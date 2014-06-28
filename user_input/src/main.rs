@@ -2,9 +2,11 @@
 
 extern crate graphics;
 extern crate piston;
-extern crate sdl2_game_window;
+// extern crate sdl2_game_window;
+extern crate glfw_game_window;
 
-use sdl2_game_window::GameWindowSDL2;
+// use Window = sdl2_game_window::GameWindowSDL2;
+use Window = glfw_game_window::GameWindowGLFW;
 use piston::{
     Game,
     GameIteratorSettings,
@@ -13,6 +15,7 @@ use piston::{
     KeyReleaseArgs,
     MousePressArgs,
     MouseReleaseArgs,
+    MouseScrollArgs,
 };
 
 pub struct App;
@@ -52,6 +55,13 @@ impl Game for App {
     ) {
         println!("Released mouse button '{}'", args.button);
     }
+
+    fn mouse_scroll(
+        &mut self,
+        args: &MouseScrollArgs
+    ) {
+        println!("Scrolled mouse '{}, {}'", args.x, args.y);
+    }
 }
 
 #[start]
@@ -61,7 +71,7 @@ fn start(argc: int, argv: **u8) -> int {
 }
 
 fn main() {
-    let mut window = GameWindowSDL2::new(
+    let mut window = Window::new(
         GameWindowSettings {
             title: "Keycode".to_string(),
             size: [300, 300],
