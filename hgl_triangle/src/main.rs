@@ -67,7 +67,7 @@ impl App {
 }
 
 impl Game for App {
-    fn render(&mut self, args: &mut RenderArgs) {
+    fn render(&mut self, args: &RenderArgs) {
         gl::Viewport(0, 0, args.width as i32, args.height as i32);
         gl::ClearColor(0.0, 0.0, 0.0, 0.1);
         gl::Clear(gl::COLOR_BUFFER_BIT);
