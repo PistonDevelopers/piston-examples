@@ -25,17 +25,21 @@ pub struct App {
 }
 
 static VERTEX_SHADER: &'static str = r"
-    attribute vec2 position;
+#version 330
+in vec2 position;
     
-    void main() {
-        gl_Position = vec4(position, 0.0, 1.0);
-    }
+void main() {
+    gl_Position = vec4(position, 0.0, 1.0);
+}
 ";
 
 static FRAGMENT_SHADER: &'static str = r"
-    void main() {
-        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-    }
+#version 330
+out vec4 out_color;
+
+void main() {
+    out_color = vec4(1.0, 0.0, 0.0, 1.0);
+}
 ";
 
 impl App {
@@ -46,6 +50,7 @@ impl App {
 
         let program = Program::link([Shader::compile(VERTEX_SHADER, hgl::VertexShader),
         Shader::compile(FRAGMENT_SHADER, hgl::FragmentShader)]).unwrap();
+        program.bind_frag(0, "out_color");
         program.bind();
 
         let vbo = Vbo::from_data([
