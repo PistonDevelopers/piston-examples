@@ -36,7 +36,7 @@ impl App {
 
 impl Game for App {
     fn load(&mut self) {
-        let asset_store = AssetStore::from_folder("assets");
+        let asset_store = AssetStore::from_folder("../bin/assets");
         let image = asset_store.path("rust-logo.png").unwrap();
         self.image = Some(Texture::from_path(&image).unwrap());
     }
