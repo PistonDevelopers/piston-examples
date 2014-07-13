@@ -56,10 +56,11 @@ function build_deps {
 
         # Visit the symlinks and build the dependencies
         build_deps
-
+        
+		echo "--- Building $current_git_dir" 
         # First check for a 'build.sh' script with default settings.
         # Check for additional 'rust-empty.mk' file. # Compile with the settings flags. # If no other options, build with make.
-        ( test -e build.sh && ./build.sh ) || ( test -e rust-empty.mk && $MAKE -f rust-empty.mk clean && $MAKE -f rust-empty.mk ) || ( echo "--- Building $current_git_dir" && $MAKE clean && $MAKE )
+        ( test -e build.sh && ./build.sh ) || ( test -e rust-empty.mk && $MAKE -f rust-empty.mk clean && $MAKE -f rust-empty.mk ) || ( test -e Makefile && $MAKE clean && $MAKE ) || ( test -e Cargo.toml && cargo build ) || ( echo "--- ERROR: Missing Makefile in $current_git_dir" )
     done
     cd $current
 }
