@@ -2,7 +2,6 @@
 
 name = "piston-example-user_input"
 version = "0.0.0"
-readme = "README.md"
 authors = ["Your Name <your@email.com>"]
 tags = []
 
