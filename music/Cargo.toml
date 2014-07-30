@@ -1,0 +1,31 @@
+[package]
+
+name = "music"
+version = "0.0.0"
+authors = ["bvssvni <bvssvni@gmail.com>"]
+tags = []
+
+[[bin]]
+
+name = "music"
+path = "src/main.rs"
+
+[dependencies.piston]
+
+git = "https://github.com/PistonDevelopers/piston.git"
+
+[dependencies.sdl2_game_window]
+
+git = "https://github.com/PistonDevelopers/sdl2_game_window.git"
+
+[dependencies.graphics]
+
+git = "https://github.com/PistonDevelopers/rust-graphics.git"
+
+[dependencies.opengl_graphics]
+
+git = "https://github.com/PistonDevelopers/opengl_graphics.git"
+
+[dependencies.rust-sdl2_mixer]
+
+git = "https://github.com/andelf/rust-sdl2_mixer"
