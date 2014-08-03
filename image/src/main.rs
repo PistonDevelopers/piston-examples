@@ -15,6 +15,7 @@ use piston::{
     AssetStore,
     Game,
     GameIteratorSettings,
+    GameWindow,
     GameWindowSettings,
     RenderArgs,
 };
@@ -34,14 +35,14 @@ impl App {
     }
 }
 
-impl Game for App {
-    fn load(&mut self) {
+impl<W: GameWindow> Game<W> for App {
+    fn load(&mut self, _window: &mut W) {
         let asset_store = AssetStore::from_folder("../bin/assets");
         let image = asset_store.path("rust-logo.png").unwrap();
         self.image = Some(Texture::from_path(&image).unwrap());
     }
 
-    fn render(&mut self, args: &RenderArgs) {
+    fn render(&mut self, _window: &mut W, args: &RenderArgs) {
         let ref mut gl = self.gl;
         gl.viewport(0, 0, args.width as i32, args.height as i32);
         let ref c = Context::abs(args.width as f64, args.height as f64);
