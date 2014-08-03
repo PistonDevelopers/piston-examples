@@ -10,6 +10,7 @@ use sdl2_game_window::GameWindowSDL2;
 use piston::{
     Game, 
     GameIteratorSettings,
+    GameWindow,
     GameWindowSettings, 
     RenderArgs
 };
@@ -71,8 +72,8 @@ impl App {
     }
 }
 
-impl Game for App {
-    fn render(&mut self, args: &RenderArgs) {
+impl<W: GameWindow> Game<W> for App {
+    fn render(&mut self, _window: &mut W, args: &RenderArgs) {
         gl::Viewport(0, 0, args.width as i32, args.height as i32);
         gl::ClearColor(0.0, 0.0, 0.0, 0.1);
         gl::Clear(gl::COLOR_BUFFER_BIT);

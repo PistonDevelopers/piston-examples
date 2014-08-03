@@ -11,6 +11,7 @@ use piston::{
     keyboard,
     Game,
     GameIteratorSettings,
+    GameWindow,
     GameWindowSettings,
     KeyPressArgs,
     KeyReleaseArgs,
@@ -34,18 +35,17 @@ impl App {
     }
 }
 
-impl Game for App {
-    fn should_capture_cursor(&mut self) -> bool {
-        self.capture_cursor
-    }
-
+impl<W: GameWindow> Game<W> for App {
     fn key_press(
         &mut self,
+        window: &mut W,
         args: &KeyPressArgs
     ) {
         if args.key == keyboard::C {
             println!("Turned capture cursor on");
             self.capture_cursor = !self.capture_cursor;
+
+            window.capture_cursor(self.capture_cursor);
         }
 
         println!("Pressed keyboard key '{}'", args.key);
@@ -53,6 +53,7 @@ impl Game for App {
 
     fn key_release(
         &mut self,
+        _window: &mut W,
         args: &KeyReleaseArgs
     ) {
         println!("Released keyboard key '{}'", args.key);
@@ -60,6 +61,7 @@ impl Game for App {
 
     fn mouse_move(
         &mut self,
+        _window: &mut W,
         args: &MouseMoveArgs
     ) {
         println!("Mouse moved '{} {}'", args.x, args.y);
@@ -67,6 +69,7 @@ impl Game for App {
 
     fn mouse_relative_move(
         &mut self,
+        _window: &mut W,
         args: &MouseRelativeMoveArgs
     ) {
         println!("Relative mouse moved '{} {}'", args.dx, args.dy);
@@ -74,6 +77,7 @@ impl Game for App {
 
     fn mouse_press(
         &mut self,
+        _window: &mut W,
         args: &MousePressArgs
     ) {
         println!("Pressed mouse button '{}'", args.button);
@@ -81,6 +85,7 @@ impl Game for App {
 
     fn mouse_release(
         &mut self,
+        _window: &mut W,
         args: &MouseReleaseArgs
     ) {
         println!("Released mouse button '{}'", args.button);
@@ -88,6 +93,7 @@ impl Game for App {
 
     fn mouse_scroll(
         &mut self,
+        _window: &mut W,
         args: &MouseScrollArgs
     ) {
         println!("Scrolled mouse '{}, {}'", args.x, args.y);
