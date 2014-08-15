@@ -1,0 +1,28 @@
+[package]
+
+name = "triangle"
+version = "0.0.0"
+authors = ["Your Name <your@email.com>"]
+tags = []
+
+[[bin]]
+
+name = "triangle"
+path = "src/main.rs"
+
+[dependencies.gfx]
+
+git = "http://github.com/gfx-rs/gfx-rs"
+
+[dependencies.piston]
+
+git = "https://github.com/PistonDevelopers/piston.git"
+
+[dependencies.sdl2_game_window]
+
+git = "https://github.com/PistonDevelopers/sdl2_game_window.git"
+
+[dependencies.glfw_game_window]
+
+git = "https://github.com/pistondevelopers/glfw_game_window"
+
