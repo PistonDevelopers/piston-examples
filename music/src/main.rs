@@ -46,7 +46,7 @@ fn main() {
  
     // Load music file. 
     let asset_store = AssetStore::from_folder("assets");
-    let file = asset_store.path("piano.wav").unwrap();
+    let file = asset_store.path("piano.mp3").unwrap();
     let music = mix::Music::from_file(&file).unwrap();
    
     // Loop once. 
