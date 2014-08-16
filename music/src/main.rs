@@ -2,6 +2,7 @@
 
 extern crate sdl2_game_window;
 extern crate sdl2_mixer;
+extern crate sdl2;
 extern crate piston;
 
 use Window = sdl2_game_window::GameWindowSDL2;
@@ -14,6 +15,7 @@ use piston::{
 };
 
 fn init_audio() {
+    sdl2::init(sdl2::InitAudio | sdl2::InitTimer);
     // Load dynamic libraries.
     mix::init(
           mix::InitMp3 
@@ -46,11 +48,11 @@ fn main() {
  
     // Load music file. 
     let asset_store = AssetStore::from_folder("assets");
-    let file = asset_store.path("piano.mp3").unwrap();
+    let file = asset_store.path("piano.wav").unwrap();
     let music = mix::Music::from_file(&file).unwrap();
    
     // Loop once. 
-    music.play(1).unwrap();
+    music.play(4).unwrap();
 
     let game_iter_settings = GameIteratorSettings {
             updates_per_second: 120,
