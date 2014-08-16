@@ -77,7 +77,7 @@ fn main() {
             exit_on_esc: true,
         }
     );
-    let (mut device, frontend) = window.gfx();
+    let (mut device, frame) = window.gfx();
 
     let state = gfx::DrawState::new();
     let vertex_data = vec![
@@ -92,19 +92,19 @@ fn main() {
             FRAGMENT_SRC.clone()
         ).unwrap();
 
-    let mut list = frontend.create_drawlist();
+    let mut list = device.create_draw_list();
     list.clear(
         gfx::ClearData {
             color: Some(gfx::Color([0.3, 0.3, 0.3, 0.1])),
             depth: None,
             stencil: None,
         },
-        frontend.get_main_frame()
+        &frame
     );
     list.draw(
             &mesh, 
             mesh.get_slice(), 
-            frontend.get_main_frame(),
+            &frame,
             &program,
             &state
         ).unwrap();
