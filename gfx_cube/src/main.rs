@@ -14,13 +14,7 @@ extern crate time;
 use Window = glfw_game_window::GameWindowGLFW;
 use cgmath::*;
 use gfx::{Device, DeviceHelper};
-use piston::{
-    GameIterator,
-    GameIteratorSettings,
-    GameWindow,
-    GameWindowSettings,
-    Render,
-};
+use piston::GameWindow;
 
 //----------------------------------------
 // Cube associated data
@@ -109,7 +103,7 @@ fn start(argc: int, argv: *const *const u8) -> int {
 fn main() {
     let mut window = Window::new(
         piston::shader_version::opengl::OpenGL_3_2,
-        GameWindowSettings {
+        piston::GameWindowSettings {
             title: "cube".to_string(),
             size: [640, 480],
             fullscreen: false,
@@ -210,9 +204,9 @@ fn main() {
         mp.mul_m(&mv.mat)
     };
 
-    let mut game_iter = GameIterator::new(
+    let mut game_iter = piston::GameIterator::new(
         &mut window,
-        &GameIteratorSettings {
+        &piston::GameIteratorSettings {
             updates_per_second: 120,
             max_frames_per_second: 60
         }
@@ -220,7 +214,7 @@ fn main() {
 
     for e in game_iter {
         match e {
-            Render(_args) => {
+            piston::Render(_args) => {
                 list.reset();
                 list.clear(
                     gfx::ClearData {
