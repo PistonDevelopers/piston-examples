@@ -3,14 +3,16 @@
 #![crate_name = "cube"]
 
 extern crate piston;
-extern crate glfw_game_window;
+// extern crate glfw_game_window;
+extern crate sdl2_game_window;
 extern crate gfx;
 #[phase(plugin)]
 extern crate gfx_macros;
 extern crate native;
 extern crate time;
 
-use Window = glfw_game_window::GameWindowGLFW;
+// use Window = glfw_game_window::GameWindowGLFW;
+use Window = sdl2_game_window::GameWindowSDL2;
 use gfx::{Device, DeviceHelper};
 use piston::GameWindow;
 

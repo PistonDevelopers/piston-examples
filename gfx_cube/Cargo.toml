@@ -22,3 +22,7 @@ git = "https://github.com/gfx-rs/gfx-rs"
 
 git = "https://github.com/pistondevelopers/glfw_game_window"
 
+[dependencies.sdl2_game_window]
+
+git = "https://github.com/pistondevelopers/sdl2_game_window"
+
