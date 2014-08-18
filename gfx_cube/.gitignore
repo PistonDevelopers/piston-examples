@@ -14,7 +14,7 @@
 *.dummy
 *.exe
 *-test
-/bin/gfx_cube
+/bin/cube
 /bin/test-internal
 /bin/test-external
 /doc/
