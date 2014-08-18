@@ -196,7 +196,7 @@ fn main() {
             FRAGMENT_SRC.clone()
         ).unwrap();
 
-    let m_model = piston::vecmath::mat4_id();
+    let model = piston::vecmath::mat4_id();
     let projection = piston::CameraPerspective {
             fov: 90.0f32,
             near_clip: 0.1,
@@ -230,7 +230,7 @@ fn main() {
                     &frame
                 );
                 data.u_ModelViewProj = piston::model_view_projection(
-                        m_model,
+                        model,
                         camera.orthogonal(),
                         projection
                     );
