@@ -108,6 +108,7 @@ fn start(argc: int, argv: *const *const u8) -> int {
 
 fn main() {
     let mut window = Window::new(
+        piston::shader_version::opengl::OpenGL_3_2,
         GameWindowSettings {
             title: "cube".to_string(),
             size: [640, 480],
