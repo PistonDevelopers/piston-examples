@@ -4,7 +4,6 @@
 
 extern crate piston;
 extern crate glfw_game_window;
-extern crate cgmath;
 extern crate gfx;
 #[phase(plugin)]
 extern crate gfx_macros;
@@ -12,7 +11,6 @@ extern crate native;
 extern crate time;
 
 use Window = glfw_game_window::GameWindowGLFW;
-use cgmath::*;
 use gfx::{Device, DeviceHelper};
 use piston::GameWindow;
 
@@ -110,6 +108,8 @@ fn main() {
             exit_on_esc: true
         }
     );
+
+    window.capture_cursor(true);
     
     let (mut device, frame) = window.gfx();
     let mut list = device.create_draw_list();
@@ -174,35 +174,40 @@ fn main() {
     };
     let img_info = tinfo.to_image_info();
     let texture = device.create_texture(tinfo).unwrap();
-    device.update_texture(&texture, &img_info,
-                          &vec![0x20u8, 0xA0u8, 0xC0u8, 0x00u8])
-           .unwrap();
+    device.update_texture(
+            &texture, 
+            &img_info,
+            &vec![0x20u8, 0xA0u8, 0xC0u8, 0x00u8]
+        ).unwrap();
 
-    let sampler = device.create_sampler(gfx::tex::SamplerInfo::new(
-        gfx::tex::Bilinear, gfx::tex::Clamp));
+    let sampler = device.create_sampler(
+        gfx::tex::SamplerInfo::new(
+            gfx::tex::Bilinear, 
+            gfx::tex::Clamp
+        )
+    );
 
-    let mut prog = {
-        let data = Params {
-            u_ModelViewProj: Matrix4::identity().into_fixed(),
-            t_Color: (texture, Some(sampler)),
-        };
-        device.link_program(data, VERTEX_SRC.clone(), FRAGMENT_SRC.clone())
-               .unwrap()
+    let mut data = Params {
+        u_ModelViewProj: piston::vecmath::mat4_id(),
+        t_Color: (texture, Some(sampler)),
     };
+    let prog: Program = device.link_program(
+            VERTEX_SRC.clone(), 
+            FRAGMENT_SRC.clone()
+        ).unwrap();
 
-    let mut m_model = Matrix4::<f32>::identity();
-    let (w, h) = window.get_size();
-    let m_viewproj = {
-        let mv: AffineMatrix3<f32> = Transform::look_at(
-            &Point3::new(1.5f32, -5.0, 3.0),
-            &Point3::new(0f32, 0.0, 0.0),
-            &Vector3::unit_z()
-        );
-        let aspect = w as f32 / h as f32;
-        let mp = cgmath::perspective(cgmath::deg(45f32),
-                                     aspect, 1f32, 10f32);
-        mp.mul_m(&mv.mat)
-    };
+    let m_model = piston::vecmath::mat4_id();
+    let projection = piston::CameraPerspective {
+            fov: 90.0f32,
+            near_clip: 0.1,
+            far_clip: 1000.0,
+            aspect_ratio: 1.0
+        }.projection();
+    let mut camera = piston::Camera::new(0.5f32, 0.5, 4.0);
+    let mut fps_controller = piston::FPSController::new(
+        piston::FPSControllerSettings::default()
+    );
+    camera.set_yaw_pitch(fps_controller.yaw, fps_controller.pitch);
 
     let mut game_iter = piston::GameIterator::new(
         &mut window,
@@ -224,12 +229,15 @@ fn main() {
                     },
                     &frame
                 );
-                m_model.x.x = 1.0;
-                prog.data.u_ModelViewProj = m_viewproj.mul_m(&m_model).into_fixed();
-                list.draw(&mesh, slice, &frame, &prog, &state).unwrap();
+                data.u_ModelViewProj = piston::model_view_projection(
+                        m_model,
+                        camera.orthogonal(),
+                        projection
+                    );
+                list.draw(&mesh, slice, &frame, (&prog, &data), &state).unwrap();
                 device.submit(list.as_slice());
             },
-            _ => {}
+            e => fps_controller.event(&e, &mut camera),
         }
     }
 }
