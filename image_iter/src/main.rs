@@ -22,6 +22,7 @@ use piston::{
 
 fn main() {
     let mut window = GameWindowSDL2::new(
+        piston::shader_version::opengl::OpenGL_3_2,
         GameWindowSettings {
             title: "Image".to_string(),
             size: [300, 300],

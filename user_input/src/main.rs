@@ -7,20 +7,7 @@ extern crate glfw_game_window;
 
 // use Window = sdl2_game_window::GameWindowSDL2;
 use Window = glfw_game_window::GameWindowGLFW;
-use piston::{
-    keyboard,
-    Game,
-    GameIteratorSettings,
-    GameWindow,
-    GameWindowSettings,
-    KeyPressArgs,
-    KeyReleaseArgs,
-    MouseMoveArgs,
-    MouseRelativeMoveArgs,
-    MousePressArgs,
-    MouseReleaseArgs,
-    MouseScrollArgs,
-};
+use piston::keyboard;
 
 pub struct App {
     capture_cursor: bool
@@ -33,13 +20,11 @@ impl App {
             capture_cursor: false 
         }
     }
-}
 
-impl<W: GameWindow> Game<W> for App {
-    fn key_press(
+    fn key_press<W: piston::GameWindow>(
         &mut self,
         window: &mut W,
-        args: &KeyPressArgs
+        args: &piston::KeyPressArgs
     ) {
         if args.key == keyboard::C {
             println!("Turned capture cursor on");
@@ -53,48 +38,42 @@ impl<W: GameWindow> Game<W> for App {
 
     fn key_release(
         &mut self,
-        _window: &mut W,
-        args: &KeyReleaseArgs
+        args: &piston::KeyReleaseArgs
     ) {
         println!("Released keyboard key '{}'", args.key);
     }
 
     fn mouse_move(
         &mut self,
-        _window: &mut W,
-        args: &MouseMoveArgs
+        args: &piston::MouseMoveArgs
     ) {
         println!("Mouse moved '{} {}'", args.x, args.y);
     }
 
     fn mouse_relative_move(
         &mut self,
-        _window: &mut W,
-        args: &MouseRelativeMoveArgs
+        args: &piston::MouseRelativeMoveArgs
     ) {
         println!("Relative mouse moved '{} {}'", args.dx, args.dy);
     }
 
     fn mouse_press(
         &mut self,
-        _window: &mut W,
-        args: &MousePressArgs
+        args: &piston::MousePressArgs
     ) {
         println!("Pressed mouse button '{}'", args.button);
     }
 
     fn mouse_release(
         &mut self,
-        _window: &mut W,
-        args: &MouseReleaseArgs
+        args: &piston::MouseReleaseArgs
     ) {
         println!("Released mouse button '{}'", args.button);
     }
 
     fn mouse_scroll(
         &mut self,
-        _window: &mut W,
-        args: &MouseScrollArgs
+        args: &piston::MouseScrollArgs
     ) {
         println!("Scrolled mouse '{}, {}'", args.x, args.y);
     }
@@ -102,7 +81,8 @@ impl<W: GameWindow> Game<W> for App {
 
 fn main() {
     let mut window = Window::new(
-        GameWindowSettings {
+        piston::shader_version::opengl::OpenGL_3_2,
+        piston::GameWindowSettings {
             title: "Keycode".to_string(),
             size: [300, 300],
             fullscreen: false,
@@ -113,10 +93,22 @@ fn main() {
     println!("Press C to turn capture cursor on/off");
 
     let mut app = App::new();
-    let game_iter_settings = GameIteratorSettings {
+    let game_iter_settings = piston::GameIteratorSettings {
             updates_per_second: 120,
             max_frames_per_second: 60,
         };
-    app.run(&mut window, &game_iter_settings);
+    for e in piston::GameIterator::new(&mut window, &game_iter_settings) {
+        match e {
+            piston::KeyPress(args) => app.key_press(&mut window, &args),
+            piston::KeyRelease(args) => app.key_release(&args),
+            piston::MousePress(args) => app.mouse_press(&args),
+            piston::MouseRelease(args) => app.mouse_release(&args),
+            piston::MouseMove(args) => app.mouse_move(&args),
+            piston::MouseScroll(args) => app.mouse_scroll(&args),
+            piston::MouseRelativeMove(args) => app.mouse_relative_move(&args),
+            piston::Render(_) => {},
+            piston::Update(_) => {},
+        }
+    }
 }
 

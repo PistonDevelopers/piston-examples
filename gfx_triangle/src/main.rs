@@ -70,6 +70,7 @@ GLSL_150: b"
 
 fn main() {
     let ref mut window = Window::new(
+        piston::shader_version::opengl::OpenGL_3_2,
         GameWindowSettings {
             title: "triangle".to_string(),
             size: [300, 300],

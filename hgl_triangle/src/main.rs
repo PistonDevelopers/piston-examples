@@ -6,12 +6,12 @@ extern crate hgl;
 extern crate gl;
 extern crate sdl2_game_window;
 
-use sdl2_game_window::GameWindowSDL2;
+use Window = sdl2_game_window::GameWindowSDL2;
 use piston::{
-    Game, 
+    GameIterator,
     GameIteratorSettings,
-    GameWindow,
     GameWindowSettings, 
+    Render,
     RenderArgs
 };
 
@@ -70,10 +70,8 @@ impl App {
             vbo: vbo
         }
     }
-}
-
-impl<W: GameWindow> Game<W> for App {
-    fn render(&mut self, _window: &mut W, args: &RenderArgs) {
+    
+    fn render(&mut self, args: &RenderArgs) {
         gl::Viewport(0, 0, args.width as i32, args.height as i32);
         gl::ClearColor(0.0, 0.0, 0.0, 0.1);
         gl::Clear(gl::COLOR_BUFFER_BIT);
@@ -82,7 +80,8 @@ impl<W: GameWindow> Game<W> for App {
 }
 
 fn main() {
-    let mut window = GameWindowSDL2::new(
+    let mut window = Window::new(
+        piston::shader_version::opengl::OpenGL_3_2,
         GameWindowSettings {
             title: "Test".to_string(),
             size: [800, 600],
@@ -91,10 +90,16 @@ fn main() {
         }
     );
 
+    let mut app = App::new();
     let game_iter_settings = GameIteratorSettings {
             updates_per_second: 120,
             max_frames_per_second: 60,
         };
-    App::new().run(&mut window, &game_iter_settings);
+    for e in GameIterator::new(&mut window, &game_iter_settings) {
+        match e {
+            Render(args) => app.render(&args),
+            _ => {}
+        }
+    }
 }
 
