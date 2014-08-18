@@ -3,14 +3,16 @@
 #![crate_name = "cube"]
 
 extern crate piston;
-extern crate glfw_game_window;
+// extern crate glfw_game_window;
+extern crate sdl2_game_window;
 extern crate gfx;
 #[phase(plugin)]
 extern crate gfx_macros;
 extern crate native;
 extern crate time;
 
-use Window = glfw_game_window::GameWindowGLFW;
+// use Window = glfw_game_window::GameWindowGLFW;
+use Window = sdl2_game_window::GameWindowSDL2;
 use gfx::{Device, DeviceHelper};
 use piston::GameWindow;
 
@@ -196,7 +198,7 @@ fn main() {
             FRAGMENT_SRC.clone()
         ).unwrap();
 
-    let m_model = piston::vecmath::mat4_id();
+    let model = piston::vecmath::mat4_id();
     let projection = piston::CameraPerspective {
             fov: 90.0f32,
             near_clip: 0.1,
@@ -230,7 +232,7 @@ fn main() {
                     &frame
                 );
                 data.u_ModelViewProj = piston::model_view_projection(
-                        m_model,
+                        model,
                         camera.orthogonal(),
                         projection
                     );
