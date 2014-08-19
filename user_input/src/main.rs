@@ -7,7 +7,7 @@ extern crate glfw_game_window;
 
 // use Window = sdl2_game_window::GameWindowSDL2;
 use Window = glfw_game_window::GameWindowGLFW;
-use piston::keyboard;
+use piston::input::keyboard;
 use piston::input;
 use piston::{
     Input,
