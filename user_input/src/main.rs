@@ -8,6 +8,7 @@ extern crate glfw_game_window;
 // use Window = sdl2_game_window::GameWindowSDL2;
 use Window = glfw_game_window::GameWindowGLFW;
 use piston::input::keyboard;
+use piston::input::mouse;
 use piston::input;
 use piston::{
     Input,
@@ -30,58 +31,40 @@ impl App {
     fn key_press<W: piston::GameWindow>(
         &mut self,
         window: &mut W,
-        args: &input::KeyPressArgs
+        key: keyboard::Key
     ) {
-        if args.key == keyboard::C {
+        if key == keyboard::C {
             println!("Turned capture cursor on");
             self.capture_cursor = !self.capture_cursor;
 
             window.capture_cursor(self.capture_cursor);
         }
 
-        println!("Pressed keyboard key '{}'", args.key);
+        println!("Pressed keyboard key '{}'", key);
     }
 
-    fn key_release(
-        &mut self,
-        args: &input::KeyReleaseArgs
-    ) {
-        println!("Released keyboard key '{}'", args.key);
+    fn key_release(&mut self, key: keyboard::Key) {
+        println!("Released keyboard key '{}'", key);
     }
 
-    fn mouse_move(
-        &mut self,
-        args: &input::MouseMoveArgs
-    ) {
-        println!("Mouse moved '{} {}'", args.x, args.y);
+    fn mouse_move(&mut self, x: f64, y: f64) {
+        println!("Mouse moved '{} {}'", x, y);
     }
 
-    fn mouse_relative_move(
-        &mut self,
-        args: &input::MouseRelativeMoveArgs
-    ) {
-        println!("Relative mouse moved '{} {}'", args.dx, args.dy);
+    fn mouse_relative_move(&mut self, dx: f64, dy: f64) {
+        println!("Relative mouse moved '{} {}'", dx, dy);
     }
 
-    fn mouse_press(
-        &mut self,
-        args: &input::MousePressArgs
-    ) {
-        println!("Pressed mouse button '{}'", args.button);
+    fn mouse_press(&mut self, button: mouse::Button) {
+        println!("Pressed mouse button '{}'", button);
     }
 
-    fn mouse_release(
-        &mut self,
-        args: &input::MouseReleaseArgs
-    ) {
-        println!("Released mouse button '{}'", args.button);
+    fn mouse_release(&mut self, button: mouse::Button) {
+        println!("Released mouse button '{}'", button);
     }
 
-    fn mouse_scroll(
-        &mut self,
-        args: &input::MouseScrollArgs
-    ) {
-        println!("Scrolled mouse '{}, {}'", args.x, args.y);
+    fn mouse_scroll(&mut self, dx: f64, dy: f64) {
+        println!("Scrolled mouse '{}, {}'", dx, dy);
     }
 }
 
@@ -105,13 +88,20 @@ fn main() {
         };
     for e in piston::GameIterator::new(&mut window, &game_iter_settings) {
         match e {
-            Input(input::KeyPress(args)) => app.key_press(&mut window, &args),
-            Input(input::KeyRelease(args)) => app.key_release(&args),
-            Input(input::MousePress(args)) => app.mouse_press(&args),
-            Input(input::MouseRelease(args)) => app.mouse_release(&args),
-            Input(input::MouseMove(args)) => app.mouse_move(&args),
-            Input(input::MouseScroll(args)) => app.mouse_scroll(&args),
-            Input(input::MouseRelativeMove(args)) => app.mouse_relative_move(&args),
+            Input(input::KeyPress { key, .. }) => 
+                app.key_press(&mut window, key),
+            Input(input::KeyRelease { key, .. }) => 
+                app.key_release(key),
+            Input(input::MousePress { button, .. }) => 
+                app.mouse_press(button),
+            Input(input::MouseRelease { button, .. }) => 
+                app.mouse_release(button),
+            Input(input::MouseMove { draw_x, draw_y, .. }) => 
+                app.mouse_move(draw_x, draw_y),
+            Input(input::MouseScroll { dx, dy, .. }) => 
+                app.mouse_scroll(dx, dy),
+            Input(input::MouseRelativeMove { draw_dx, draw_dy, .. }) => 
+                app.mouse_relative_move(draw_dx, draw_dy),
             Render(_) => {},
             Update(_) => {},
         }
