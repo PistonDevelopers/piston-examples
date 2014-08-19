@@ -239,7 +239,8 @@ fn main() {
                 list.draw(&mesh, slice, &frame, (&prog, &data), &state).unwrap();
                 device.submit(list.as_slice());
             },
-            e => fps_controller.event(&e, &mut camera),
+            piston::Update(args) => fps_controller.update(args.dt, &mut camera),
+            piston::Input(e) => fps_controller.input(&e, &mut camera),
         }
     }
 }
