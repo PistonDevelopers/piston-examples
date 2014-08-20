@@ -14,7 +14,7 @@ extern crate time;
 // use Window = glfw_game_window::GameWindowGLFW;
 use Window = sdl2_game_window::GameWindowSDL2;
 use gfx::{Device, DeviceHelper};
-use piston::GameWindow;
+use piston::{cam, GameWindow};
 
 //----------------------------------------
 // Cube associated data
@@ -199,15 +199,15 @@ fn main() {
         ).unwrap();
 
     let model = piston::vecmath::mat4_id();
-    let projection = piston::CameraPerspective {
+    let projection = cam::CameraPerspective {
             fov: 90.0f32,
             near_clip: 0.1,
             far_clip: 1000.0,
             aspect_ratio: 1.0
         }.projection();
-    let mut camera = piston::Camera::new(0.5f32, 0.5, 4.0);
-    let mut fps_controller = piston::FPSController::new(
-        piston::FPSControllerSettings::default()
+    let mut camera = cam::Camera::new(0.5f32, 0.5, 4.0);
+    let mut fps_controller = cam::FPSController::new(
+        cam::FPSControllerSettings::default()
     );
     camera.set_yaw_pitch(fps_controller.yaw, fps_controller.pitch);
 
@@ -231,7 +231,7 @@ fn main() {
                     },
                     &frame
                 );
-                data.u_ModelViewProj = piston::model_view_projection(
+                data.u_ModelViewProj = cam::model_view_projection(
                         model,
                         camera.orthogonal(),
                         projection
