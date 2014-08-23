@@ -1,2 +1,0 @@
-* Get a triangle on the screen with gfx-rs and Piston
-
