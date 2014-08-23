@@ -86,7 +86,7 @@ fn main() {
         Vertex { pos: [ 0.5, -0.5 ], color: [0.0, 1.0, 0.0] },
         Vertex { pos: [ 0.0, 0.5 ], color: [0.0, 0.0, 1.0] }
     ];
-    let mesh = device.create_mesh(vertex_data, gfx::TriangleList);
+    let mesh = device.create_mesh(vertex_data);
     let program: gfx::shade::EmptyProgram = device.link_program( 
             VERTEX_SRC.clone(), 
             FRAGMENT_SRC.clone()
@@ -95,7 +95,7 @@ fn main() {
     let mut renderer = device.create_renderer();
     renderer.clear(
         gfx::ClearData {
-            color: Some(gfx::Color([0.3, 0.3, 0.3, 0.1])),
+            color: Some([0.3, 0.3, 0.3, 0.1]),
             depth: None,
             stencil: None,
         },
@@ -103,7 +103,7 @@ fn main() {
     );
     renderer.draw(
             &mesh, 
-            mesh.get_slice(), 
+            mesh.get_slice(gfx::TriangleList), 
             &frame,
             &program,
             &state

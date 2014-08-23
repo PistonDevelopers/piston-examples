@@ -1,13 +1,13 @@
 [package]
 
-name = "piston-example-image_iter"
+name = "piston-example-image"
 version = "0.0.0"
 authors = ["Your Name <your@email.com>"]
 tags = []
 
 [[bin]]
 
-name = "piston-example-image_iter"
+name = "piston-example-image"
 path = "src/main.rs"
 
 [dependencies.graphics]

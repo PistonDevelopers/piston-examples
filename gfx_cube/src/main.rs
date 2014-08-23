@@ -149,7 +149,7 @@ fn main() {
         Vertex::new([ 1, -1, -1], [0, 1]),
     ];
 
-    let mesh = device.create_mesh(vertex_data, gfx::TriangleList);
+    let mesh = device.create_mesh(vertex_data);
 
     let slice = {
         let index_data = vec![
@@ -162,7 +162,7 @@ fn main() {
         ];
 
         let buf = device.create_buffer_static(&index_data);
-        gfx::IndexSlice8(buf, 0, 36)
+        gfx::IndexSlice8(gfx::TriangleList, buf, 0, 36)
     };
 
     let tinfo = gfx::tex::TextureInfo {
@@ -224,7 +224,7 @@ fn main() {
                 renderer.reset();
                 renderer.clear(
                     gfx::ClearData {
-                        color: Some(gfx::Color([0.3, 0.3, 0.3, 1.0])),
+                        color: Some([0.3, 0.3, 0.3, 1.0]),
                         depth: Some(1.0),
                         stencil: None,
                     },
