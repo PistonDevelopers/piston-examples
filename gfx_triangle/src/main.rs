@@ -8,8 +8,8 @@ extern crate gfx_macros;
 extern crate sdl2_game_window;
 extern crate glfw_game_window;
 
-// use Window = sdl2_game_window::GameWindowSDL2;
-use Window = glfw_game_window::GameWindowGLFW;
+// use sdl2_game_window::GameWindowSDL2 as Window;
+use glfw_game_window::GameWindowGLFW as Window;
 use piston::{
     GameIterator,
     GameIteratorSettings,
@@ -86,14 +86,14 @@ fn main() {
         Vertex { pos: [ 0.5, -0.5 ], color: [0.0, 1.0, 0.0] },
         Vertex { pos: [ 0.0, 0.5 ], color: [0.0, 0.0, 1.0] }
     ];
-    let mesh = device.create_mesh(vertex_data);
+    let mesh = device.create_mesh(vertex_data, gfx::TriangleList);
     let program: gfx::shade::EmptyProgram = device.link_program( 
             VERTEX_SRC.clone(), 
             FRAGMENT_SRC.clone()
         ).unwrap();
 
-    let mut list = device.create_draw_list();
-    list.clear(
+    let mut renderer = device.create_renderer();
+    renderer.clear(
         gfx::ClearData {
             color: Some(gfx::Color([0.3, 0.3, 0.3, 0.1])),
             depth: None,
@@ -101,7 +101,7 @@ fn main() {
         },
         &frame
     );
-    list.draw(
+    renderer.draw(
             &mesh, 
             mesh.get_slice(), 
             &frame,
@@ -120,7 +120,7 @@ fn main() {
     for e in game_iter {
         match e {
             Render(_args) => {
-                device.submit(list.as_slice());
+                device.submit(renderer.as_buffer());
             },
             _ => {},
         }
