@@ -5,8 +5,8 @@ extern crate sdl2_mixer;
 extern crate sdl2;
 extern crate piston;
 
-use Window = sdl2_game_window::GameWindowSDL2;
-use mix = sdl2_mixer;
+use sdl2_game_window::GameWindowSDL2 as Window;
+use sdl2_mixer as mix;
 use piston::{
     AssetStore,
     GameIterator,

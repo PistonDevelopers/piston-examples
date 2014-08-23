@@ -6,7 +6,7 @@ extern crate hgl;
 extern crate gl;
 extern crate sdl2_game_window;
 
-use Window = sdl2_game_window::GameWindowSDL2;
+use sdl2_game_window::GameWindowSDL2 as Window;
 use piston::{
     GameIterator,
     GameIteratorSettings,

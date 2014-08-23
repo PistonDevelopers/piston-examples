@@ -11,11 +11,10 @@ extern crate gfx_macros;
 extern crate native;
 extern crate time;
 
-// use Window = glfw_game_window::GameWindowGLFW;
-use Window = sdl2_game_window::GameWindowSDL2;
+// use glfw_game_window::GameWindowGLFW as Window;
+use sdl2_game_window::GameWindowSDL2 as Window;
 use gfx::{Device, DeviceHelper};
 use piston::{cam, GameWindow};
-
 //----------------------------------------
 // Cube associated data
 
@@ -114,7 +113,7 @@ fn main() {
     window.capture_cursor(true);
     
     let (mut device, frame) = window.gfx();
-    let mut list = device.create_draw_list();
+    let mut renderer = device.create_renderer();
     let state = gfx::DrawState::new().depth(gfx::state::LessEqual, true);
 
     let vertex_data = vec![
@@ -150,7 +149,7 @@ fn main() {
         Vertex::new([ 1, -1, -1], [0, 1]),
     ];
 
-    let mesh = device.create_mesh(vertex_data);
+    let mesh = device.create_mesh(vertex_data, gfx::TriangleList);
 
     let slice = {
         let index_data = vec![
@@ -170,7 +169,7 @@ fn main() {
         width: 1,
         height: 1,
         depth: 1,
-        mipmap_range: (0, 1),
+        levels: 1,
         kind: gfx::tex::Texture2D,
         format: gfx::tex::RGBA8,
     };
@@ -222,8 +221,8 @@ fn main() {
     for e in game_iter {
         match e {
             piston::Render(_args) => {
-                list.reset();
-                list.clear(
+                renderer.reset();
+                renderer.clear(
                     gfx::ClearData {
                         color: Some(gfx::Color([0.3, 0.3, 0.3, 1.0])),
                         depth: Some(1.0),
@@ -236,8 +235,8 @@ fn main() {
                         camera.orthogonal(),
                         projection
                     );
-                list.draw(&mesh, slice, &frame, (&prog, &data), &state).unwrap();
-                device.submit(list.as_slice());
+                renderer.draw(&mesh, slice, &frame, (&prog, &data), &state).unwrap();
+                device.submit(renderer.as_buffer());
             },
             piston::Update(args) => fps_controller.update(args.dt, &mut camera),
             piston::Input(e) => fps_controller.input(&e, &mut camera),
