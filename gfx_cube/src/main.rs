@@ -204,11 +204,10 @@ fn main() {
             far_clip: 1000.0,
             aspect_ratio: 1.0
         }.projection();
-    let mut camera = cam::Camera::new(0.5f32, 0.5, 4.0);
-    let mut fps_controller = cam::FPSController::new(
-        cam::FPSControllerSettings::default()
+    let mut first_person = cam::FirstPerson::new(
+        0.5f32, 0.5, 4.0,
+        cam::FirstPersonSettings::default()
     );
-    camera.set_yaw_pitch(fps_controller.yaw, fps_controller.pitch);
 
     let mut game_iter = piston::GameIterator::new(
         &mut window,
@@ -220,7 +219,7 @@ fn main() {
 
     for e in game_iter {
         match e {
-            piston::Render(_args) => {
+            piston::Render(args) => {
                 renderer.reset();
                 renderer.clear(
                     gfx::ClearData {
@@ -232,14 +231,14 @@ fn main() {
                 );
                 data.u_ModelViewProj = cam::model_view_projection(
                         model,
-                        camera.orthogonal(),
+                        first_person.camera(args.ext_dt).orthogonal(),
                         projection
                     );
                 renderer.draw(&mesh, slice, &frame, (&prog, &data), &state).unwrap();
                 device.submit(renderer.as_buffer());
             },
-            piston::Update(args) => fps_controller.update(args.dt, &mut camera),
-            piston::Input(e) => fps_controller.input(&e, &mut camera),
+            piston::Update(args) => first_person.update(args.dt),
+            piston::Input(e) => first_person.input(&e),
         }
     }
 }
