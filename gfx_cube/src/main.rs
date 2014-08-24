@@ -205,7 +205,7 @@ fn main() {
             aspect_ratio: 1.0
         }.projection();
     let mut first_person = cam::FirstPerson::new(
-        0.5f32, 0.5, 4.0,
+        [0.5f32, 0.5, 4.0],
         cam::FirstPersonSettings::default()
     );
 
