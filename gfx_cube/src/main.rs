@@ -5,7 +5,6 @@
 extern crate piston;
 // extern crate glfw_game_window;
 extern crate sdl2_game_window;
-extern crate gfx;
 #[phase(plugin)]
 extern crate gfx_macros;
 extern crate native;
@@ -13,7 +12,8 @@ extern crate time;
 
 // use glfw_game_window::GameWindowGLFW as Window;
 use sdl2_game_window::GameWindowSDL2 as Window;
-use gfx::{Device, DeviceHelper};
+use piston::gfx;
+use piston::gfx::{Device, DeviceHelper};
 use piston::{cam, GameWindow};
 //----------------------------------------
 // Cube associated data

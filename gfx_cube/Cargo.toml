@@ -14,10 +14,6 @@ path = "src/main.rs"
 
 git = "https://github.com/pistondevelopers/piston"
 
-[dependencies.gfx]
-
-git = "https://github.com/gfx-rs/gfx-rs"
-
 [dependencies.glfw_game_window]
 
 git = "https://github.com/pistondevelopers/glfw_game_window"

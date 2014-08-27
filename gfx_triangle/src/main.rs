@@ -2,7 +2,6 @@
 #![feature(phase)]
 
 extern crate piston;
-extern crate gfx;
 #[phase(plugin)]
 extern crate gfx_macros;
 extern crate sdl2_game_window;
@@ -16,7 +15,8 @@ use piston::{
     GameWindowSettings,
     Render,
 };
-use gfx::{
+use piston::gfx;
+use piston::gfx::{
     Device,
     DeviceHelper,
 };

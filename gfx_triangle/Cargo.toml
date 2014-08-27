@@ -10,10 +10,6 @@ tags = []
 name = "triangle"
 path = "src/main.rs"
 
-[dependencies.gfx]
-
-git = "http://github.com/gfx-rs/gfx-rs"
-
 [dependencies.piston]
 
 git = "https://github.com/PistonDevelopers/piston.git"
