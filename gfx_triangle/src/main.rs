@@ -17,7 +17,6 @@ use piston::{
 };
 use piston::gfx;
 use piston::gfx::{
-    Device,
     DeviceHelper,
 };
 
@@ -87,28 +86,13 @@ fn main() {
         Vertex { pos: [ 0.0, 0.5 ], color: [0.0, 0.0, 1.0] }
     ];
     let mesh = device.create_mesh(vertex_data);
-    let program: gfx::shade::EmptyProgram = device.link_program( 
+    let program = device.link_program( 
             VERTEX_SRC.clone(), 
             FRAGMENT_SRC.clone()
         ).unwrap();
 
-    let mut renderer = device.create_renderer();
-    renderer.clear(
-        gfx::ClearData {
-            color: Some([0.3, 0.3, 0.3, 0.1]),
-            depth: None,
-            stencil: None,
-        },
-        &frame
-    );
-    renderer.draw(
-            &mesh, 
-            mesh.get_slice(gfx::TriangleList), 
-            &frame,
-            &program,
-            &state
-        ).unwrap();
-    
+    let mut graphics = gfx::Graphics::new(device);
+    let batch = graphics.make_batch(&mesh, mesh.get_slice(gfx::TriangleList), &program, &state).unwrap();
     
     let mut game_iter = GameIterator::new(
         window,
@@ -120,7 +104,16 @@ fn main() {
     for e in game_iter {
         match e {
             Render(_args) => {
-                device.submit(renderer.as_buffer());
+                graphics.clear(
+                    gfx::ClearData {
+                        color: Some([0.3, 0.3, 0.3, 0.1]),
+                        depth: None,
+                        stencil: None,
+                    },
+                    &frame
+                );
+                graphics.draw(&batch, &(), &frame);
+                graphics.end_frame();
             },
             _ => {},
         }
