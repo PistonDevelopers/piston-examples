@@ -1,0 +1,24 @@
+language: rust
+os:
+    - linux
+    - osx
+install:
+    # GLFW 3
+    - sudo apt-get install libXxf86vm-dev xdotool
+    - git clone https://github.com/glfw/glfw.git
+    - cd glfw
+    - git checkout 3.0.3
+    - cmake -DCMAKE_C_FLAGS=-fPIC -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF .
+    - make
+    - sudo make install
+    - cd ..
+before_script:
+    - rustc -v
+    - cargo -V
+script:
+    - (cd gfx_cube && cargo build -v)
+    - (cd gfx_triangle && cargo build -v)
+    - (cd hgl_triangle && cargo build -v)
+    - (cd image && cargo build -v)
+    - (cd music && cargo build -v)
+    - (cd user_input && cargo build -v)
