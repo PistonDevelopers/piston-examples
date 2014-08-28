@@ -35,7 +35,7 @@ impl Vertex {
     }
 }
 
-#[shader_param(Program)]
+#[shader_param(CubeBatch)]
 struct Params {
     u_ModelViewProj: [[f32, ..4], ..4],
     t_Color: gfx::shade::TextureParam,
@@ -113,7 +113,6 @@ fn main() {
     window.capture_cursor(true);
     
     let (mut device, frame) = window.gfx();
-    let mut renderer = device.create_renderer();
     let state = gfx::DrawState::new().depth(gfx::state::LessEqual, true);
 
     let vertex_data = vec![
@@ -178,7 +177,7 @@ fn main() {
     device.update_texture(
             &texture, 
             &img_info,
-            &vec![0x20u8, 0xA0u8, 0xC0u8, 0x00u8]
+            &vec![0x20u8, 0xA0u8, 0xC0u8, 0x00u8].as_slice()
         ).unwrap();
 
     let sampler = device.create_sampler(
@@ -187,15 +186,19 @@ fn main() {
             gfx::tex::Clamp
         )
     );
+    
+    let program = device.link_program(
+            VERTEX_SRC.clone(), 
+            FRAGMENT_SRC.clone()
+        ).unwrap();
+
+    let mut graphics = gfx::Graphics::new(device);
+    let batch: CubeBatch = graphics.make_batch(&mesh, slice, &program, &state).unwrap();
 
     let mut data = Params {
         u_ModelViewProj: piston::vecmath::mat4_id(),
         t_Color: (texture, Some(sampler)),
     };
-    let prog: Program = device.link_program(
-            VERTEX_SRC.clone(), 
-            FRAGMENT_SRC.clone()
-        ).unwrap();
 
     let model = piston::vecmath::mat4_id();
     let projection = cam::CameraPerspective {
@@ -206,7 +209,7 @@ fn main() {
         }.projection();
     let mut first_person = cam::FirstPerson::new(
         [0.5f32, 0.5, 4.0],
-        cam::FirstPersonSettings::default()
+        cam::FirstPersonSettings::keyboard_wasd()
     );
 
     let mut game_iter = piston::GameIterator::new(
@@ -220,8 +223,7 @@ fn main() {
     for e in game_iter {
         match e {
             piston::Render(args) => {
-                renderer.reset();
-                renderer.clear(
+                graphics.clear(
                     gfx::ClearData {
                         color: Some([0.3, 0.3, 0.3, 1.0]),
                         depth: Some(1.0),
@@ -234,8 +236,8 @@ fn main() {
                         first_person.camera(args.ext_dt).orthogonal(),
                         projection
                     );
-                renderer.draw(&mesh, slice, &frame, (&prog, &data), &state).unwrap();
-                device.submit(renderer.as_buffer());
+                graphics.draw(&batch, &data, &frame);
+                graphics.end_frame();
             },
             piston::Update(args) => first_person.update(args.dt),
             piston::Input(e) => first_person.input(&e),
