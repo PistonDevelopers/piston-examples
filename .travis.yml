@@ -26,5 +26,6 @@ before_script:
 script:
     - (cd hgl_triangle && cargo build -v)
     - (cd image && cargo build -v)
+    - (cd paint && cargo build -v)
     - (cd music && cargo build -v)
     - (cd user_input && cargo build -v)
