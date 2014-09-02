@@ -24,6 +24,7 @@ before_script:
     - rustc -v
     - cargo -V
 script:
+    - (cd gfx_cube && cargo build -v)
     - (cd hgl_triangle && cargo build -v)
     - (cd image && cargo build -v)
     - (cd paint && cargo build -v)
