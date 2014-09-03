@@ -7,4 +7,4 @@ A collection of examples using the Piston game engine
 1. Install [Cargo](https://github.com/rust-lang/cargo)
 2. In the Terminal window, navigate to the project directory of the example you want to build.
 3. Type `cargo build`
-4. Type `make run`
+4. Type `cargo run`
