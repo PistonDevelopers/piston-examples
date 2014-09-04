@@ -5,13 +5,13 @@ extern crate sdl2_mixer;
 extern crate sdl2;
 extern crate piston;
 
-use sdl2_game_window::GameWindowSDL2 as Window;
+use sdl2_game_window::WindowSDL2;
 use sdl2_mixer as mix;
 use piston::{
     AssetStore,
-    GameIterator,
-    GameIteratorSettings,
-    GameWindowSettings,
+    EventIterator,
+    EventSettings,
+    WindowSettings,
 };
 
 fn init_audio() {
@@ -35,13 +35,14 @@ fn init_audio() {
 }
 
 fn main() {
-    let mut window = Window::new(
+    let mut window = WindowSDL2::new(
         piston::shader_version::opengl::OpenGL_3_2,
-        GameWindowSettings {
+        WindowSettings {
             title: "Music".to_string(),
             size: [300, 300],
             fullscreen: false,
-            exit_on_esc: true
+            exit_on_esc: true,
+            samples: 0,
         }
     );
 
@@ -55,10 +56,10 @@ fn main() {
     // Loop once. 
     music.play(4).unwrap();
 
-    let game_iter_settings = GameIteratorSettings {
+    let event_settings = EventSettings {
             updates_per_second: 120,
             max_frames_per_second: 60,
         };
-    for _e in GameIterator::new(&mut window, &game_iter_settings) {}
+    for _e in EventIterator::new(&mut window, &event_settings) {}
 }
 

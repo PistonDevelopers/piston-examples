@@ -10,24 +10,25 @@ use opengl_graphics::{
     Gl,
     Texture,
 };
-use sdl2_game_window::GameWindowSDL2;
+use sdl2_game_window::WindowSDL2;
 use graphics::*;
 use piston::{
     AssetStore,
-    GameIterator,
-    GameIteratorSettings,
-    GameWindowSettings,
+    EventIterator,
+    EventSettings,
+    WindowSettings,
     Render,
 };
 
 fn main() {
-    let mut window = GameWindowSDL2::new(
+    let mut window = WindowSDL2::new(
         piston::shader_version::opengl::OpenGL_3_2,
-        GameWindowSettings {
+        WindowSettings {
             title: "Image".to_string(),
             size: [300, 300],
             fullscreen: false,
             exit_on_esc: true,
+            samples: 0,
         }
     );
 
@@ -35,12 +36,12 @@ fn main() {
 
     let image = asset_store.path("rust-logo.png").unwrap();
     let image = Texture::from_path(&image).unwrap();
-    let game_iter_settings = GameIteratorSettings {
+    let event_settings = EventSettings {
             updates_per_second: 120,
             max_frames_per_second: 60,
         };
     let ref mut gl = Gl::new();
-    for e in GameIterator::new(&mut window, &game_iter_settings) {
+    for e in EventIterator::new(&mut window, &event_settings) {
         match e {
             Render(args) => {
                 gl.viewport(0, 0, args.width as i32, args.height as i32);

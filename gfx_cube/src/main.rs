@@ -11,10 +11,10 @@ extern crate gfx_macros;
 extern crate native;
 extern crate time;
 
-// use glfw_game_window::GameWindowGLFW as Window;
-use sdl2_game_window::GameWindowSDL2 as Window;
+// use glfw_game_window::WindowGLFW;
+use sdl2_game_window::WindowSDL2;
 use gfx::{Device, DeviceHelper};
-use piston::{cam, GameWindow};
+use piston::{cam, Window};
 //----------------------------------------
 // Cube associated data
 
@@ -100,13 +100,14 @@ fn start(argc: int, argv: *const *const u8) -> int {
 }
 
 fn main() {
-    let mut window = Window::new(
+    let mut window = WindowSDL2::new(
         piston::shader_version::opengl::OpenGL_3_2,
-        piston::GameWindowSettings {
+        piston::WindowSettings {
             title: "cube".to_string(),
             size: [640, 480],
             fullscreen: false,
-            exit_on_esc: true
+            exit_on_esc: true,
+            samples: 4,
         }
     );
 
@@ -212,9 +213,9 @@ fn main() {
         cam::FirstPersonSettings::keyboard_wasd()
     );
 
-    let mut game_iter = piston::GameIterator::new(
+    let mut game_iter = piston::EventIterator::new(
         &mut window,
-        &piston::GameIteratorSettings {
+        &piston::EventSettings {
             updates_per_second: 120,
             max_frames_per_second: 60
         }

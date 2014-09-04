@@ -7,12 +7,12 @@ extern crate sdl2_game_window;
 extern crate opengl_graphics;
 
 use opengl_graphics::{ Gl,Texture };
-use sdl2_game_window::GameWindowSDL2;
+use sdl2_game_window::WindowSDL2;
 use graphics::*;
 use piston::{
-    GameIterator,
-    GameIteratorSettings,
-    GameWindowSettings,
+    EventIterator,
+    EventSettings,
+    WindowSettings,
     Render,
     Input,
 };
@@ -22,25 +22,26 @@ use piston::input;
 
 fn main() {
     let (width, height) = (300, 300);
-    let mut window = GameWindowSDL2::new(
+    let mut window = WindowSDL2::new(
         piston::shader_version::opengl::OpenGL_3_2,
-        GameWindowSettings {
+        WindowSettings {
             title: "Paint".to_string(),
             size: [width, height],
             fullscreen: false,
             exit_on_esc: true,
+            samples: 0,
         }
     );
 
     let mut image = image::ImageBuf::new(width, height);
     let mut draw = false;
     let mut texture = Texture::from_image(&image);
-    let game_iter_settings = GameIteratorSettings {
+    let event_settings = EventSettings {
             updates_per_second: 120,
             max_frames_per_second: 60,
         };
     let ref mut gl = Gl::new();
-    for e in GameIterator::new(&mut window, &game_iter_settings) {
+    for e in EventIterator::new(&mut window, &event_settings) {
         match e {
             Render(args) => {
                 gl.viewport(0, 0, args.width as i32, args.height as i32);
