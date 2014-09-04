@@ -6,9 +6,19 @@ extern crate piston;
 extern crate glfw_game_window;
 
 // use sdl2_game_window::GameWindowSDL2 as Window;
-use glfw_game_window::GameWindowGLFW as Window;
+use glfw_game_window::WindowGLFW;
 use piston::input::keyboard;
-use piston::input;
+use piston::input::{
+    Keyboard,
+    Mouse,
+    MouseCursor,
+    MouseRelative,
+    MouseScroll,
+    Move,
+    Press,
+    Release,
+    Text,
+};
 use piston::{
     Input,
     Render,
@@ -27,7 +37,7 @@ impl App {
         }
     }
 
-    fn key_press<W: piston::GameWindow>(
+    fn key_press<W: piston::Window>(
         &mut self,
         window: &mut W,
         key: keyboard::Key
@@ -44,40 +54,41 @@ impl App {
 }
 
 fn main() {
-    let mut window = Window::new(
+    let mut window = WindowGLFW::new(
         piston::shader_version::opengl::OpenGL_3_2,
-        piston::GameWindowSettings {
+        piston::WindowSettings {
             title: "Keycode".to_string(),
             size: [300, 300],
             fullscreen: false,
             exit_on_esc: true,
+            samples: 0,
         }
     );
 
     println!("Press C to turn capture cursor on/off");
 
     let mut app = App::new();
-    let game_iter_settings = piston::GameIteratorSettings {
+    let event_settings = piston::EventSettings {
             updates_per_second: 120,
             max_frames_per_second: 60,
         };
-    for e in piston::GameIterator::new(&mut window, &game_iter_settings) {
+    for e in piston::EventIterator::new(&mut window, &event_settings) {
         match e {
-            Input(input::Press(input::Keyboard(key))) => 
+            Input(Press(Keyboard(key))) => 
                 app.key_press(&mut window, key),
-            Input(input::Release(input::Keyboard(key))) => 
+            Input(Release(Keyboard(key))) => 
                 println!("Released keyboard key '{}'", key),
-            Input(input::Press(input::Mouse(button))) => 
+            Input(Press(Mouse(button))) => 
                 println!("Pressed mouse button '{}'", button),
-            Input(input::Release(input::Mouse(button))) => 
+            Input(Release(Mouse(button))) => 
                 println!("Released mouse button '{}'", button),
-            Input(input::Move(input::MouseCursor(x, y))) => 
+            Input(Move(MouseCursor(x, y))) => 
                 println!("Mouse moved '{} {}'", x, y),
-            Input(input::Move(input::MouseScroll(dx, dy))) => 
+            Input(Move(MouseScroll(dx, dy))) => 
                 println!("Scrolled mouse '{}, {}'", dx, dy),
-            Input(input::Move(input::MouseRelative(dx, dy))) => 
+            Input(Move(MouseRelative(dx, dy))) => 
                 println!("Relative mouse moved '{} {}'", dx, dy),
-            Input(input::Text(text)) => println!("Typed '{}'", text),
+            Input(Text(text)) => println!("Typed '{}'", text),
             Render(_) => {},
             Update(_) => {},
         }
