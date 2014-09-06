@@ -226,10 +226,11 @@ fn main() {
             piston::Render(args) => {
                 graphics.clear(
                     gfx::ClearData {
-                        color: Some([0.3, 0.3, 0.3, 1.0]),
-                        depth: Some(1.0),
-                        stencil: None,
+                        color: [0.3, 0.3, 0.3, 1.0],
+                        depth: 1.0,
+                        stencil: 0,
                     },
+                    gfx::Color | gfx::Depth,
                     &frame
                 );
                 data.u_model_view_proj = cam::model_view_projection(

@@ -5,10 +5,11 @@ extern crate piston;
 // extern crate sdl2_game_window;
 extern crate glfw_game_window;
 
-// use sdl2_game_window::GameWindowSDL2 as Window;
+// use sdl2_game_window::WindowSDL2;
 use glfw_game_window::WindowGLFW;
 use piston::input::keyboard;
 use piston::input::{
+    Focus,
     Keyboard,
     Mouse,
     MouseCursor,
@@ -17,6 +18,7 @@ use piston::input::{
     Move,
     Press,
     Release,
+    Resize,
     Text,
 };
 use piston::{
@@ -89,6 +91,9 @@ fn main() {
             Input(Move(MouseRelative(dx, dy))) => 
                 println!("Relative mouse moved '{} {}'", dx, dy),
             Input(Text(text)) => println!("Typed '{}'", text),
+            Input(Resize(w, h)) => println!("Resized '{}, {}'", w, h),
+            Input(Focus(true)) => println!("Gained focus"),
+            Input(Focus(false)) => println!("Lost focus"),
             Render(_) => {},
             Update(_) => {},
         }
