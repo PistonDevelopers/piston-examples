@@ -21,8 +21,9 @@ use piston::{
 };
 
 fn main() {
+    let opengl = piston::shader_version::opengl::OpenGL_3_2;
     let mut window = WindowSDL2::new(
-        piston::shader_version::opengl::OpenGL_3_2,
+        opengl,
         WindowSettings {
             title: "Image".to_string(),
             size: [300, 300],
@@ -40,7 +41,7 @@ fn main() {
             updates_per_second: 120,
             max_frames_per_second: 60,
         };
-    let ref mut gl = Gl::new();
+    let ref mut gl = Gl::new(opengl);
     for e in EventIterator::new(&mut window, &event_settings) {
         match e {
             Render(args) => {
