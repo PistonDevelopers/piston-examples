@@ -9,6 +9,7 @@ extern crate glfw_game_window;
 use glfw_game_window::WindowGLFW;
 use piston::input::keyboard;
 use piston::input::{
+    Focus,
     Keyboard,
     Mouse,
     MouseCursor,
@@ -91,6 +92,8 @@ fn main() {
                 println!("Relative mouse moved '{} {}'", dx, dy),
             Input(Text(text)) => println!("Typed '{}'", text),
             Input(Resize(w, h)) => println!("Resized '{}, {}'", w, h),
+            Input(Focus(true)) => println!("Gained focus"),
+            Input(Focus(false)) => println!("Lost focus"),
             Render(_) => {},
             Update(_) => {},
         }
