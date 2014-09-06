@@ -57,8 +57,11 @@ fn main() {
                 draw = false
             }
             Input(input::Move(input::MouseCursor(x, y))) if draw => {
-                image.put_pixel(x as u32, y as u32, image::Rgba(0, 0, 0, 255));
-                texture.update(&image);
+                let (x, y) = (x as u32, y as u32);
+                if x < width && y < height {
+                    image.put_pixel(x, y, image::Rgba(0, 0, 0, 255));
+                    texture.update(&image);
+                }
             }
             _ => {},
         }
