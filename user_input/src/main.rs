@@ -74,10 +74,16 @@ fn main() {
             updates_per_second: 120,
             max_frames_per_second: 60,
         };
-    for e in piston::EventIterator::new(&mut window, &event_settings) {
+    let mut event_iter = piston::EventIterator::new(&mut window, &event_settings);
+    loop {
+        let e = match event_iter.next() {
+                None => { break; }
+                Some(e) => e
+            };
+
         match e {
             Input(Press(Keyboard(key))) => 
-                app.key_press(&mut window, key),
+                app.key_press(event_iter.window, key),
             Input(Release(Keyboard(key))) => 
                 println!("Released keyboard key '{}'", key),
             Input(Press(Mouse(button))) => 
