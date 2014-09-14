@@ -100,11 +100,12 @@ fn start(argc: int, argv: *const *const u8) -> int {
 }
 
 fn main() {
+    let (win_width, win_height) = (640, 480);
     let mut window = WindowSDL2::new(
         piston::shader_version::opengl::OpenGL_3_2,
         piston::WindowSettings {
             title: "cube".to_string(),
-            size: [640, 480],
+            size: [win_width, win_height],
             fullscreen: false,
             exit_on_esc: true,
             samples: 4,
@@ -206,7 +207,7 @@ fn main() {
             fov: 90.0f32,
             near_clip: 0.1,
             far_clip: 1000.0,
-            aspect_ratio: 1.0
+            aspect_ratio: (win_width as f32) / (win_height as f32)
         }.projection();
     let mut first_person = cam::FirstPerson::new(
         [0.5f32, 0.5, 4.0],
