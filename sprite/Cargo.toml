@@ -1,0 +1,22 @@
+[package]
+
+name = "sprite"
+version = "0.0.1"
+authors = ["Coeuvre Wong <coeuvre@gmail.com>"]
+
+[[bin]]
+
+name = "piston-example-sprite"
+
+[dependencies.piston]
+
+git = "https://github.com/pistondevelopers/piston"
+
+[dependencies.sdl2_game_window]
+
+git = "https://github.com/pistondevelopers/sdl2_game_window"
+
+[dependencies.opengl_graphics]
+
+git = "https://github.com/pistondevelopers/opengl_graphics"
+
