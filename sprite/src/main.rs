@@ -14,6 +14,7 @@ use piston::{
     EventSettings,
     WindowSettings,
     Render,
+    Input,
 };
 use piston::sprite::*;
 use piston::event::{
@@ -56,7 +57,7 @@ fn main() {
     let id = scene.add_child(sprite);
 
     // Run a sequence actions
-    scene.run_action(id, Sequence(vec![
+    let seq_action = Sequence(vec![
         Action(Ease(EaseCubicOut, box ScaleTo(2.0, 0.5, 0.5))),
         Action(Ease(EaseBounceOut, box MoveBy(1.0, 0.0, 100.0))),
         Action(Ease(EaseElasticOut, box MoveBy(2.0, 0.0, -100.0))),
@@ -68,10 +69,14 @@ fn main() {
             Action(Ease(EaseQuadraticIn, box FadeOut(1.0))),
             Action(Ease(EaseQuadraticOut, box FadeIn(1.0))),
         ]),
-    ]));
+    ]);
+    scene.run_action(id, &seq_action);
 
     // This action and above one can run in parallel
-    scene.run_action(id, Action(Ease(EaseExponentialInOut, box RotateTo(2.0, 360.0))));
+    let rotate_action = Action(Ease(EaseExponentialInOut, box RotateTo(2.0, 360.0)));
+    scene.run_action(id, &rotate_action);
+
+    println!("Press any key to pause/resume the animation!");
 
     let event_settings = EventSettings {
         updates_per_second: 120,
@@ -89,6 +94,10 @@ fn main() {
                 c.rgb(1.0, 1.0, 1.0).draw(gl);
 
                 scene.draw(&c, gl);
+            },
+            Input(piston::input::Press(_)) => {
+                scene.toggle_action(id, &seq_action);
+                scene.toggle_action(id, &rotate_action);
             },
             _ => {},
         }
