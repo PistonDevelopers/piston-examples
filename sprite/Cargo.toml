@@ -1,6 +1,6 @@
 [package]
 
-name = "sprite"
+name = "piston-example-sprite"
 version = "0.0.1"
 authors = ["Coeuvre Wong <coeuvre@gmail.com>"]
 

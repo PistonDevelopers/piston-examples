@@ -14,10 +14,8 @@ use piston::{
     EventSettings,
     WindowSettings,
     Render,
-    Scene,
-    Sprite,
 };
-use piston::action::*;
+use piston::sprite::*;
 use piston::event::{
     Action,
     Sequence,
@@ -59,18 +57,21 @@ fn main() {
 
     // Run a sequence actions
     scene.run_action(id, Sequence(vec![
-        Action(EaseOut(box ScaleTo(2.0, 0.5, 0.5))),
-        Action(EaseInOut(box MoveBy(0.5, 0.0, -100.0))),
-        Wait(1.0),
+        Action(Ease(EaseCubicOut, box ScaleTo(2.0, 0.5, 0.5))),
+        Action(Ease(EaseBounceOut, box MoveBy(1.0, 0.0, 100.0))),
+        Action(Ease(EaseElasticOut, box MoveBy(2.0, 0.0, -100.0))),
+        Action(Ease(EaseBackInOut, box MoveBy(1.0, 0.0, -100.0))),
+        Wait(0.5),
+        Action(Ease(EaseExponentialInOut, box MoveBy(1.0, 0.0, 100.0))),
         Action(Blink(1.0, 5)),
         While(box WaitForever, vec![
-            Action(EaseIn(box FadeOut(1.0))),
-            Action(EaseOut(box FadeIn(1.0))),
+            Action(Ease(EaseQuadraticIn, box FadeOut(1.0))),
+            Action(Ease(EaseQuadraticOut, box FadeIn(1.0))),
         ]),
     ]));
 
     // This action and above one can run in parallel
-    scene.run_action(id, Action(RotateTo(2.0, 360.0)));
+    scene.run_action(id, Action(Ease(EaseExponentialInOut, box RotateTo(2.0, 360.0))));
 
     let event_settings = EventSettings {
         updates_per_second: 120,
