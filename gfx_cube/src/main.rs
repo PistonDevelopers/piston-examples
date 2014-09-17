@@ -5,6 +5,7 @@
 extern crate gfx;
 extern crate piston;
 // extern crate glfw_game_window;
+extern crate sdl2;
 extern crate sdl2_game_window;
 #[phase(plugin)]
 extern crate gfx_macros;
@@ -113,8 +114,11 @@ fn main() {
     );
 
     window.capture_cursor(true);
-    
-    let (mut device, frame) = window.gfx();
+
+    let mut device = gfx::GlDevice::new(|s| unsafe {
+        std::mem::transmute(sdl2::video::gl_get_proc_address(s))
+    });
+    let frame = gfx::Frame::new(win_width as u16, win_height as u16);
     let state = gfx::DrawState::new().depth(gfx::state::LessEqual, true);
 
     let vertex_data = vec![
@@ -150,7 +154,7 @@ fn main() {
         Vertex::new([ 1, -1, -1], [0, 1]),
     ];
 
-    let mesh = device.create_mesh(vertex_data);
+    let mesh = device.create_mesh(vertex_data.as_slice());
 
     let slice = {
         let index_data = vec![
@@ -162,7 +166,7 @@ fn main() {
             20, 21, 22, 22, 23, 20, //back
         ];
 
-        let buf = device.create_buffer_static(&index_data);
+        let buf = device.create_buffer_static(index_data.as_slice());
         gfx::IndexSlice8(gfx::TriangleList, buf, 0, 36)
     };
 
@@ -179,7 +183,7 @@ fn main() {
     device.update_texture(
             &texture, 
             &img_info,
-            &vec![0x20u8, 0xA0u8, 0xC0u8, 0x00u8].as_slice()
+            vec![0x20u8, 0xA0u8, 0xC0u8, 0x00u8].as_slice()
         ).unwrap();
 
     let sampler = device.create_sampler(
