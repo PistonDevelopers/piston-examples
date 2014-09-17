@@ -119,7 +119,6 @@ fn main() {
         std::mem::transmute(sdl2::video::gl_get_proc_address(s))
     });
     let frame = gfx::Frame::new(win_width as u16, win_height as u16);
-    //let (mut device, frame) = window.gfx();
     let state = gfx::DrawState::new().depth(gfx::state::LessEqual, true);
 
     let vertex_data = vec![
