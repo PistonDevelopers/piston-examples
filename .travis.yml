@@ -31,3 +31,4 @@ script:
     - (cd paint && cargo build -v)
     - (cd music && cargo build -v)
     - (cd user_input && cargo build -v)
+    - (cd sprite && cargo build -v)
