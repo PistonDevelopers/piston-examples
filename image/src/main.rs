@@ -11,7 +11,6 @@ use opengl_graphics::{
     Texture,
 };
 use sdl2_game_window::WindowSDL2;
-use graphics::*;
 use piston::{
     AssetStore,
     EventIterator,
@@ -19,6 +18,7 @@ use piston::{
     WindowSettings,
     Render,
 };
+use piston::graphics::*;
 
 fn main() {
     let opengl = piston::shader_version::opengl::OpenGL_3_2;
