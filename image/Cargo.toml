@@ -10,10 +10,6 @@ tags = []
 name = "piston-example-image"
 path = "src/main.rs"
 
-[dependencies.graphics]
-
-git = "https://github.com/pistondevelopers/rust-graphics"
-
 [dependencies.piston]
 
 git = "https://github.com/pistondevelopers/piston/"
