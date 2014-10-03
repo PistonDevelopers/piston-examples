@@ -87,14 +87,16 @@ fn main() {
                         Some(pos) => {
                             // Add point to deformed grid.
                             grid.add_control_point(pos);
-                            grid.set_current(-1, [x, y]);
+                            let n = grid.ps.len();
+                            grid.set_current(n - 1, [x, y]);
                         }
                     }
                     grid.update();
                     true
                 }
                 MoveDrag(x, y) => {
-                    grid.set_current(-1, [x, y]);
+                    let n = grid.ps.len();
+                    grid.set_current(n - 1, [x, y]);
                     grid.update();
                     true
                 }
