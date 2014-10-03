@@ -1,7 +1,3 @@
-
-#![feature(globs)]
-
-extern crate graphics;
 extern crate piston;
 extern crate sdl2_game_window;
 extern crate opengl_graphics;
@@ -18,7 +14,12 @@ use piston::{
     WindowSettings,
     Render,
 };
-use piston::graphics::*;
+use piston::graphics::{
+    AddColor,
+    AddImage,
+    Context,
+    Draw,
+};
 
 fn main() {
     let opengl = piston::shader_version::opengl::OpenGL_3_2;
