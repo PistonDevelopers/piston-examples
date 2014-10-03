@@ -42,6 +42,7 @@ use piston::input::{
 fn main() {
     println!("Click in the red square and drag.");
     println!("Toggle grid with G.");
+    println!("Reset grid with R.");
 
     let opengl = piston::shader_version::opengl::OpenGL_3_2;
     let mut window = WindowSDL2::new(
@@ -78,17 +79,22 @@ fn main() {
         drag.event(&e, |action| {
             match action {
                 StartDrag(x, y) => {
-                    grid.add_control_point([x, y]);
+                    match grid.hit([x, y]) {
+                        None => {
+                            // Did not hit deformed grid.
+                            grid.add_control_point([x, y]);
+                        }
+                        Some(pos) => {
+                            // Add point to deformed grid.
+                            grid.add_control_point(pos);
+                            grid.set_current(-1, [x, y]);
+                        }
+                    }
+                    grid.update();
                     true
                 }
                 MoveDrag(x, y) => {
-                    {
-                        let last_index = grid.qs.len() - 1;
-                        let last_point = grid.qs.get_mut(
-                            last_index
-                        );
-                        *last_point = [x, y];
-                    }
+                    grid.set_current(-1, [x, y]);
                     grid.update();
                     true
                 }
@@ -101,6 +107,11 @@ fn main() {
             if button == Keyboard(keyboard::G) {
                 draw_grid = !draw_grid;
                 println!("Draw grid {}", draw_grid);
+            } else if button == Keyboard(keyboard::R) {
+                grid.reset_control_points();
+                grid.reset_vertices_and_texture_coords();
+                grid.update();
+                println!("Reset grid");
             }
         });
         e.render(|args| {
