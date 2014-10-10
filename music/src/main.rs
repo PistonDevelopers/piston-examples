@@ -15,7 +15,7 @@ use piston::{
 };
 
 fn init_audio() {
-    sdl2::init(sdl2::InitAudio | sdl2::InitTimer);
+    sdl2::init(sdl2::INIT_AUDIO | sdl2::INIT_TIMER);
     // Load dynamic libraries.
     mix::init(
           mix::InitMp3 
