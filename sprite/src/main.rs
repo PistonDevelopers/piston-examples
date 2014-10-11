@@ -84,7 +84,7 @@ fn main() {
     };
     let ref mut gl = Gl::new(opengl);
     for e in EventIterator::new(&mut window, &event_settings) {
-        scene.update(&e);
+        scene.event(&e);
 
         match e {
             Render(args) => {
