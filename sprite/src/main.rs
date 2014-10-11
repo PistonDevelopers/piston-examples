@@ -56,8 +56,8 @@ fn main() {
 
     let id = scene.add_child(sprite);
 
-    // Run a sequence actions
-    let seq_action = Sequence(vec![
+    // Run a sequence or animations.
+    let seq = Sequence(vec![
         Action(Ease(EaseCubicOut, box ScaleTo(2.0, 0.5, 0.5))),
         Action(Ease(EaseBounceOut, box MoveBy(1.0, 0.0, 100.0))),
         Action(Ease(EaseElasticOut, box MoveBy(2.0, 0.0, -100.0))),
@@ -70,11 +70,11 @@ fn main() {
             Action(Ease(EaseQuadraticOut, box FadeIn(1.0))),
         ]),
     ]);
-    scene.run_action(id, &seq_action);
+    scene.run(id, &seq);
 
-    // This action and above one can run in parallel
-    let rotate_action = Action(Ease(EaseExponentialInOut, box RotateTo(2.0, 360.0)));
-    scene.run_action(id, &rotate_action);
+    // This animation and the one above can run in parallel.
+    let rotate = Action(Ease(EaseExponentialInOut, box RotateTo(2.0, 360.0)));
+    scene.run(id, &rotate);
 
     println!("Press any key to pause/resume the animation!");
 
@@ -96,8 +96,8 @@ fn main() {
                 scene.draw(&c, gl);
             },
             Input(piston::input::Press(_)) => {
-                scene.toggle_action(id, &seq_action);
-                scene.toggle_action(id, &rotate_action);
+                scene.toggle(id, &seq);
+                scene.toggle(id, &rotate);
             },
             _ => {},
         }
