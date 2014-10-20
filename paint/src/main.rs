@@ -1,27 +1,25 @@
 
 #![feature(globs)]
 
+extern crate shader_version;
+extern crate input;
+extern crate event;
+extern crate image;
 extern crate graphics;
-extern crate piston;
 extern crate sdl2_game_window;
 extern crate opengl_graphics;
 
 use opengl_graphics::{ Gl,Texture };
 use sdl2_game_window::WindowSDL2;
-use graphics::*;
-use piston::{
+use event::{
     EventIterator,
     EventSettings,
     WindowSettings,
-    Render,
-    Input,
 };
-use piston::image;
-use piston::image::GenericImage;
-use piston::input;
+use image::GenericImage;
 
 fn main() {
-    let opengl = piston::shader_version::opengl::OpenGL_3_2;
+    let opengl = shader_version::opengl::OpenGL_3_2;
     let (width, height) = (300, 300);
     let mut window = WindowSDL2::new(
         opengl,
@@ -43,28 +41,34 @@ fn main() {
         };
     let ref mut gl = Gl::new(opengl);
     for e in EventIterator::new(&mut window, &event_settings) {
-        match e {
-            Render(args) => {
-                gl.viewport(0, 0, args.width as i32, args.height as i32);
+        use event::{ MouseCursorEvent, PressEvent, ReleaseEvent, RenderEvent };
+        e.render(|args| {
+            use graphics::*;
 
-                let c = Context::abs(args.width as f64, args.height as f64);
-                c.rgb(1.0, 1.0, 1.0).draw(gl);
-                c.image(&texture).draw(gl);
-            },
-            Input(input::Press(input::Mouse(input::mouse::Left))) => {
+            gl.viewport(0, 0, args.width as i32, args.height as i32);
+
+            let c = Context::abs(args.width as f64, args.height as f64);
+            c.rgb(1.0, 1.0, 1.0).draw(gl);
+            c.image(&texture).draw(gl);
+        });
+        e.press(|button| {
+            if button == input::Mouse(input::mouse::Left) {
                 draw = true
             }
-            Input(input::Release(input::Mouse(input::mouse::Left))) => {
+        });
+        e.release(|button| {
+            if button == input::Mouse(input::mouse::Left) {
                 draw = false
             }
-            Input(input::Move(input::MouseCursor(x, y))) if draw => {
+        });
+        if draw {
+            e.mouse_cursor(|x, y| {
                 let (x, y) = (x as u32, y as u32);
                 if x < width && y < height {
                     image.put_pixel(x, y, image::Rgba(0, 0, 0, 255));
                     texture.update(&image);
                 }
-            }
-            _ => {},
+            });
         }
     }
 }

@@ -1,4 +1,8 @@
-extern crate piston;
+#![feature(globs)]
+
+extern crate shader_version;
+extern crate event;
+extern crate graphics;
 extern crate sdl2_game_window;
 extern crate opengl_graphics;
 
@@ -7,22 +11,14 @@ use opengl_graphics::{
     Texture,
 };
 use sdl2_game_window::WindowSDL2;
-use piston::{
-    AssetStore,
+use event::{
     EventIterator,
     EventSettings,
     WindowSettings,
-    Render,
-};
-use piston::graphics::{
-    AddColor,
-    AddImage,
-    Context,
-    Draw,
 };
 
 fn main() {
-    let opengl = piston::shader_version::opengl::OpenGL_3_2;
+    let opengl = shader_version::opengl::OpenGL_3_2;
     let mut window = WindowSDL2::new(
         opengl,
         WindowSettings {
@@ -34,9 +30,7 @@ fn main() {
         }
     );
 
-    let asset_store = AssetStore::from_folder("../bin/assets");
-
-    let image = asset_store.path("rust-logo.png").unwrap();
+    let image = Path::new("./bin/assets/rust-logo.png");
     let image = Texture::from_path(&image).unwrap();
     let event_settings = EventSettings {
             updates_per_second: 120,
@@ -44,16 +38,17 @@ fn main() {
         };
     let ref mut gl = Gl::new(opengl);
     for e in EventIterator::new(&mut window, &event_settings) {
-        match e {
-            Render(args) => {
-                gl.viewport(0, 0, args.width as i32, args.height as i32);
+        use event::RenderEvent;
 
-                let c = Context::abs(args.width as f64, args.height as f64);
-                c.rgb(1.0, 1.0, 1.0).draw(gl);
-                    c.image(&image).draw(gl);
-            },
-            _ => {},
-        }
+        e.render(|args| {
+            use graphics::*;
+
+            gl.viewport(0, 0, args.width as i32, args.height as i32);
+
+            let c = Context::abs(args.width as f64, args.height as f64);
+            c.rgb(1.0, 1.0, 1.0).draw(gl);
+            c.image(&image).draw(gl);
+        });
     }
 }
 
