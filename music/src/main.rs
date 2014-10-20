@@ -18,12 +18,12 @@ fn init_audio() {
     sdl2::init(sdl2::INIT_AUDIO | sdl2::INIT_TIMER);
     // Load dynamic libraries.
     mix::init(
-          mix::InitMp3 
-        | mix::InitFlac 
-        | mix::InitMod 
-        | mix::InitFluidSynth
-        | mix::InitModPlug
-        | mix::InitOgg
+          mix::INIT_MP3 
+        | mix::INIT_FLAC 
+        | mix::INIT_MOD 
+        | mix::INIT_FLUIDSYNTH
+        | mix::INIT_MODPLUG
+        | mix::INIT_OGG
     );
     mix::open_audio(
         mix::DEFAULT_FREQUENCY,
