@@ -23,7 +23,7 @@ use piston::graphics::{
     ImageSize,
 };
 use piston::graphics::deform::DeformGrid;
-use piston::drag_controller::{
+use piston::event::drag_controller::{
     DragController,
     StartDrag,
     MoveDrag,
