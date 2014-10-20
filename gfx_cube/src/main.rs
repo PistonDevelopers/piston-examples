@@ -235,7 +235,7 @@ fn main() {
                         depth: 1.0,
                         stencil: 0,
                     },
-                    gfx::Color | gfx::Depth,
+                    gfx::COLOR | gfx::DEPTH,
                     &frame
                 );
                 data.u_model_view_proj = cam::model_view_projection(
