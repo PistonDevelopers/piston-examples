@@ -8,9 +8,9 @@ authors = ["Coeuvre Wong <coeuvre@gmail.com>"]
 
 name = "piston-example-sprite"
 
-[dependencies.piston]
+[dependencies.sprite]
 
-git = "https://github.com/pistondevelopers/piston"
+git = "https://github.com/pistondevelopers/sprite"
 
 [dependencies.sdl2_game_window]
 

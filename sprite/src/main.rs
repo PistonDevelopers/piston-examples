@@ -1,23 +1,23 @@
 
 #![feature(globs)]
 
-extern crate piston;
+extern crate shader_version;
+extern crate input;
+extern crate sprite;
+extern crate event;
 extern crate graphics;
 extern crate sdl2_game_window;
 extern crate opengl_graphics;
 
 use std::rc::Rc;
 
-use piston::{
-    AssetStore,
+use event::{
     EventIterator,
     EventSettings,
     WindowSettings,
-    Render,
-    Input,
 };
-use piston::sprite::*;
-use piston::event::{
+use sprite::*;
+use event::{
     Action,
     Sequence,
     Wait,
@@ -35,7 +35,7 @@ use opengl_graphics::{
 
 fn main() {
     let (width, height) = (300, 300);
-    let opengl = piston::shader_version::opengl::OpenGL_3_2;
+    let opengl = shader_version::opengl::OpenGL_3_2;
     let mut window = WindowSDL2::new(
         opengl,
         WindowSettings {
@@ -47,10 +47,9 @@ fn main() {
         }
     );
 
-    let asset_store = AssetStore::from_folder("../");
     let mut scene = Scene::new();
-
-    let tex = Rc::new(Texture::from_path(&asset_store.path("rust-logo.png").unwrap()).unwrap());
+    let tex = Path::new("./rust-logo.png");
+    let tex = Rc::new(Texture::from_path(&tex).unwrap());
     let mut sprite = Sprite::from_texture(tex.clone());
     sprite.set_position(width as f64 / 2.0, height as f64 / 2.0);
 
@@ -84,22 +83,23 @@ fn main() {
     };
     let ref mut gl = Gl::new(opengl);
     for e in EventIterator::new(&mut window, &event_settings) {
+        use event::{ PressEvent, RenderEvent };
+
         scene.event(&e);
 
-        match e {
-            Render(args) => {
-                gl.viewport(0, 0, args.width as i32, args.height as i32);
+        e.render(|args| {
+            use graphics::*;
 
-                let c = Context::abs(args.width as f64, args.width as f64);
-                c.rgb(1.0, 1.0, 1.0).draw(gl);
+            gl.viewport(0, 0, args.width as i32, args.height as i32);
 
-                scene.draw(&c, gl);
-            },
-            Input(piston::input::Press(_)) => {
-                scene.toggle(id, &seq);
-                scene.toggle(id, &rotate);
-            },
-            _ => {},
-        }
+            let c = Context::abs(args.width as f64, args.width as f64);
+            c.rgb(1.0, 1.0, 1.0).draw(gl);
+
+            scene.draw(&c, gl);
+        });
+        e.press(|_| {
+            scene.toggle(id, &seq);
+            scene.toggle(id, &rotate);
+        });
     }
 }
