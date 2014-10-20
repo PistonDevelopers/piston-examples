@@ -1,14 +1,17 @@
 #![feature(globs)]
 
-extern crate piston;
-// extern crate sdl2_game_window;
-extern crate glfw_game_window;
+extern crate shader_version;
+extern crate input;
+extern crate event;
+extern crate sdl2_game_window;
+// extern crate glfw_game_window;
 
-// use sdl2_game_window::WindowSDL2;
-use glfw_game_window::WindowGLFW;
-use piston::Window;
-use piston::input::{ keyboard, Keyboard, Mouse };
-use piston::event::{
+use sdl2_game_window::WindowSDL2;
+// use glfw_game_window::WindowGLFW;
+use input::{ keyboard, Keyboard, Mouse };
+use event::{
+    EventIterator,
+    EventSettings,
     FocusEvent,
     PressEvent,
     MouseCursorEvent,
@@ -19,12 +22,14 @@ use piston::event::{
     ResizeEvent,
     TextEvent,
     UpdateEvent,
+    Window,
+    WindowSettings,
 };
 
 fn main() {
-    let mut window = WindowGLFW::new(
-        piston::shader_version::opengl::OpenGL_3_2,
-        piston::WindowSettings {
+    let mut window = WindowSDL2::new(
+        shader_version::opengl::OpenGL_3_2,
+        WindowSettings {
             title: "Keycode".to_string(),
             size: [300, 300],
             fullscreen: false,
@@ -36,11 +41,11 @@ fn main() {
     println!("Press C to turn capture cursor on/off");
 
     let mut capture_cursor = false;
-    let event_settings = piston::EventSettings {
+    let event_settings = EventSettings {
             updates_per_second: 120,
             max_frames_per_second: 60,
         };
-    let mut event_iter = piston::EventIterator::new(&mut window, &event_settings);
+    let mut event_iter = EventIterator::new(&mut window, &event_settings);
     loop {
         let e = match event_iter.next() {
                 None => { break; }

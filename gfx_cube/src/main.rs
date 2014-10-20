@@ -2,8 +2,12 @@
 #![feature(globs)]
 #![crate_name = "cube"]
 
+extern crate shader_version;
+extern crate vecmath;
+extern crate event;
+extern crate input;
+extern crate cam;
 extern crate gfx;
-extern crate piston;
 // extern crate glfw_game_window;
 extern crate sdl2;
 extern crate sdl2_game_window;
@@ -15,7 +19,7 @@ extern crate time;
 // use glfw_game_window::WindowGLFW;
 use sdl2_game_window::WindowSDL2;
 use gfx::{Device, DeviceHelper};
-use piston::{cam, Window};
+use event::{ EventIterator, EventSettings, Window, WindowSettings };
 //----------------------------------------
 // Cube associated data
 
@@ -103,8 +107,8 @@ fn start(argc: int, argv: *const *const u8) -> int {
 fn main() {
     let (win_width, win_height) = (640, 480);
     let mut window = WindowSDL2::new(
-        piston::shader_version::opengl::OpenGL_3_2,
-        piston::WindowSettings {
+        shader_version::opengl::OpenGL_3_2,
+        WindowSettings {
             title: "cube".to_string(),
             size: [win_width, win_height],
             fullscreen: false,
@@ -202,11 +206,11 @@ fn main() {
     let batch: CubeBatch = graphics.make_batch(&program, &mesh, slice, &state).unwrap();
 
     let mut data = Params {
-        u_model_view_proj: piston::vecmath::mat4_id(),
+        u_model_view_proj: vecmath::mat4_id(),
         t_color: (texture, Some(sampler)),
     };
 
-    let model = piston::vecmath::mat4_id();
+    let model = vecmath::mat4_id();
     let projection = cam::CameraPerspective {
             fov: 90.0f32,
             near_clip: 0.1,
@@ -218,37 +222,36 @@ fn main() {
         cam::FirstPersonSettings::keyboard_wasd()
     );
 
-    let mut game_iter = piston::EventIterator::new(
+    let mut game_iter = EventIterator::new(
         &mut window,
-        &piston::EventSettings {
+        &EventSettings {
             updates_per_second: 120,
             max_frames_per_second: 60
         }
     );
 
     for e in game_iter {
-        match e {
-            piston::Render(args) => {
-                graphics.clear(
-                    gfx::ClearData {
-                        color: [0.3, 0.3, 0.3, 1.0],
-                        depth: 1.0,
-                        stencil: 0,
-                    },
-                    gfx::Color | gfx::Depth,
-                    &frame
+        use event::RenderEvent;
+
+        first_person.event(&e);
+        e.render(|args| {
+            graphics.clear(
+                gfx::ClearData {
+                    color: [0.3, 0.3, 0.3, 1.0],
+                    depth: 1.0,
+                    stencil: 0,
+                },
+                gfx::COLOR | gfx::DEPTH,
+                &frame
+            );
+            data.u_model_view_proj = cam::model_view_projection(
+                    model,
+                    first_person.camera(args.ext_dt).orthogonal(),
+                    projection
                 );
-                data.u_model_view_proj = cam::model_view_projection(
-                        model,
-                        first_person.camera(args.ext_dt).orthogonal(),
-                        projection
-                    );
-                graphics.draw(&batch, &data, &frame);
-                graphics.end_frame();
-            },
-            piston::Update(args) => first_person.update(args.dt),
-            piston::Input(e) => first_person.input(&e),
-        }
+            graphics.draw(&batch, &data, &frame);
+            graphics.end_frame();
+        });
     }
 }
 

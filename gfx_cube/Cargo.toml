@@ -10,9 +10,9 @@ tags = []
 name = "cube"
 path = "src/main.rs"
 
-[dependencies.piston]
+[dependencies.cam]
 
-git = "https://github.com/pistondevelopers/piston"
+git = "https://github.com/PistonDevelopers/cam"
 
 [dependencies.glfw_game_window]
 

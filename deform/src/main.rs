@@ -1,4 +1,7 @@
-extern crate piston;
+extern crate shader_version;
+extern crate graphics;
+extern crate event;
+extern crate input;
 extern crate sdl2_game_window;
 extern crate opengl_graphics;
 
@@ -7,13 +10,12 @@ use opengl_graphics::{
     Texture,
 };
 use sdl2_game_window::WindowSDL2;
-use piston::{
-    AssetStore,
+use event::{
     EventIterator,
     EventSettings,
     WindowSettings,
 };
-use piston::graphics::{
+use graphics::{
     AddBorder,
     AddEllipse,
     AddRectangle,
@@ -22,19 +24,19 @@ use piston::graphics::{
     Draw,
     ImageSize,
 };
-use piston::graphics::deform::DeformGrid;
-use piston::drag_controller::{
+use graphics::deform::DeformGrid;
+use event::drag_controller::{
     DragController,
     StartDrag,
     MoveDrag,
     EndDrag,
     InterruptDrag,
 };
-use piston::event::{
+use event::{
     PressEvent,
     RenderEvent,
 };
-use piston::input::{
+use input::{
     keyboard,
     Keyboard,
 };
@@ -44,7 +46,7 @@ fn main() {
     println!("Toggle grid with G.");
     println!("Reset grid with R.");
 
-    let opengl = piston::shader_version::opengl::OpenGL_3_2;
+    let opengl = shader_version::opengl::OpenGL_3_2;
     let mut window = WindowSDL2::new(
         opengl,
         WindowSettings {
@@ -56,8 +58,7 @@ fn main() {
         }
     );
 
-    let asset_store = AssetStore::from_folder("../bin/assets");
-    let image = asset_store.path("rust-logo.png").unwrap();
+    let image = Path::new("./bin/assets/rust-logo.png");
     let image = Texture::from_path(&image).unwrap();
 
     let (width, height) = image.get_size();
