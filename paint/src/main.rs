@@ -6,11 +6,11 @@ extern crate input;
 extern crate event;
 extern crate image;
 extern crate graphics;
-extern crate sdl2_game_window;
+extern crate sdl2_window;
 extern crate opengl_graphics;
 
 use opengl_graphics::{ Gl,Texture };
-use sdl2_game_window::WindowSDL2;
+use sdl2_window::Sdl2Window;
 use event::{
     EventIterator,
     EventSettings,
@@ -21,7 +21,7 @@ use image::GenericImage;
 fn main() {
     let opengl = shader_version::opengl::OpenGL_3_2;
     let (width, height) = (300, 300);
-    let mut window = WindowSDL2::new(
+    let mut window = Sdl2Window::new(
         opengl,
         WindowSettings {
             title: "Paint".to_string(),

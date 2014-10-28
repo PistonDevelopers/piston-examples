@@ -14,11 +14,11 @@ path = "src/main.rs"
 
 git = "https://github.com/pistondevelopers/rust-graphics"
 
-[dependencies.sdl2_game_window]
+[dependencies.sdl2_window]
 
-git = "https://github.com/pistondevelopers/sdl2_game_window"
+git = "https://github.com/pistondevelopers/sdl2_window"
 
-[dependencies.glfw_game_window]
+[dependencies.glfw_window]
 
-git = "https://github.com/PistonDevelopers/glfw_game_window"
+git = "https://github.com/PistonDevelopers/glfw_window"
 

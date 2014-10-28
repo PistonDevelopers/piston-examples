@@ -3,11 +3,11 @@
 extern crate shader_version;
 extern crate input;
 extern crate event;
-extern crate sdl2_game_window;
-// extern crate glfw_game_window;
+extern crate sdl2_window;
+// extern crate glfw_window;
 
-use sdl2_game_window::WindowSDL2;
-// use glfw_game_window::WindowGLFW;
+use sdl2_window::Sdl2Window;
+// use glfw_window::GlfwWindow;
 use input::{ keyboard, Keyboard, Mouse };
 use event::{
     EventIterator,
@@ -27,7 +27,7 @@ use event::{
 };
 
 fn main() {
-    let mut window = WindowSDL2::new(
+    let mut window = Sdl2Window::new(
         shader_version::opengl::OpenGL_3_2,
         WindowSettings {
             title: "Keycode".to_string(),

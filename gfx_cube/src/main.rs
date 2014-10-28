@@ -8,18 +8,19 @@ extern crate event;
 extern crate input;
 extern crate cam;
 extern crate gfx;
-// extern crate glfw_game_window;
+// extern crate glfw_window;
 extern crate sdl2;
-extern crate sdl2_game_window;
+extern crate sdl2_window;
 #[phase(plugin)]
 extern crate gfx_macros;
 extern crate native;
 extern crate time;
 
-// use glfw_game_window::WindowGLFW;
-use sdl2_game_window::WindowSDL2;
-use gfx::{Device, DeviceHelper};
+// use glfw_window::GlfwWindow;
+use sdl2_window::Sdl2Window;
+use gfx::{ Device, DeviceHelper };
 use event::{ EventIterator, EventSettings, Window, WindowSettings };
+
 //----------------------------------------
 // Cube associated data
 
@@ -106,7 +107,7 @@ fn start(argc: int, argv: *const *const u8) -> int {
 
 fn main() {
     let (win_width, win_height) = (640, 480);
-    let mut window = WindowSDL2::new(
+    let mut window = Sdl2Window::new(
         shader_version::opengl::OpenGL_3_2,
         WindowSettings {
             title: "cube".to_string(),
