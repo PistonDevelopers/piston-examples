@@ -3,10 +3,11 @@
 
 extern crate shader_version;
 extern crate input;
+extern crate ai_behavior;
 extern crate sprite;
 extern crate event;
 extern crate graphics;
-extern crate sdl2_game_window;
+extern crate sdl2_window;
 extern crate opengl_graphics;
 
 use std::rc::Rc;
@@ -17,7 +18,7 @@ use event::{
     WindowSettings,
 };
 use sprite::*;
-use event::{
+use ai_behavior::{
     Action,
     Sequence,
     Wait,
@@ -27,7 +28,7 @@ use event::{
 
 use graphics::*;
 
-use sdl2_game_window::WindowSDL2;
+use sdl2_window::Sdl2Window;
 use opengl_graphics::{
     Gl,
     Texture,
@@ -36,7 +37,7 @@ use opengl_graphics::{
 fn main() {
     let (width, height) = (300, 300);
     let opengl = shader_version::opengl::OpenGL_3_2;
-    let mut window = WindowSDL2::new(
+    let mut window = Sdl2Window::new(
         opengl,
         WindowSettings {
             title: "Sprite".to_string(),

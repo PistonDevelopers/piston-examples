@@ -9,9 +9,9 @@ authors = ["Sven Nilsen <bvssvni@gmail.com>"]
 name = "piston-examples-deform"
 path = "src/main.rs"
 
-[dependencies.sdl2_game_window]
+[dependencies.sdl2_window]
 
-git = "https://github.com/pistondevelopers/sdl2_game_window"
+git = "https://github.com/pistondevelopers/sdl2_window"
 
 [dependencies.opengl_graphics]
 
