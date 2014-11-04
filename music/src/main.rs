@@ -52,7 +52,7 @@ fn main() {
     let file = Path::new("./bin/assets/piano.wav");
     let music = mix::Music::from_file(&file).unwrap();
    
-    // Loop once. 
+    // Loop four times. 
     music.play(4).unwrap();
 
     let event_settings = EventSettings {
