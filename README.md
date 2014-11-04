@@ -8,3 +8,7 @@ A collection of examples using the Piston game engine
 2. In the Terminal window, navigate to the project directory of the example you want to build.
 3. Type `cargo build`
 4. Type `cargo run`
+
+## Troubleshooting
+
+* [I get `ld: library not found for -lSDL2` error on OSX](https://github.com/PistonDevelopers/rust-empty/issues/175)
