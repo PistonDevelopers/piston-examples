@@ -10,7 +10,7 @@ use std::cell::RefCell;
 use sdl2_window::Sdl2Window;
 use sdl2_mixer as mix;
 use event::{
-    EventIterator,
+    Events,
     EventSettings,
     WindowSettings,
 };
@@ -61,6 +61,6 @@ fn main() {
             max_frames_per_second: 60,
         };
     let window = RefCell::new(window);
-    for _e in EventIterator::new(&window, &event_settings) {}
+    for _e in Events::new(&window, &event_settings) {}
 }
 

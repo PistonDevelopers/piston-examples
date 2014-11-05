@@ -11,7 +11,7 @@ use sdl2_window::Sdl2Window;
 // use glfw_window::GlfwWindow;
 use input::{ keyboard, Keyboard, Mouse };
 use event::{
-    EventIterator,
+    Events,
     EventSettings,
     FocusEvent,
     PressEvent,
@@ -47,7 +47,7 @@ fn main() {
             max_frames_per_second: 60,
         };
     let window = RefCell::new(window);
-    for e in EventIterator::new(&window, &event_settings) {
+    for e in Events::new(&window, &event_settings) {
         e.press(|button| {
             match button {
                 Keyboard(key) => {

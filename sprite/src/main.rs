@@ -14,7 +14,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use event::{
-    EventIterator,
+    Events,
     EventSettings,
     WindowSettings,
 };
@@ -85,7 +85,7 @@ fn main() {
     };
     let ref mut gl = Gl::new(opengl);
     let window = RefCell::new(window);
-    for e in EventIterator::new(&window, &event_settings) {
+    for e in Events::new(&window, &event_settings) {
         use event::{ PressEvent, RenderEvent };
 
         scene.event(&e);
