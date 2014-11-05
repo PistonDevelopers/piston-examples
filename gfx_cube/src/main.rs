@@ -20,7 +20,7 @@ use std::cell::RefCell;
 // use glfw_window::GlfwWindow;
 use sdl2_window::Sdl2Window;
 use gfx::{ Device, DeviceHelper };
-use event::{ Events, EventSettings, Window, WindowSettings };
+use event::{ Events, Window, WindowSettings };
 
 //----------------------------------------
 // Cube associated data
@@ -225,15 +225,7 @@ fn main() {
     );
 
     let window = RefCell::new(window);
-    let mut game_iter = Events::new(
-        &window,
-        &EventSettings {
-            updates_per_second: 120,
-            max_frames_per_second: 60
-        }
-    );
-
-    for e in game_iter {
+    for e in Events::new(&window) {
         use event::RenderEvent;
 
         first_person.event(&e);

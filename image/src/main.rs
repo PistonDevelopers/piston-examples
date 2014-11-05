@@ -12,11 +12,7 @@ use opengl_graphics::{
     Texture,
 };
 use sdl2_window::Sdl2Window;
-use event::{
-    Events,
-    EventSettings,
-    WindowSettings,
-};
+use event::{ Events, WindowSettings };
 
 fn main() {
     let opengl = shader_version::opengl::OpenGL_3_2;
@@ -33,13 +29,9 @@ fn main() {
 
     let image = Path::new("./bin/assets/rust-logo.png");
     let image = Texture::from_path(&image).unwrap();
-    let event_settings = EventSettings {
-            updates_per_second: 120,
-            max_frames_per_second: 60,
-        };
     let ref mut gl = Gl::new(opengl);
     let window = RefCell::new(window);
-    for e in Events::new(&window, &event_settings) {
+    for e in Events::new(&window) {
         use event::RenderEvent;
 
         e.render(|args| {

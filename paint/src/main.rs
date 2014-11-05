@@ -12,11 +12,7 @@ extern crate opengl_graphics;
 use std::cell::RefCell;
 use opengl_graphics::{ Gl,Texture };
 use sdl2_window::Sdl2Window;
-use event::{
-    Events,
-    EventSettings,
-    WindowSettings,
-};
+use event::{ Events, WindowSettings };
 use image::GenericImage;
 
 fn main() {
@@ -36,13 +32,9 @@ fn main() {
     let mut image = image::ImageBuf::new(width, height);
     let mut draw = false;
     let mut texture = Texture::from_image(&image);
-    let event_settings = EventSettings {
-            updates_per_second: 120,
-            max_frames_per_second: 60,
-        };
     let ref mut gl = Gl::new(opengl);
     let window = RefCell::new(window);
-    for e in Events::new(&window, &event_settings) {
+    for e in Events::new(&window) {
         use event::{ MouseCursorEvent, PressEvent, ReleaseEvent, RenderEvent };
         e.render(|args| {
             use graphics::*;

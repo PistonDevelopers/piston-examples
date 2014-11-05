@@ -9,11 +9,7 @@ extern crate sdl2;
 use std::cell::RefCell;
 use sdl2_window::Sdl2Window;
 use sdl2_mixer as mix;
-use event::{
-    Events,
-    EventSettings,
-    WindowSettings,
-};
+use event::{ Events, WindowSettings };
 
 fn init_audio() {
     sdl2::init(sdl2::INIT_AUDIO | sdl2::INIT_TIMER);
@@ -56,11 +52,7 @@ fn main() {
     // Loop four times. 
     music.play(4).unwrap();
 
-    let event_settings = EventSettings {
-            updates_per_second: 120,
-            max_frames_per_second: 60,
-        };
     let window = RefCell::new(window);
-    for _e in Events::new(&window, &event_settings) {}
+    for _e in Events::new(&window) {}
 }
 
