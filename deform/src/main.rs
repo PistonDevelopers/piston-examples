@@ -12,7 +12,7 @@ use opengl_graphics::{
 };
 use sdl2_window::Sdl2Window;
 use event::{
-    EventIterator,
+    Events,
     EventSettings,
     WindowSettings,
 };
@@ -78,7 +78,7 @@ fn main() {
     let mut drag = DragController::new();
     let mut draw_grid = true;
     let window = RefCell::new(window);
-    for e in EventIterator::new(&window, &event_settings) {
+    for e in Events::new(&window, &event_settings) {
         drag.event(&e, |action| {
             match action {
                 StartDrag(x, y) => {

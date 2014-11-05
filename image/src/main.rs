@@ -13,7 +13,7 @@ use opengl_graphics::{
 };
 use sdl2_window::Sdl2Window;
 use event::{
-    EventIterator,
+    Events,
     EventSettings,
     WindowSettings,
 };
@@ -39,7 +39,7 @@ fn main() {
         };
     let ref mut gl = Gl::new(opengl);
     let window = RefCell::new(window);
-    for e in EventIterator::new(&window, &event_settings) {
+    for e in Events::new(&window, &event_settings) {
         use event::RenderEvent;
 
         e.render(|args| {
