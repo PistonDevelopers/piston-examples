@@ -6,6 +6,7 @@ extern crate sdl2_window;
 extern crate sdl2_mixer;
 extern crate sdl2;
 
+use std::cell::RefCell;
 use sdl2_window::Sdl2Window;
 use sdl2_mixer as mix;
 use event::{
@@ -35,7 +36,7 @@ fn init_audio() {
 }
 
 fn main() {
-    let mut window = Sdl2Window::new(
+    let window = Sdl2Window::new(
         shader_version::opengl::OpenGL_3_2,
         WindowSettings {
             title: "Music".to_string(),
@@ -59,6 +60,7 @@ fn main() {
             updates_per_second: 120,
             max_frames_per_second: 60,
         };
-    for _e in EventIterator::new(&mut window, &event_settings) {}
+    let window = RefCell::new(window);
+    for _e in EventIterator::new(&window, &event_settings) {}
 }
 

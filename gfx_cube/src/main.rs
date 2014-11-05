@@ -16,6 +16,7 @@ extern crate gfx_macros;
 extern crate native;
 extern crate time;
 
+use std::cell::RefCell;
 // use glfw_window::GlfwWindow;
 use sdl2_window::Sdl2Window;
 use gfx::{ Device, DeviceHelper };
@@ -223,8 +224,9 @@ fn main() {
         cam::FirstPersonSettings::keyboard_wasd()
     );
 
+    let window = RefCell::new(window);
     let mut game_iter = EventIterator::new(
-        &mut window,
+        &window,
         &EventSettings {
             updates_per_second: 120,
             max_frames_per_second: 60
