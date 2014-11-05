@@ -9,6 +9,7 @@ extern crate graphics;
 extern crate sdl2_window;
 extern crate opengl_graphics;
 
+use std::cell::RefCell;
 use opengl_graphics::{ Gl,Texture };
 use sdl2_window::Sdl2Window;
 use event::{
@@ -21,7 +22,7 @@ use image::GenericImage;
 fn main() {
     let opengl = shader_version::opengl::OpenGL_3_2;
     let (width, height) = (300, 300);
-    let mut window = Sdl2Window::new(
+    let window = Sdl2Window::new(
         opengl,
         WindowSettings {
             title: "Paint".to_string(),
@@ -40,7 +41,8 @@ fn main() {
             max_frames_per_second: 60,
         };
     let ref mut gl = Gl::new(opengl);
-    for e in EventIterator::new(&mut window, &event_settings) {
+    let window = RefCell::new(window);
+    for e in EventIterator::new(&window, &event_settings) {
         use event::{ MouseCursorEvent, PressEvent, ReleaseEvent, RenderEvent };
         e.render(|args| {
             use graphics::*;

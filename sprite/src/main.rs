@@ -10,6 +10,7 @@ extern crate graphics;
 extern crate sdl2_window;
 extern crate opengl_graphics;
 
+use std::cell::RefCell;
 use std::rc::Rc;
 
 use event::{
@@ -37,7 +38,7 @@ use opengl_graphics::{
 fn main() {
     let (width, height) = (300, 300);
     let opengl = shader_version::opengl::OpenGL_3_2;
-    let mut window = Sdl2Window::new(
+    let window = Sdl2Window::new(
         opengl,
         WindowSettings {
             title: "Sprite".to_string(),
@@ -83,7 +84,8 @@ fn main() {
         max_frames_per_second: 60,
     };
     let ref mut gl = Gl::new(opengl);
-    for e in EventIterator::new(&mut window, &event_settings) {
+    let window = RefCell::new(window);
+    for e in EventIterator::new(&window, &event_settings) {
         use event::{ PressEvent, RenderEvent };
 
         scene.event(&e);

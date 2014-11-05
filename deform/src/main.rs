@@ -5,6 +5,7 @@ extern crate input;
 extern crate sdl2_window;
 extern crate opengl_graphics;
 
+use std::cell::RefCell;
 use opengl_graphics::{
     Gl,
     Texture,
@@ -47,7 +48,7 @@ fn main() {
     println!("Reset grid with R.");
 
     let opengl = shader_version::opengl::OpenGL_3_2;
-    let mut window = Sdl2Window::new(
+    let window = Sdl2Window::new(
         opengl,
         WindowSettings {
             title: "Deform".to_string(),
@@ -76,7 +77,8 @@ fn main() {
     let ref mut gl = Gl::new(opengl);
     let mut drag = DragController::new();
     let mut draw_grid = true;
-    for e in EventIterator::new(&mut window, &event_settings) {
+    let window = RefCell::new(window);
+    for e in EventIterator::new(&window, &event_settings) {
         drag.event(&e, |action| {
             match action {
                 StartDrag(x, y) => {
