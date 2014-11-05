@@ -11,11 +11,7 @@ use opengl_graphics::{
     Texture,
 };
 use sdl2_window::Sdl2Window;
-use event::{
-    Events,
-    EventSettings,
-    WindowSettings,
-};
+use event::{ Events, WindowSettings };
 use graphics::{
     AddBorder,
     AddEllipse,
@@ -70,15 +66,11 @@ fn main() {
         20, 20
     );
 
-    let event_settings = EventSettings {
-        updates_per_second: 120,
-        max_frames_per_second: 60,
-    };
     let ref mut gl = Gl::new(opengl);
     let mut drag = DragController::new();
     let mut draw_grid = true;
     let window = RefCell::new(window);
-    for e in Events::new(&window, &event_settings) {
+    for e in Events::new(&window) {
         drag.event(&e, |action| {
             match action {
                 StartDrag(x, y) => {

@@ -13,11 +13,7 @@ extern crate opengl_graphics;
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use event::{
-    Events,
-    EventSettings,
-    WindowSettings,
-};
+use event::{ Events, WindowSettings };
 use sprite::*;
 use ai_behavior::{
     Action,
@@ -79,13 +75,9 @@ fn main() {
 
     println!("Press any key to pause/resume the animation!");
 
-    let event_settings = EventSettings {
-        updates_per_second: 120,
-        max_frames_per_second: 60,
-    };
     let ref mut gl = Gl::new(opengl);
     let window = RefCell::new(window);
-    for e in Events::new(&window, &event_settings) {
+    for e in Events::new(&window) {
         use event::{ PressEvent, RenderEvent };
 
         scene.event(&e);

@@ -12,7 +12,6 @@ use sdl2_window::Sdl2Window;
 use input::{ keyboard, Keyboard, Mouse };
 use event::{
     Events,
-    EventSettings,
     FocusEvent,
     PressEvent,
     MouseCursorEvent,
@@ -42,12 +41,8 @@ fn main() {
     println!("Press C to turn capture cursor on/off");
 
     let mut capture_cursor = false;
-    let event_settings = EventSettings {
-            updates_per_second: 120,
-            max_frames_per_second: 60,
-        };
     let window = RefCell::new(window);
-    for e in Events::new(&window, &event_settings) {
+    for e in Events::new(&window) {
         e.press(|button| {
             match button {
                 Keyboard(key) => {
