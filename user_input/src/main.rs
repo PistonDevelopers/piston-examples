@@ -1,14 +1,16 @@
 #![feature(globs)]
 
+extern crate current;
 extern crate shader_version;
 extern crate input;
 extern crate event;
 extern crate sdl2_window;
 // extern crate glfw_window;
 
+use current::{ Set };
 use std::cell::RefCell;
-use sdl2_window::Sdl2Window;
-// use glfw_window::GlfwWindow;
+use sdl2_window::Sdl2Window as Window;
+// use glfw_window::GlfwWindow as Window;
 use input::{ keyboard, Keyboard, Mouse };
 use event::{
     Events,
@@ -22,15 +24,15 @@ use event::{
     ResizeEvent,
     TextEvent,
     UpdateEvent,
-    Window,
     WindowSettings,
 };
+use event::window::{ CaptureCursor };
 
 fn main() {
-    let window = Sdl2Window::new(
+    let window = Window::new(
         shader_version::opengl::OpenGL_3_2,
         WindowSettings {
-            title: "Keycode".to_string(),
+            title: "piston-examples/user_input".to_string(),
             size: [300, 300],
             fullscreen: false,
             exit_on_esc: true,
@@ -41,15 +43,15 @@ fn main() {
     println!("Press C to turn capture cursor on/off");
 
     let mut capture_cursor = false;
-    let window = RefCell::new(window);
-    for e in Events::new(&window) {
+    let ref window = RefCell::new(window);
+    for e in Events::new(window) {
         e.press(|button| {
             match button {
                 Keyboard(key) => {
                     if key == keyboard::C {
                         println!("Turned capture cursor on");
                         capture_cursor = !capture_cursor;
-                        window.borrow_mut().capture_cursor(capture_cursor);
+                        window.set(CaptureCursor(capture_cursor));
                     }
 
                     println!("Pressed keyboard key '{}'", key);
