@@ -2,6 +2,7 @@
 #![feature(globs)]
 #![crate_name = "cube"]
 
+extern crate current;
 extern crate shader_version;
 extern crate vecmath;
 extern crate event;
@@ -16,11 +17,13 @@ extern crate gfx_macros;
 extern crate native;
 extern crate time;
 
+use current::{ Set };
 use std::cell::RefCell;
 // use glfw_window::GlfwWindow;
 use sdl2_window::Sdl2Window;
 use gfx::{ Device, DeviceHelper, ToSlice };
-use event::{ Events, Window, WindowSettings };
+use event::{ Events, WindowSettings };
+use event::window::{ CaptureCursor };
 
 //----------------------------------------
 // Cube associated data
@@ -119,7 +122,7 @@ fn main() {
         }
     );
 
-    window.capture_cursor(true);
+    window.set_mut(CaptureCursor(true));
 
     let mut device = gfx::GlDevice::new(|s| unsafe {
         std::mem::transmute(sdl2::video::gl_get_proc_address(s))
