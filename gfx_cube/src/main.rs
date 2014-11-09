@@ -8,6 +8,7 @@ extern crate event;
 extern crate input;
 extern crate cam;
 extern crate gfx;
+extern crate render;
 // extern crate glfw_window;
 extern crate sdl2;
 extern crate sdl2_window;
@@ -19,7 +20,7 @@ extern crate time;
 use std::cell::RefCell;
 // use glfw_window::GlfwWindow;
 use sdl2_window::Sdl2Window;
-use gfx::{ Device, DeviceHelper };
+use gfx::{ Device, DeviceHelper, ToSlice };
 use event::{ Events, Window, WindowSettings };
 
 //----------------------------------------
@@ -48,7 +49,7 @@ struct Params {
     t_color: gfx::shade::TextureParam,
 }
 
-static VERTEX_SRC: gfx::ShaderSource = shaders! {
+static VERTEX_SRC: gfx::ShaderSource<'static> = shaders! {
 GLSL_120: b"
     #version 120
     attribute vec3 a_pos;
@@ -73,7 +74,7 @@ GLSL_150: b"
 "
 };
 
-static FRAGMENT_SRC: gfx::ShaderSource = shaders! {
+static FRAGMENT_SRC: gfx::ShaderSource<'static> = shaders! {
 GLSL_120: b"
     #version 120
     varying vec2 v_TexCoord;
@@ -162,20 +163,19 @@ fn main() {
 
     let mesh = device.create_mesh(vertex_data.as_slice());
 
-    let slice = {
-        let index_data = vec![
-            0u8, 1, 2, 2, 3, 0,    //top
-            4, 5, 6, 6, 7, 4,       //bottom
-            8, 9, 10, 10, 11, 8,    //right
-            12, 13, 14, 14, 16, 12, //left
-            16, 17, 18, 18, 19, 16, //front
-            20, 21, 22, 22, 23, 20, //back
-        ];
+    let index_data: &[u8] = [
+         0,  1,  2,  2,  3,  0, // top
+         4,  5,  6,  6,  7,  4, // bottom
+         8,  9, 10, 10, 11,  8, // right
+        12, 13, 14, 14, 16, 12, // left
+        16, 17, 18, 18, 19, 16, // front
+        20, 21, 22, 22, 23, 20, // back
+    ];
 
-        let buf = device.create_buffer_static(index_data.as_slice());
-        gfx::IndexSlice8(gfx::TriangleList, buf, 0, 36)
-    };
-
+    let slice = device
+        .create_buffer_static::<u8>(index_data)
+        .to_slice(gfx::TriangleList);
+    
     let tinfo = gfx::tex::TextureInfo {
         width: 1,
         height: 1,
