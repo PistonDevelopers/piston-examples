@@ -8,7 +8,6 @@ extern crate event;
 extern crate input;
 extern crate cam;
 extern crate gfx;
-extern crate render;
 // extern crate glfw_window;
 extern crate sdl2;
 extern crate sdl2_window;
