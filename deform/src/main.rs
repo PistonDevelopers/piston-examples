@@ -4,6 +4,7 @@ extern crate event;
 extern crate input;
 extern crate sdl2_window;
 extern crate opengl_graphics;
+extern crate drag_controller;
 
 use std::cell::RefCell;
 use opengl_graphics::{
@@ -22,7 +23,7 @@ use graphics::{
     ImageSize,
 };
 use graphics::deform::DeformGrid;
-use event::drag_controller::{
+use drag_controller::{
     DragController,
     StartDrag,
     MoveDrag,
