@@ -18,6 +18,10 @@ git = "https://github.com/PistonDevelopers/sdl2_window.git"
 
 git = "https://github.com/PistonDevelopers/opengl_graphics.git"
 
+[dependencies.event]
+
+git = "https://github.com/PistonDevelopers/event"
+
 [dependencies.sdl2_mixer]
 
 git = "https://github.com/andelf/rust-sdl2_mixer"
