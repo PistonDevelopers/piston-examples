@@ -12,7 +12,11 @@ path = "src/main.rs"
 
 [dependencies.graphics]
 
-git = "https://github.com/pistondevelopers/rust-graphics"
+git = "https://github.com/pistondevelopers/graphics"
+
+[dependencies.event]
+
+git = "https://github.com/pistondevelopers/event"
 
 [dependencies.sdl2_window]
 

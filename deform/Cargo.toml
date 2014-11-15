@@ -17,6 +17,10 @@ git = "https://github.com/pistondevelopers/sdl2_window"
 
 git = "https://github.com/pistondevelopers/opengl_graphics"
 
+[dependencies.event]
+
+git = "https://github.com/pistondevelopers/event"
+
 [dependencies.drag_controller]
 
 git = "https://github.com/PistonDevelopers/drag_controller.git"
