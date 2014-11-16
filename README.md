@@ -2,6 +2,8 @@
 
 A collection of examples using the Piston game engine
 
+[How to contribute](https://github.com/PistonDevelopers/piston/blob/master/CONTRIBUTING.md)
+
 ## How to build & run examples
 
 1. Install [Cargo](https://github.com/rust-lang/cargo)
