@@ -165,7 +165,7 @@ fn main() {
 
     let mesh = device.create_mesh(vertex_data.as_slice());
 
-    let index_data: &[u8] = [
+    let index_data: &[u8] = &[
          0,  1,  2,  2,  3,  0, // top
          4,  6,  5,  6,  4,  7, // bottom
          8,  9, 10, 10, 11,  8, // right
