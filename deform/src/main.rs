@@ -25,10 +25,7 @@ use graphics::{
 use graphics::deform::DeformGrid;
 use drag_controller::{
     DragController,
-    StartDrag,
-    MoveDrag,
-    EndDrag,
-    InterruptDrag,
+    Drag
 };
 use event::{
     PressEvent,
@@ -74,7 +71,7 @@ fn main() {
     for e in Events::new(&window) {
         drag.event(&e, |action| {
             match action {
-                StartDrag(x, y) => {
+                Drag::Start(x, y) => {
                     match grid.hit([x, y]) {
                         None => {
                             // Did not hit deformed grid.
@@ -90,15 +87,15 @@ fn main() {
                     grid.update();
                     true
                 }
-                MoveDrag(x, y) => {
+                Drag::Move(x, y) => {
                     let n = grid.ps.len();
                     grid.set_current(n - 1, [x, y]);
                     grid.update();
                     true
                 }
-                EndDrag(_, _) => false,
+                Drag::End(_, _) => false,
                 // Continue dragging when receiving focus.
-                InterruptDrag => true,
+                Drag::Interrupt => true,
             }
         });
         e.press(|button| {
