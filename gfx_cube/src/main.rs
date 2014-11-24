@@ -14,7 +14,6 @@ extern crate sdl2;
 extern crate sdl2_window;
 #[phase(plugin)]
 extern crate gfx_macros;
-extern crate native;
 extern crate time;
 
 use current::{ Set };
@@ -101,13 +100,6 @@ GLSL_150: b"
 };
 
 //----------------------------------------
-
-// We need to run on the main thread, so ensure we are using the `native` runtime. This is
-// technically not needed, since this is the default, but it's not guaranteed.
-#[start]
-fn start(argc: int, argv: *const *const u8) -> int {
-     native::start(argc, argv, main)
-}
 
 fn main() {
     let (win_width, win_height) = (640, 480);
