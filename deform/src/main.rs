@@ -18,7 +18,6 @@ use graphics::{
     AddEllipse,
     AddRectangle,
     AddColor,
-    Context,
     Draw,
     ImageSize,
 };
@@ -110,12 +109,9 @@ fn main() {
             }
         });
         e.render(|args| {
-            gl.viewport(0, 0, 
-                        args.width as i32, args.height as i32);
-            let c = Context::abs(
-                args.width as f64,
-                args.height as f64
-            );
+            gl.draw([0, 0, args.width as i32, args.height as i32],
+                |c, gl| {
+            
             // Clear background.
             c.rgb(1.0, 1.0, 1.0).draw(gl);
 
@@ -156,7 +152,9 @@ fn main() {
                 .circle(x, y, 3.0)
                 .draw(gl)
             };
-        });
+
+            });
+        }); // end render
     }
 }
 
