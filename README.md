@@ -6,6 +6,8 @@ A collection of examples using the Piston game engine
 
 ## How to build & run examples
 
+To build the examples, you need the latest Rust nightly and Cargo installed.
+
 1. Install [Cargo](https://github.com/rust-lang/cargo)
 2. In the Terminal window, navigate to the project directory of the example you want to build.
 3. Type `cargo build`
