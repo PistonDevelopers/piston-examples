@@ -17,6 +17,10 @@ git = "https://github.com/pistondevelopers/sdl2_window"
 
 git = "https://github.com/pistondevelopers/opengl_graphics"
 
+[dependencies.current]
+
+git = "https://github.com/pistondevelopers/current"
+
 [dependencies.event]
 
 git = "https://github.com/pistondevelopers/event"

@@ -1,3 +1,4 @@
+extern crate current;
 extern crate shader_version;
 extern crate graphics;
 extern crate event;
@@ -7,20 +8,14 @@ extern crate opengl_graphics;
 extern crate drag_controller;
 
 use std::cell::RefCell;
+use current::{ Set };
 use opengl_graphics::{
     Gl,
     Texture,
 };
 use sdl2_window::Sdl2Window;
 use event::{ Events, WindowSettings };
-use graphics::{
-    AddBorder,
-    AddEllipse,
-    AddRectangle,
-    AddColor,
-    Draw,
-    ImageSize,
-};
+use graphics::ImageSize;
 use graphics::deform::DeformGrid;
 use drag_controller::{
     DragController,
@@ -112,45 +107,46 @@ fn main() {
             gl.draw([0, 0, args.width as i32, args.height as i32],
                 |c, gl| {
             
-            // Clear background.
-            c.rgb(1.0, 1.0, 1.0).draw(gl);
+            graphics::clear([1.0, ..4], gl);
 
             // Draw deformed image.
-            grid.draw_image(&c, gl, &image);
+            grid.draw_image(&image, &c, gl);
 
             if draw_grid {
                 // Draw grid.
                 grid.draw_vertical_lines(
-                    &c.rgb(0.0, 1.0, 0.0),
-                    gl, 1.0
+                    &graphics::Line::new([0.0, 1.0, 0.0, 1.0], 0.5),
+                    &c,     
+                    gl
                 );
                 grid.draw_horizontal_lines(
-                    &c.rgb(0.0, 0.0, 1.0),
-                    gl, 1.0
+                    &graphics::Line::new([0.0, 0.0, 1.0, 1.0], 0.5),
+                    &c,
+                    gl
                 );
             }
             
             // Draw rect of the original grid.
-            c.rgb(1.0, 0.0, 0.0)
-            .rect(0.0, 0.0, width, height)
-            .border_width(3.0)
-            .draw(gl);
+            graphics::Rectangle::new(graphics::color::TRANSPARENT)
+                .set(graphics::rectangle::Border {
+                        color: [1.0, 0.0, 0.0, 1.0],
+                        radius: 1.5
+                    })
+                .draw([0.0, 0.0, width, height], &c, gl);
 
             // Draw control points.
             for i in range(0, grid.ps.len()) {
                 // Original positions.
                 let x = grid.ps[i][0];
                 let y = grid.ps[i][1];
-                c.rgba(1.0, 0.0, 0.0, 0.5)
-                .circle(x, y, 3.0)
-                .draw(gl);
+                graphics::Ellipse::new([1.0, 0.0, 0.0, 0.5])
+                    .draw(graphics::ellipse::circle(x, y, 3.0), &c, gl);
 
                 // Current positions.
                 let x = grid.qs[i][0];
                 let y = grid.qs[i][1];
-                c.rgba(0.0, 0.0, 0.0, 0.5)
-                .circle(x, y, 3.0)
-                .draw(gl)
+                graphics::Ellipse::new([0.0, 0.0, 0.0, 0.5])
+                    .draw(graphics::ellipse::circle(x, y, 3.0), &c, gl);
             };
 
             });
