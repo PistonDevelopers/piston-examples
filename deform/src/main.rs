@@ -1,4 +1,3 @@
-extern crate current;
 extern crate shader_version;
 extern crate graphics;
 extern crate event;
@@ -8,7 +7,6 @@ extern crate opengl_graphics;
 extern crate drag_controller;
 
 use std::cell::RefCell;
-use current::{ Set };
 use opengl_graphics::{
     Gl,
     Texture,
@@ -127,26 +125,24 @@ fn main() {
             }
             
             // Draw rect of the original grid.
-            graphics::Rectangle::new(graphics::color::TRANSPARENT)
-                .set(graphics::rectangle::Border {
-                        color: [1.0, 0.0, 0.0, 1.0],
-                        radius: 1.5
-                    })
+            graphics::Rectangle::border([1.0, 0.0, 0.0, 1.0], 1.5)
                 .draw([0.0, 0.0, width, height], &c, gl);
 
             // Draw control points.
+            let original = graphics::Ellipse::new([1.0, 0.0, 0.0, 0.5]);
+            let current = graphics::Ellipse::new([0.0, 0.0, 0.0, 0.5]);
             for i in range(0, grid.ps.len()) {
+                use graphics::ellipse::circle;
+
                 // Original positions.
                 let x = grid.ps[i][0];
                 let y = grid.ps[i][1];
-                graphics::Ellipse::new([1.0, 0.0, 0.0, 0.5])
-                    .draw(graphics::ellipse::circle(x, y, 3.0), &c, gl);
+                original.draw(circle(x, y, 3.0), &c, gl);
 
                 // Current positions.
                 let x = grid.qs[i][0];
                 let y = grid.qs[i][1];
-                graphics::Ellipse::new([0.0, 0.0, 0.0, 0.5])
-                    .draw(graphics::ellipse::circle(x, y, 3.0), &c, gl);
+                current.draw(circle(x, y, 3.0), &c, gl);
             };
 
             });
