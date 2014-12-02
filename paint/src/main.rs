@@ -37,10 +37,9 @@ fn main() {
     for e in Events::new(&window) {
         use event::{ MouseCursorEvent, PressEvent, ReleaseEvent, RenderEvent };
         e.render(|args| {
-            use graphics::*;
             gl.draw([0, 0, args.width as i32, args.height as i32], |c, gl| {
-                c.rgb(1.0, 1.0, 1.0).draw(gl);
-                c.image(&texture).draw(gl);
+                graphics::clear([1.0, ..4], gl);
+                graphics::image(&texture, &c, gl);
             });
         });
         e.press(|button| {
