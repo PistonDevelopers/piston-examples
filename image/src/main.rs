@@ -37,8 +37,8 @@ fn main() {
         e.render(|args| {
             use graphics::*;
             gl.draw([0, 0, args.width as i32, args.height as i32], |c, gl| {
-                c.rgb(1.0, 1.0, 1.0).draw(gl);
-                c.image(&image).draw(gl);
+                graphics::clear([1.0, ..4], gl);
+                graphics::Image::new().draw(&image, &c, gl);
             });
         });
     }
