@@ -11,7 +11,8 @@ use current::{ Set };
 use std::cell::RefCell;
 use sdl2_window::Sdl2Window as Window;
 // use glfw_window::GlfwWindow as Window;
-use input::{ keyboard, Keyboard, Mouse };
+use input::{ keyboard, Button };
+use input::keyboard::Key;
 use event::{
     Events,
     FocusEvent,
@@ -30,7 +31,7 @@ use event::window::{ CaptureCursor };
 
 fn main() {
     let window = Window::new(
-        shader_version::opengl::OpenGL_3_2,
+        shader_version::opengl::OpenGL::OpenGL_3_2,
         WindowSettings {
             title: "piston-examples/user_input".to_string(),
             size: [300, 300],
@@ -47,8 +48,8 @@ fn main() {
     for e in Events::new(window) {
         e.press(|button| {
             match button {
-                Keyboard(key) => {
-                    if key == keyboard::C {
+                Button::Keyboard(key) => {
+                    if key == Key::C {
                         println!("Turned capture cursor on");
                         capture_cursor = !capture_cursor;
                         window.set(CaptureCursor(capture_cursor));
@@ -56,13 +57,13 @@ fn main() {
 
                     println!("Pressed keyboard key '{}'", key);
                 }, 
-                Mouse(button) => println!("Pressed mouse button '{}'", button),
+                Button::Mouse(button) => println!("Pressed mouse button '{}'", button),
             }
         });
         e.release(|button| {
             match button {
-                Keyboard(key) => println!("Released keyboard key '{}'", key),
-                Mouse(button) => println!("Released mouse button '{}'", button),
+                Button::Keyboard(key) => println!("Released keyboard key '{}'", key),
+                Button::Mouse(button) => println!("Released mouse button '{}'", button),
             }
         });
         e.mouse_cursor(|x, y| println!("Mouse moved '{} {}'", x, y));

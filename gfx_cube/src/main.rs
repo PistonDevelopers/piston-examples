@@ -104,7 +104,7 @@ GLSL_150: b"
 fn main() {
     let (win_width, win_height) = (640, 480);
     let mut window = Sdl2Window::new(
-        shader_version::opengl::OpenGL_3_2,
+        shader_version::opengl::OpenGL::OpenGL_3_2,
         WindowSettings {
             title: "cube".to_string(),
             size: [win_width, win_height],
@@ -120,7 +120,7 @@ fn main() {
         std::mem::transmute(sdl2::video::gl_get_proc_address(s))
     });
     let frame = gfx::Frame::new(win_width as u16, win_height as u16);
-    let state = gfx::DrawState::new().depth(gfx::state::LessEqual, true);
+    let state = gfx::DrawState::new().depth(gfx::state::Comparison::LessEqual, true);
 
     let vertex_data = vec![
         //top (0, 0, 1)
@@ -168,14 +168,14 @@ fn main() {
 
     let slice = device
         .create_buffer_static::<u8>(index_data)
-        .to_slice(gfx::TriangleList);
+        .to_slice(gfx::PrimitiveType::TriangleList);
     
     let tinfo = gfx::tex::TextureInfo {
         width: 1,
         height: 1,
         depth: 1,
         levels: 1,
-        kind: gfx::tex::Texture2D,
+        kind: gfx::tex::TextureKind::Texture2D,
         format: gfx::tex::RGBA8,
     };
     let img_info = tinfo.to_image_info();
@@ -188,8 +188,8 @@ fn main() {
 
     let sampler = device.create_sampler(
         gfx::tex::SamplerInfo::new(
-            gfx::tex::Bilinear, 
-            gfx::tex::Clamp
+            gfx::tex::FilterMethod::Bilinear, 
+            gfx::tex::WrapMode::Clamp
         )
     );
     

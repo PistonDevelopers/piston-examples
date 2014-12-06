@@ -14,9 +14,10 @@ use opengl_graphics::{ Gl,Texture };
 use sdl2_window::Sdl2Window;
 use event::{ Events, WindowSettings };
 use image::GenericImage;
+use input::{ mouse, Button };
 
 fn main() {
-    let opengl = shader_version::opengl::OpenGL_3_2;
+    let opengl = shader_version::opengl::OpenGL::OpenGL_3_2;
     let (width, height) = (300, 300);
     let window = Sdl2Window::new(
         opengl,
@@ -43,12 +44,12 @@ fn main() {
             });
         });
         e.press(|button| {
-            if button == input::Mouse(input::mouse::Left) {
+            if button == Button::Mouse(mouse::Button::Left) {
                 draw = true
             }
         });
         e.release(|button| {
-            if button == input::Mouse(input::mouse::Left) {
+            if button == Button::Mouse(mouse::Button::Left) {
                 draw = false
             }
         });
