@@ -33,7 +33,7 @@ fn init_audio() {
 
 fn main() {
     let window = Sdl2Window::new(
-        shader_version::opengl::OpenGL_3_2,
+        shader_version::opengl::OpenGL::OpenGL_3_2,
         WindowSettings {
             title: "Music".to_string(),
             size: [300, 300],

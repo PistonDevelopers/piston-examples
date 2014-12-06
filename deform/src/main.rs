@@ -12,7 +12,6 @@ use opengl_graphics::{
     Texture,
 };
 use sdl2_window::Sdl2Window;
-use event::{ Events, WindowSettings };
 use graphics::ImageSize;
 use graphics::deform::DeformGrid;
 use drag_controller::{
@@ -20,20 +19,20 @@ use drag_controller::{
     Drag
 };
 use event::{
+    Events,
+    WindowSettings,
     PressEvent,
     RenderEvent,
 };
-use input::{
-    keyboard,
-    Keyboard,
-};
+use input::Button;
+use input::keyboard::Key;
 
 fn main() {
     println!("Click in the red square and drag.");
     println!("Toggle grid with G.");
     println!("Reset grid with R.");
 
-    let opengl = shader_version::opengl::OpenGL_3_2;
+    let opengl = shader_version::opengl::OpenGL::OpenGL_3_2;
     let window = Sdl2Window::new(
         opengl,
         WindowSettings {
@@ -91,10 +90,10 @@ fn main() {
             }
         });
         e.press(|button| {
-            if button == Keyboard(keyboard::G) {
+            if button == Button::Keyboard(Key::G) {
                 draw_grid = !draw_grid;
                 println!("Draw grid {}", draw_grid);
-            } else if button == Keyboard(keyboard::R) {
+            } else if button == Button::Keyboard(Key::R) {
                 grid.reset_control_points();
                 grid.reset_vertices_and_texture_coords();
                 grid.update();

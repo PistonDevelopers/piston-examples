@@ -31,7 +31,7 @@ use opengl_graphics::{
 
 fn main() {
     let (width, height) = (300, 300);
-    let opengl = shader_version::opengl::OpenGL_3_2;
+    let opengl = shader_version::opengl::OpenGL::OpenGL_3_2;
     let window = Sdl2Window::new(
         opengl,
         WindowSettings {
