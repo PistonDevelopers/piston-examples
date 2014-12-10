@@ -11,7 +11,7 @@ use current::{ Set };
 use std::cell::RefCell;
 use sdl2_window::Sdl2Window as Window;
 // use glfw_window::GlfwWindow as Window;
-use input::{ keyboard, Button };
+use input::Button;
 use input::keyboard::Key;
 use event::{
     Events,
@@ -31,7 +31,7 @@ use event::window::{ CaptureCursor };
 
 fn main() {
     let window = Window::new(
-        shader_version::opengl::OpenGL::OpenGL_3_2,
+        shader_version::OpenGL::_3_2,
         WindowSettings {
             title: "piston-examples/user_input".to_string(),
             size: [300, 300],

@@ -104,7 +104,7 @@ GLSL_150: b"
 fn main() {
     let (win_width, win_height) = (640, 480);
     let mut window = Sdl2Window::new(
-        shader_version::opengl::OpenGL::OpenGL_3_2,
+        shader_version::OpenGL::_3_2,
         WindowSettings {
             title: "cube".to_string(),
             size: [win_width, win_height],
