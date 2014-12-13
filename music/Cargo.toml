@@ -10,17 +10,17 @@ tags = []
 name = "music"
 path = "src/main.rs"
 
-[dependencies.sdl2_window]
+[dependencies.pistoncore-sdl2_window]
 
 git = "https://github.com/PistonDevelopers/sdl2_window.git"
 
-[dependencies.opengl_graphics]
-
-git = "https://github.com/PistonDevelopers/opengl_graphics.git"
-
-[dependencies.event]
+[dependencies.pistoncore-event]
 
 git = "https://github.com/PistonDevelopers/event"
+
+[dependencies.piston2d-opengl_graphics]
+
+git = "https://github.com/PistonDevelopers/opengl_graphics.git"
 
 [dependencies.sdl2_mixer]
 

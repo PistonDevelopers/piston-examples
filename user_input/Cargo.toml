@@ -10,19 +10,19 @@ tags = []
 name = "piston-example-user_input"
 path = "src/main.rs"
 
-[dependencies.graphics]
-
-git = "https://github.com/pistondevelopers/graphics"
-
-[dependencies.event]
+[dependencies.pistoncore-event]
 
 git = "https://github.com/pistondevelopers/event"
 
-[dependencies.sdl2_window]
+[dependencies.pistoncore-sdl2_window]
 
 git = "https://github.com/pistondevelopers/sdl2_window"
 
-[dependencies.glfw_window]
+[dependencies.pistoncore-glfw_window]
 
 git = "https://github.com/PistonDevelopers/glfw_window"
+
+[dependencies.piston2d-graphics]
+
+git = "https://github.com/pistondevelopers/graphics"
 

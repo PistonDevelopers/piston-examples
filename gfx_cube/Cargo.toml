@@ -10,21 +10,21 @@ tags = []
 name = "cube"
 path = "src/main.rs"
 
-[dependencies.cam]
-
-git = "https://github.com/PistonDevelopers/cam"
-
-[dependencies.event]
+[dependencies.pistoncore-event]
 
 git = "https://github.com/PistonDevelopers/event"
 
-[dependencies.glfw_window]
+[dependencies.pistoncore-glfw_window]
 
 git = "https://github.com/pistondevelopers/glfw_window"
 
-[dependencies.sdl2_window]
+[dependencies.pistoncore-sdl2_window]
 
 git = "https://github.com/pistondevelopers/sdl2_window"
+
+[dependencies.piston3d-cam]
+
+git = "https://github.com/PistonDevelopers/cam"
 
 [dependencies.gfx]
 
