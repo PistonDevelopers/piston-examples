@@ -14,7 +14,7 @@ use opengl_graphics::{ Gl,Texture };
 use sdl2_window::Sdl2Window;
 use event::{ Events, WindowSettings };
 use image::GenericImage;
-use input::{ mouse, Button };
+use input::{ Button, MouseButton };
 
 fn main() {
     let opengl = shader_version::OpenGL::_3_2;
@@ -30,7 +30,7 @@ fn main() {
         }
     );
 
-    let mut image = image::ImageBuf::new(width, height);
+    let mut image = image::ImageBuffer::new(width, height);
     let mut draw = false;
     let mut texture = Texture::from_image(&image);
     let ref mut gl = Gl::new(opengl);
@@ -44,12 +44,12 @@ fn main() {
             });
         });
         e.press(|button| {
-            if button == Button::Mouse(mouse::Button::Left) {
+            if button == Button::Mouse(MouseButton::Left) {
                 draw = true
             }
         });
         e.release(|button| {
-            if button == Button::Mouse(mouse::Button::Left) {
+            if button == Button::Mouse(MouseButton::Left) {
                 draw = false
             }
         });
@@ -57,7 +57,7 @@ fn main() {
             e.mouse_cursor(|x, y| {
                 let (x, y) = (x as u32, y as u32);
                 if x < width && y < height {
-                    image.put_pixel(x, y, image::Rgba(0, 0, 0, 255));
+                    image.put_pixel(x, y, image::Rgba([0, 0, 0, 255]));
                     texture.update(&image);
                 }
             });
