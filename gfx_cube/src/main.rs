@@ -28,6 +28,7 @@ use event::window::{ CaptureCursor };
 // Cube associated data
 
 #[vertex_format]
+#[deriving(Copy)]
 struct Vertex {
     #[as_float]
     a_pos: [i8, ..3],
