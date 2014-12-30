@@ -90,7 +90,6 @@ pub fn start() {
         });
         e.render(|_args| {
             piston::render_2d_opengl(
-                unsafe { piston::DANGER::new() },
                 Some(graphics::color::WHITE),
                 |c, g| {
 
