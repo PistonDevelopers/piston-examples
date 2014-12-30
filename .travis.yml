@@ -22,9 +22,6 @@ install:
     - curl -O http://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.0.tar.gz
     - tar -xzvf SDL2_mixer-2.0.0.tar.gz
     - (cd SDL2_mixer-2.0.0 && ./configure && make && sudo make install)
-before_script:
-    - rustc -V
-    - cargo -V
 script:
     - (cd gfx_cube && cargo build -v)
     - (cd image && cargo build -v)
