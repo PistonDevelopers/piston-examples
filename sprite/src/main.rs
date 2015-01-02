@@ -1,4 +1,4 @@
-
+#![feature(default_type_params)]
 #![feature(globs)]
 
 extern crate shader_version;
@@ -78,6 +78,7 @@ fn main() {
     for e in Events::new(&window) {
         use event::{ PressEvent, RenderEvent };
 
+        let e: event::Event<input::Input> = e;
         scene.event(&e);
 
         e.render(|args| {
