@@ -1,3 +1,4 @@
+#![feature(default_type_params)]
 #![feature(globs)]
 
 extern crate shader_version;
@@ -5,6 +6,7 @@ extern crate event;
 extern crate graphics;
 extern crate sdl2_window;
 extern crate opengl_graphics;
+extern crate input;
 
 use std::cell::RefCell;
 use opengl_graphics::{
@@ -34,6 +36,7 @@ fn main() {
     for e in Events::new(&window) {
         use event::RenderEvent;
 
+        let e: event::Event<input::Input> = e;
         e.render(|args| {
             use graphics::*;
             gl.draw([0, 0, args.width as i32, args.height as i32], |c, gl| {
