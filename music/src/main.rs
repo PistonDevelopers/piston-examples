@@ -1,5 +1,8 @@
+#![feature(default_type_params)]
+
 //! Playing a music file with SDL2 mixer.
 
+extern crate input;
 extern crate shader_version;
 extern crate event;
 extern crate sdl2_window;
@@ -53,6 +56,8 @@ fn main() {
     music.play(4).unwrap();
 
     let window = RefCell::new(window);
-    for _e in Events::new(&window) {}
+    for e in Events::new(&window) {
+        let _e: event::Event<input::Input> = e;
+    }
 }
 

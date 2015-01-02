@@ -1,3 +1,5 @@
+#![feature(default_type_params)]
+
 extern crate piston;
 extern crate opengl_graphics;
 
@@ -45,6 +47,7 @@ pub fn start() {
     for e in piston::events() {
         use piston::event::{ RenderEvent, PressEvent };
 
+        let e: piston::event::Event<piston::input::Input> = e;
         drag.event(&e, |action| {
             match action {
                 Drag::Start(x, y) => {

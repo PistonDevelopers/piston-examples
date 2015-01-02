@@ -1,4 +1,4 @@
-
+#![feature(default_type_params)]
 #![feature(globs)]
 
 extern crate shader_version;
@@ -37,6 +37,8 @@ fn main() {
     let window = RefCell::new(window);
     for e in Events::new(&window) {
         use event::{ MouseCursorEvent, PressEvent, ReleaseEvent, RenderEvent };
+        
+        let e: event::Event<input::Input> = e;
         e.render(|args| {
             gl.draw([0, 0, args.width as i32, args.height as i32], |c, gl| {
                 graphics::clear([1.0, ..4], gl);

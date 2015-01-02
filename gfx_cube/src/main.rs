@@ -1,8 +1,9 @@
+#![feature(default_type_params)]
 #![feature(phase)]
 #![feature(globs)]
 #![crate_name = "cube"]
 
-extern crate current;
+extern crate quack;
 extern crate shader_version;
 extern crate vecmath;
 extern crate event;
@@ -16,7 +17,7 @@ extern crate sdl2_window;
 extern crate gfx_macros;
 extern crate time;
 
-use current::{ Set };
+use quack::{ Set };
 use std::cell::RefCell;
 // use glfw_window::GlfwWindow;
 use sdl2_window::Sdl2Window;
@@ -223,6 +224,7 @@ fn main() {
     for e in Events::new(&window) {
         use event::RenderEvent;
 
+        let e: event::Event<input::Input> = e;
         first_person.event(&e);
         e.render(|args| {
             graphics.clear(

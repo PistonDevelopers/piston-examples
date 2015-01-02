@@ -1,13 +1,14 @@
+#![feature(default_type_params)]
 #![feature(globs)]
 
-extern crate current;
+extern crate quack;
 extern crate shader_version;
 extern crate input;
 extern crate event;
 extern crate sdl2_window;
 // extern crate glfw_window;
 
-use current::{ Set };
+use quack::{ Set };
 use std::cell::RefCell;
 use sdl2_window::Sdl2Window as Window;
 // use glfw_window::GlfwWindow as Window;
@@ -46,6 +47,7 @@ fn main() {
     let mut capture_cursor = false;
     let ref window = RefCell::new(window);
     for e in Events::new(window) {
+        let e: event::Event<input::Input> = e;
         e.press(|button| {
             match button {
                 Button::Keyboard(key) => {
