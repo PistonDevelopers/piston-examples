@@ -53,22 +53,22 @@ fn main() {
 
     // Run a sequence or animations.
     let seq = Sequence(vec![
-        Action(Ease(EaseCubicOut, box ScaleTo(2.0, 0.5, 0.5))),
-        Action(Ease(EaseBounceOut, box MoveBy(1.0, 0.0, 100.0))),
-        Action(Ease(EaseElasticOut, box MoveBy(2.0, 0.0, -100.0))),
-        Action(Ease(EaseBackInOut, box MoveBy(1.0, 0.0, -100.0))),
+        Action(Ease(EaseFunction::CubicOut, box ScaleTo(2.0, 0.5, 0.5))),
+        Action(Ease(EaseFunction::BounceOut, box MoveBy(1.0, 0.0, 100.0))),
+        Action(Ease(EaseFunction::ElasticOut, box MoveBy(2.0, 0.0, -100.0))),
+        Action(Ease(EaseFunction::BackInOut, box MoveBy(1.0, 0.0, -100.0))),
         Wait(0.5),
-        Action(Ease(EaseExponentialInOut, box MoveBy(1.0, 0.0, 100.0))),
+        Action(Ease(EaseFunction::ExponentialInOut, box MoveBy(1.0, 0.0, 100.0))),
         Action(Blink(1.0, 5)),
         While(box WaitForever, vec![
-            Action(Ease(EaseQuadraticIn, box FadeOut(1.0))),
-            Action(Ease(EaseQuadraticOut, box FadeIn(1.0))),
+            Action(Ease(EaseFunction::QuadraticIn, box FadeOut(1.0))),
+            Action(Ease(EaseFunction::QuadraticOut, box FadeIn(1.0))),
         ]),
     ]);
     scene.run(id.clone(), &seq);
 
     // This animation and the one above can run in parallel.
-    let rotate = Action(Ease(EaseExponentialInOut, box RotateTo(2.0, 360.0)));
+    let rotate = Action(Ease(EaseFunction::ExponentialInOut, box RotateTo(2.0, 360.0)));
     scene.run(id.clone(), &rotate);
 
     println!("Press any key to pause/resume the animation!");
