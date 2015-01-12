@@ -1,6 +1,5 @@
-#![feature(default_type_params)]
-#![feature(phase)]
-#![feature(globs)]
+#![feature(plugin)]
+#![allow(unstable)]
 #![crate_name = "cube"]
 
 extern crate quack;
@@ -10,10 +9,9 @@ extern crate event;
 extern crate input;
 extern crate cam;
 extern crate gfx;
-// extern crate glfw_window;
 extern crate sdl2;
 extern crate sdl2_window;
-#[phase(plugin)]
+#[macro_use] #[plugin]
 extern crate gfx_macros;
 extern crate time;
 
@@ -29,16 +27,16 @@ use event::window::{ CaptureCursor };
 // Cube associated data
 
 #[vertex_format]
-#[deriving(Copy)]
+#[derive(Copy)]
 struct Vertex {
     #[as_float]
-    a_pos: [i8, ..3],
+    a_pos: [i8; 3],
     #[as_float]
-    a_tex_coord: [u8, ..2],
+    a_tex_coord: [u8; 2],
 }
 
 impl Vertex {
-    fn new(pos: [i8, ..3], tc: [u8, ..2]) -> Vertex {
+    fn new(pos: [i8; 3], tc: [u8; 2]) -> Vertex {
         Vertex {
             a_pos: pos,
             a_tex_coord: tc,
@@ -48,12 +46,12 @@ impl Vertex {
 
 #[shader_param(CubeBatch)]
 struct Params {
-    u_model_view_proj: [[f32, ..4], ..4],
+    u_model_view_proj: [[f32; 4]; 4],
     t_color: gfx::shade::TextureParam,
 }
 
 static VERTEX_SRC: gfx::ShaderSource<'static> = shaders! {
-GLSL_120: b"
+glsl_120: b"
     #version 120
     attribute vec3 a_pos;
     attribute vec2 a_tex_coord;
@@ -63,8 +61,8 @@ GLSL_120: b"
         v_TexCoord = a_tex_coord;
         gl_Position = u_model_view_proj * vec4(a_pos, 1.0);
     }
-"
-GLSL_150: b"
+",
+glsl_150: b"
     #version 150 core
     in vec3 a_pos;
     in vec2 a_tex_coord;
@@ -74,11 +72,11 @@ GLSL_150: b"
         v_TexCoord = a_tex_coord;
         gl_Position = u_model_view_proj * vec4(a_pos, 1.0);
     }
-"
+",
 };
 
 static FRAGMENT_SRC: gfx::ShaderSource<'static> = shaders! {
-GLSL_120: b"
+glsl_120: b"
     #version 120
     varying vec2 v_TexCoord;
     uniform sampler2D t_color;
@@ -87,8 +85,8 @@ GLSL_120: b"
         float blend = dot(v_TexCoord-vec2(0.5,0.5), v_TexCoord-vec2(0.5,0.5));
         gl_FragColor = mix(tex, vec4(0.0,0.0,0.0,0.0), blend*1.0);
     }
-"
-GLSL_150: b"
+",
+glsl_150: b"
     #version 150 core
     in vec2 v_TexCoord;
     out vec4 o_Color;
@@ -98,7 +96,7 @@ GLSL_150: b"
         float blend = dot(v_TexCoord-vec2(0.5,0.5), v_TexCoord-vec2(0.5,0.5));
         o_Color = mix(tex, vec4(0.0,0.0,0.0,0.0), blend*1.0);
     }
-"
+",
 };
 
 //----------------------------------------
@@ -157,7 +155,7 @@ fn main() {
         Vertex::new([ 1, -1, -1], [0, 1]),
     ];
 
-    let mesh = device.create_mesh(vertex_data.as_slice());
+    let mesh = device.create_mesh(&vertex_data[]);
 
     let index_data: &[u8] = &[
          0,  1,  2,  2,  3,  0, // top
@@ -185,7 +183,7 @@ fn main() {
     device.update_texture(
             &texture, 
             &img_info,
-            vec![0x20u8, 0xA0u8, 0xC0u8, 0x00u8].as_slice()
+            &[0x20u8, 0xA0u8, 0xC0u8, 0x00u8]
         ).unwrap();
 
     let sampler = device.create_sampler(
