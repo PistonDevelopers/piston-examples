@@ -1,5 +1,4 @@
-#![feature(default_type_params)]
-#![feature(globs)]
+#![allow(unstable)]
 
 extern crate quack;
 extern crate shader_version;
@@ -14,26 +13,12 @@ use sdl2_window::Sdl2Window as Window;
 // use glfw_window::GlfwWindow as Window;
 use input::Button;
 use input::keyboard::Key;
-use event::{
-    Events,
-    FocusEvent,
-    PressEvent,
-    MouseCursorEvent,
-    MouseRelativeEvent,
-    MouseScrollEvent,
-    ReleaseEvent,
-    RenderEvent,
-    ResizeEvent,
-    TextEvent,
-    UpdateEvent,
-    WindowSettings,
-};
 use event::window::{ CaptureCursor };
 
 fn main() {
     let window = Window::new(
         shader_version::OpenGL::_3_2,
-        WindowSettings {
+        event::WindowSettings {
             title: "piston-examples/user_input".to_string(),
             size: [300, 300],
             fullscreen: false,
@@ -46,37 +31,36 @@ fn main() {
 
     let mut capture_cursor = false;
     let ref window = RefCell::new(window);
-    for e in Events::new(window) {
-        let e: event::Event<input::Input> = e;
-        e.press(|button| {
-            match button {
-                Button::Keyboard(key) => {
-                    if key == Key::C {
-                        println!("Turned capture cursor on");
-                        capture_cursor = !capture_cursor;
-                        window.set(CaptureCursor(capture_cursor));
-                    }
+    for e in event::events(window) {
+        use event::*;
 
-                    println!("Pressed keyboard key '{}'", key);
-                }, 
-                Button::Mouse(button) => println!("Pressed mouse button '{}'", button),
+        if let Some(Button::Mouse(button)) = e.press_args() {
+            println!("Pressed mouse button '{:?}'", button);
+        }
+        if let Some(Button::Keyboard(key)) = e.press_args() {
+            if key == Key::C {
+                println!("Turned capture cursor on");
+                capture_cursor = !capture_cursor;
+                window.set(CaptureCursor(capture_cursor));
             }
-        });
-        e.release(|button| {
+
+            println!("Pressed keyboard key '{:?}'", key);
+        };
+        if let Some(button) = e.release_args() {
             match button {
-                Button::Keyboard(key) => println!("Released keyboard key '{}'", key),
-                Button::Mouse(button) => println!("Released mouse button '{}'", button),
+                Button::Keyboard(key) => println!("Released keyboard key '{:?}'", key),
+                Button::Mouse(button) => println!("Released mouse button '{:?}'", button),
             }
-        });
+        };
         e.mouse_cursor(|x, y| println!("Mouse moved '{} {}'", x, y));
         e.mouse_scroll(|dx, dy| println!("Scrolled mouse '{}, {}'", dx, dy));
         e.mouse_relative(|dx, dy| println!("Relative mouse moved '{} {}'", dx, dy));
         e.text(|text| println!("Typed '{}'", text));
         e.resize(|w, h| println!("Resized '{}, {}'", w, h));
-        e.focus(|focused| {
+        if let Some(focused) = e.focus_args() {
             if focused { println!("Gained focus"); }
             else { println!("Lost focus"); }
-        });
+        };
         e.render(|_| {});
         e.update(|_| {});
     }
