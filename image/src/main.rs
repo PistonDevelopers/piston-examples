@@ -1,5 +1,4 @@
-#![feature(default_type_params)]
-#![feature(globs)]
+#![allow(unstable)]
 
 extern crate shader_version;
 extern crate event;
@@ -14,13 +13,12 @@ use opengl_graphics::{
     Texture,
 };
 use sdl2_window::Sdl2Window;
-use event::{ Events, WindowSettings };
 
 fn main() {
     let opengl = shader_version::OpenGL::_3_2;
     let window = Sdl2Window::new(
         opengl,
-        WindowSettings {
+        event::WindowSettings {
             title: "Image".to_string(),
             size: [300, 300],
             fullscreen: false,
@@ -33,17 +31,16 @@ fn main() {
     let image = Texture::from_path(&image).unwrap();
     let ref mut gl = Gl::new(opengl);
     let window = RefCell::new(window);
-    for e in Events::new(&window) {
+    for e in event::events(&window) {
         use event::RenderEvent;
 
-        let e: event::Event<input::Input> = e;
-        e.render(|args| {
+        if let Some(args) = e.render_args() {
             use graphics::*;
             gl.draw([0, 0, args.width as i32, args.height as i32], |c, gl| {
-                graphics::clear([1.0, ..4], gl);
+                graphics::clear([1.0; 4], gl);
                 graphics::image(&image, &c, gl);
             });
-        });
+        };
     }
 }
 
