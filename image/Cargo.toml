@@ -22,3 +22,12 @@ git = "https://github.com/pistondevelopers/event"
 
 git = "https://github.com/pistondevelopers/opengl_graphics"
 
+[dependencies.piston2d-graphics]
+
+git = "https://github.com/pistondevelopers/graphics"
+
+
+[dependencies.shader_version]
+
+git = "https://github.com/pistondevelopers/shader_version"
+
