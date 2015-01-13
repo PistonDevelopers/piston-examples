@@ -118,7 +118,7 @@ pub fn start() {
             // Draw control points.
             let original = graphics::Ellipse::new([1.0, 0.0, 0.0, 0.5]);
             let current = graphics::Ellipse::new([0.0, 0.0, 0.0, 0.5]);
-            for i in range(0, grid.ps.len()) {
+            for i in (0..grid.ps.len()) {
                 use piston::graphics::ellipse::circle;
 
                 // Original positions.
