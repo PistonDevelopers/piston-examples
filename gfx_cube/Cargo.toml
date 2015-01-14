@@ -17,5 +17,20 @@ git = "https://github.com/pistondevelopers/sdl2_window"
 [dependencies.piston3d-cam]
 git = "https://github.com/PistonDevelopers/cam"
 
+[dependencies.quack]
+git = "https://github.com/PistonDevelopers/quack"
+
+[dependencies.shader_version]
+git = "https://github.com/PistonDevelopers/shader_version"
+
+[dependencies.vecmath]
+git = "https://github.com/PistonDevelopers/vecmath"
+
+[dependencies.sdl2]
+git = "https://github.com/AngryLawyer/rust-sdl2"
+
 [dependencies.gfx]
+git = "https://github.com/gfx-rs/gfx-rs"
+
+[dependencies.gfx_macros]
 git = "https://github.com/gfx-rs/gfx-rs"
