@@ -1,5 +1,3 @@
-#![feature(default_type_params)]
-#![feature(globs)]
 
 extern crate shader_version;
 extern crate input;
@@ -13,7 +11,6 @@ extern crate opengl_graphics;
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use event::{ Events, WindowSettings };
 use sprite::*;
 use ai_behavior::{
     Action,
@@ -34,7 +31,7 @@ fn main() {
     let opengl = shader_version::OpenGL::_3_2;
     let window = Sdl2Window::new(
         opengl,
-        WindowSettings {
+        event::WindowSettings {
             title: "Sprite".to_string(),
             size: [width, height],
             fullscreen: false,
@@ -53,32 +50,32 @@ fn main() {
 
     // Run a sequence or animations.
     let seq = Sequence(vec![
-        Action(Ease(EaseFunction::CubicOut, box ScaleTo(2.0, 0.5, 0.5))),
-        Action(Ease(EaseFunction::BounceOut, box MoveBy(1.0, 0.0, 100.0))),
-        Action(Ease(EaseFunction::ElasticOut, box MoveBy(2.0, 0.0, -100.0))),
-        Action(Ease(EaseFunction::BackInOut, box MoveBy(1.0, 0.0, -100.0))),
+        Action(Ease(EaseFunction::CubicOut, Box::new(ScaleTo(2.0, 0.5, 0.5)))),
+        Action(Ease(EaseFunction::BounceOut, Box::new(MoveBy(1.0, 0.0, 100.0)))),
+        Action(Ease(EaseFunction::ElasticOut, Box::new(MoveBy(2.0, 0.0, -100.0)))),
+        Action(Ease(EaseFunction::BackInOut, Box::new(MoveBy(1.0, 0.0, -100.0)))),
         Wait(0.5),
-        Action(Ease(EaseFunction::ExponentialInOut, box MoveBy(1.0, 0.0, 100.0))),
+        Action(Ease(EaseFunction::ExponentialInOut, Box::new(MoveBy(1.0, 0.0, 100.0)))),
         Action(Blink(1.0, 5)),
-        While(box WaitForever, vec![
-            Action(Ease(EaseFunction::QuadraticIn, box FadeOut(1.0))),
-            Action(Ease(EaseFunction::QuadraticOut, box FadeIn(1.0))),
+        While(Box::new(WaitForever), vec![
+            Action(Ease(EaseFunction::QuadraticIn, Box::new(FadeOut(1.0)))),
+            Action(Ease(EaseFunction::QuadraticOut, Box::new(FadeIn(1.0)))),
         ]),
     ]);
     scene.run(id.clone(), &seq);
 
     // This animation and the one above can run in parallel.
-    let rotate = Action(Ease(EaseFunction::ExponentialInOut, box RotateTo(2.0, 360.0)));
+    let rotate = Action(Ease(EaseFunction::ExponentialInOut, 
+        Box::new(RotateTo(2.0, 360.0))));
     scene.run(id.clone(), &rotate);
 
     println!("Press any key to pause/resume the animation!");
 
     let ref mut gl = Gl::new(opengl);
     let window = RefCell::new(window);
-    for e in Events::new(&window) {
+    for e in event::events(&window) {
         use event::{ PressEvent, RenderEvent };
 
-        let e: event::Event<input::Input> = e;
         scene.event(&e);
 
         e.render(|args| {
