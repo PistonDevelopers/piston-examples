@@ -1,4 +1,3 @@
-
 extern crate shader_version;
 extern crate input;
 extern crate ai_behavior;
@@ -78,16 +77,16 @@ fn main() {
 
         scene.event(&e);
 
-        e.render(|args| {
+        if let Some(args) = e.render_args() {
             use graphics::*;
-            gl.draw([0, 0, args.width as i32, args.height as i32], |c, gl| {
+            gl.draw([0, 0, args.width as i32, args.height as i32], |&mut: c, gl| {
                 graphics::clear([1.0, 1.0, 1.0, 1.0], gl);
                 scene.draw(&c, gl);
             });
-        });
-        e.press(|_| {
+        }
+        if let Some(_) = e.press_args() {
             scene.toggle(id.clone(), &seq);
             scene.toggle(id.clone(), &rotate);
-        });
+        }
     }
 }
