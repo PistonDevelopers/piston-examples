@@ -10,6 +10,8 @@ name = "piston-examples-deform"
 path = "src/main.rs"
 
 [dependencies.piston]
-
 git = "https://github.com/pistondevelopers/piston"
+
+[dependencies.piston2d-opengl_graphics]
+git = "https://github.com/pistondevelopers/opengl_graphics"
 
