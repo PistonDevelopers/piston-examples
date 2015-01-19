@@ -11,17 +11,20 @@ name = "music"
 path = "src/main.rs"
 
 [dependencies.pistoncore-sdl2_window]
-
 git = "https://github.com/PistonDevelopers/sdl2_window.git"
 
 [dependencies.pistoncore-event]
-
 git = "https://github.com/PistonDevelopers/event"
 
-[dependencies.piston2d-opengl_graphics]
+[dependencies.pistoncore-input]
+git = "https://github.com/PistonDevelopers/input"
 
+[dependencies.piston2d-opengl_graphics]
 git = "https://github.com/PistonDevelopers/opengl_graphics.git"
 
-[dependencies.sdl2_mixer]
+[dependencies.shader_version]
+git = "https://github.com/PistonDevelopers/shader_version"
 
+[dependencies.sdl2_mixer]
 git = "https://github.com/andelf/rust-sdl2_mixer"
+
