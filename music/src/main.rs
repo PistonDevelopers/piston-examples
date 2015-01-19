@@ -1,5 +1,3 @@
-#![feature(default_type_params)]
-
 //! Playing a music file with SDL2 mixer.
 
 extern crate input;
@@ -12,7 +10,6 @@ extern crate sdl2;
 use std::cell::RefCell;
 use sdl2_window::Sdl2Window;
 use sdl2_mixer as mix;
-use event::{ Events, WindowSettings };
 
 fn init_audio() {
     sdl2::init(sdl2::INIT_AUDIO | sdl2::INIT_TIMER);
@@ -37,7 +34,7 @@ fn init_audio() {
 fn main() {
     let window = Sdl2Window::new(
         shader_version::OpenGL::_3_2,
-        WindowSettings {
+        event::WindowSettings {
             title: "Music".to_string(),
             size: [300, 300],
             fullscreen: false,
@@ -49,15 +46,14 @@ fn main() {
     init_audio();
  
     // Load music file. 
-    let file = Path::new("./bin/assets/piano.wav");
+    let file = Path::new("./assets/piano.wav");
     let music = mix::Music::from_file(&file).unwrap();
    
     // Loop four times. 
     music.play(4).unwrap();
 
     let window = RefCell::new(window);
-    for e in Events::new(&window) {
-        let _e: event::Event<input::Input> = e;
+    for _e in event::events(&window) {
     }
 }
 
