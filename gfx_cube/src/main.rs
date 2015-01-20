@@ -13,14 +13,12 @@ extern crate sdl2;
 extern crate sdl2_window;
 #[macro_use] #[plugin]
 extern crate gfx_macros;
-extern crate time;
 
 use quack::{ Set };
 use std::cell::RefCell;
 // use glfw_window::GlfwWindow;
 use sdl2_window::Sdl2Window;
 use gfx::{ Device, DeviceHelper, ToSlice };
-use event::{ Events, WindowSettings };
 use event::window::{ CaptureCursor };
 
 //----------------------------------------
@@ -105,7 +103,7 @@ fn main() {
     let (win_width, win_height) = (640, 480);
     let mut window = Sdl2Window::new(
         shader_version::OpenGL::_3_2,
-        WindowSettings {
+        event::WindowSettings {
             title: "cube".to_string(),
             size: [win_width, win_height],
             fullscreen: false,
@@ -219,12 +217,11 @@ fn main() {
     );
 
     let window = RefCell::new(window);
-    for e in Events::new(&window) {
+    for e in event::events(&window) {
         use event::RenderEvent;
 
-        let e: event::Event<input::Input> = e;
         first_person.event(&e);
-        e.render(|args| {
+        if let Some(args) = e.render_args() {
             graphics.clear(
                 gfx::ClearData {
                     color: [0.3, 0.3, 0.3, 1.0],
@@ -241,7 +238,7 @@ fn main() {
                 );
             graphics.draw(&batch, &data, &frame);
             graphics.end_frame();
-        });
+        }
     }
 }
 

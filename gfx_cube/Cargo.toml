@@ -14,6 +14,9 @@ git = "https://github.com/PistonDevelopers/event"
 [dependencies.pistoncore-sdl2_window]
 git = "https://github.com/pistondevelopers/sdl2_window"
 
+[dependencies.pistoncore-input]
+git = "https://github.com/PistonDevelopers/input"
+
 [dependencies.piston3d-cam]
 git = "https://github.com/PistonDevelopers/cam"
 
