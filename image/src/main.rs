@@ -5,7 +5,6 @@ extern crate event;
 extern crate graphics;
 extern crate sdl2_window;
 extern crate opengl_graphics;
-extern crate input;
 
 use std::cell::RefCell;
 use opengl_graphics::{
