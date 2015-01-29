@@ -1,7 +1,6 @@
 #![allow(unstable)]
 
-extern crate shader_version;
-extern crate event;
+extern crate piston;
 extern crate graphics;
 extern crate sdl2_window;
 extern crate opengl_graphics;
@@ -9,15 +8,16 @@ extern crate opengl_graphics;
 use std::cell::RefCell;
 use opengl_graphics::{
     Gl,
+    OpenGL,
     Texture,
 };
 use sdl2_window::Sdl2Window;
 
 fn main() {
-    let opengl = shader_version::OpenGL::_3_2;
+    let opengl = OpenGL::_3_2;
     let window = Sdl2Window::new(
         opengl,
-        event::WindowSettings {
+        piston::window::WindowSettings {
             title: "Image".to_string(),
             size: [300, 300],
             fullscreen: false,
@@ -30,8 +30,8 @@ fn main() {
     let image = Texture::from_path(&image).unwrap();
     let ref mut gl = Gl::new(opengl);
     let window = RefCell::new(window);
-    for e in event::events(&window) {
-        use event::RenderEvent;
+    for e in piston::events(&window) {
+        use piston::event::RenderEvent;
 
         if let Some(args) = e.render_args() {
             use graphics::*;
