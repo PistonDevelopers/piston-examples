@@ -12,20 +12,14 @@ path = "src/main.rs"
 [dependencies.pistoncore-sdl2_window]
 git = "https://github.com/pistondevelopers/sdl2_window"
 
-[dependencies.pistoncore-event]
-git = "https://github.com/pistondevelopers/event"
+[dependencies.piston]
+git = "https://github.com/pistondevelopers/piston"
 
 [dependencies.piston2d-opengl_graphics]
 git = "https://github.com/pistondevelopers/opengl_graphics"
 
 [dependencies.piston2d-graphics]
 git = "https://github.com/pistondevelopers/graphics"
-
-[dependencies.shader_version]
-git = "https://github.com/pistondevelopers/shader_version"
-
-[dependencies.pistoncore-input]
-git = "https://github.com/pistondevelopers/input"
 
 [dependencies.image]
 git = "https://github.com/pistondevelopers/image"
