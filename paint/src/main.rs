@@ -1,24 +1,22 @@
 
-extern crate shader_version;
-extern crate input;
-extern crate event;
+extern crate piston;
 extern crate image;
 extern crate graphics;
 extern crate sdl2_window;
 extern crate opengl_graphics;
 
 use std::cell::RefCell;
-use opengl_graphics::{ Gl,Texture };
+use opengl_graphics::{ Gl, OpenGL, Texture };
 use sdl2_window::Sdl2Window;
 use image::GenericImage;
-use input::{ Button, MouseButton };
+use piston::input::{ Button, MouseButton };
 
 fn main() {
-    let opengl = shader_version::OpenGL::_3_2;
+    let opengl = OpenGL::_3_2;
     let (width, height) = (300, 300);
     let window = Sdl2Window::new(
         opengl,
-        event::WindowSettings {
+        piston::window::WindowSettings {
             title: "Paint".to_string(),
             size: [width, height],
             fullscreen: false,
@@ -32,8 +30,8 @@ fn main() {
     let mut texture = Texture::from_image(&image);
     let ref mut gl = Gl::new(opengl);
     let window = RefCell::new(window);
-    for e in event::events(&window) {
-        use event::{ MouseCursorEvent, PressEvent, ReleaseEvent, RenderEvent };
+    for e in piston::events(&window) {
+        use piston::event::{ MouseCursorEvent, PressEvent, ReleaseEvent, RenderEvent };
         
         if let Some(args) = e.render_args() {
             gl.draw([0, 0, args.width as i32, args.height as i32], |c, gl| {
