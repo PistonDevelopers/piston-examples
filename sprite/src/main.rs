@@ -1,8 +1,9 @@
-extern crate shader_version;
-extern crate input;
+#![feature(path)]
+#![feature(collections)]
+
+extern crate piston;
 extern crate ai_behavior;
 extern crate sprite;
-extern crate event;
 extern crate graphics;
 extern crate sdl2_window;
 extern crate opengl_graphics;
@@ -22,15 +23,16 @@ use ai_behavior::{
 use sdl2_window::Sdl2Window;
 use opengl_graphics::{
     Gl,
+    OpenGL,
     Texture,
 };
 
 fn main() {
     let (width, height) = (300, 300);
-    let opengl = shader_version::OpenGL::_3_2;
+    let opengl = OpenGL::_3_2;
     let window = Sdl2Window::new(
         opengl,
-        event::WindowSettings {
+        piston::window::WindowSettings {
             title: "Sprite".to_string(),
             size: [width, height],
             fullscreen: false,
@@ -72,8 +74,8 @@ fn main() {
 
     let ref mut gl = Gl::new(opengl);
     let window = RefCell::new(window);
-    for e in event::events(&window) {
-        use event::{ PressEvent, RenderEvent };
+    for e in piston::events(&window) {
+        use piston::event::{ PressEvent, RenderEvent };
 
         scene.event(&e);
 
