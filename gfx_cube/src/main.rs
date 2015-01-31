@@ -1,4 +1,5 @@
 #![feature(plugin)]
+#![feature(collections)]
 #![allow(unstable)]
 #![crate_name = "cube"]
 
