@@ -6,6 +6,7 @@ extern crate quack;
 extern crate shader_version;
 extern crate vecmath;
 extern crate event;
+extern crate window;
 extern crate input;
 extern crate cam;
 extern crate gfx;
@@ -19,7 +20,8 @@ use std::cell::RefCell;
 // use glfw_window::GlfwWindow;
 use sdl2_window::Sdl2Window;
 use gfx::{ Device, DeviceHelper, ToSlice };
-use event::window::{ CaptureCursor };
+use gfx::batch::RefBatch;
+use window::{ CaptureCursor };
 
 //----------------------------------------
 // Cube associated data
@@ -42,7 +44,7 @@ impl Vertex {
     }
 }
 
-#[shader_param(CubeBatch)]
+#[shader_param]
 struct Params {
     u_model_view_proj: [[f32; 4]; 4],
     t_color: gfx::shade::TextureParam,
@@ -103,7 +105,7 @@ fn main() {
     let (win_width, win_height) = (640, 480);
     let mut window = Sdl2Window::new(
         shader_version::OpenGL::_3_2,
-        event::WindowSettings {
+        window::WindowSettings {
             title: "cube".to_string(),
             size: [win_width, win_height],
             fullscreen: false,
@@ -197,7 +199,7 @@ fn main() {
         ).unwrap();
 
     let mut graphics = gfx::Graphics::new(device);
-    let batch: CubeBatch = graphics.make_batch(&program, &mesh, slice, &state).unwrap();
+    let batch: RefBatch<Params> = graphics.make_batch(&program, &mesh, slice, &state).unwrap();
 
     let mut data = Params {
         u_model_view_proj: vecmath::mat4_id(),
