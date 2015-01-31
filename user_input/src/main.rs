@@ -1,9 +1,11 @@
+#![feature(collections)]
 #![allow(unstable)]
 
 extern crate quack;
 extern crate shader_version;
 extern crate input;
 extern crate event;
+extern crate window;
 extern crate sdl2_window;
 // extern crate glfw_window;
 
@@ -13,12 +15,12 @@ use sdl2_window::Sdl2Window as Window;
 // use glfw_window::GlfwWindow as Window;
 use input::Button;
 use input::keyboard::Key;
-use event::window::{ CaptureCursor };
+use window::{ CaptureCursor };
 
 fn main() {
     let window = Window::new(
         shader_version::OpenGL::_3_2,
-        event::WindowSettings {
+        window::WindowSettings {
             title: "piston-examples/user_input".to_string(),
             size: [300, 300],
             fullscreen: false,
