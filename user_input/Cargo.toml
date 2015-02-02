@@ -13,6 +13,9 @@ path = "src/main.rs"
 [dependencies.pistoncore-event]
 git = "https://github.com/pistondevelopers/event"
 
+[dependencies.pistoncore-window]
+git = "https://github.com/PistonDevelopers/window"
+
 [dependencies.pistoncore-sdl2_window]
 git = "https://github.com/pistondevelopers/sdl2_window"
 
