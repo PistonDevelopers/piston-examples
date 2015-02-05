@@ -1,3 +1,5 @@
+#![feature(core)]
+#![feature(path)]
 
 extern crate piston;
 extern crate graphics;
