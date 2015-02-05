@@ -1,7 +1,5 @@
 #![feature(plugin)]
-#![feature(collections)]
-#![allow(unstable)]
-#![crate_name = "cube"]
+#![feature(core)]
 
 extern crate quack;
 extern crate shader_version;
