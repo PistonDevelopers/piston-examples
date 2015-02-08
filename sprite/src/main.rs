@@ -1,5 +1,4 @@
-#![feature(path)]
-#![feature(collections)]
+#![feature(core, path)]
 
 extern crate piston;
 extern crate ai_behavior;
@@ -81,7 +80,7 @@ fn main() {
 
         if let Some(args) = e.render_args() {
             use graphics::*;
-            gl.draw([0, 0, args.width as i32, args.height as i32], |&mut: c, gl| {
+            gl.draw([0, 0, args.width as i32, args.height as i32], |c, gl| {
                 graphics::clear([1.0, 1.0, 1.0, 1.0], gl);
                 scene.draw(&c, gl);
             });

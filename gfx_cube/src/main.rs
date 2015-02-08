@@ -1,5 +1,4 @@
-#![feature(plugin)]
-#![feature(core)]
+#![feature(core, plugin)]
 
 extern crate quack;
 extern crate shader_version;
@@ -237,7 +236,7 @@ fn main() {
                     first_person.camera(args.ext_dt).orthogonal(),
                     projection
                 );
-            graphics.draw(&batch, &data, &frame);
+            graphics.draw(&batch, &data, &frame).unwrap();
             graphics.end_frame();
         }
     }

@@ -1,5 +1,4 @@
-#![feature(collections)]
-#![allow(unstable)]
+#![feature(core)]
 
 extern crate quack;
 extern crate shader_version;
