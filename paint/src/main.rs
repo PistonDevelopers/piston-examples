@@ -1,3 +1,4 @@
+#![feature(core)]
 
 extern crate piston;
 extern crate image;
