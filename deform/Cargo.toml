@@ -1,11 +1,10 @@
 [package]
-
-name = "deform"
+name = "piston-examples-deform"
 version = "0.0.1"
 authors = ["Sven Nilsen <bvssvni@gmail.com>"]
+keywords = []
 
 [[bin]]
-
 name = "piston-examples-deform"
 path = "src/main.rs"
 
@@ -23,4 +22,3 @@ git = "https://github.com/pistondevelopers/drag_controller"
 
 [dependencies.pistoncore-sdl2_window]
 git = "https://github.com/pistondevelopers/sdl2_window"
-

@@ -1,11 +1,10 @@
 [package]
-
-name = "paint"
+name = "piston-example-paint"
 version = "0.0.1"
 authors = ["Sven Nilsen <bvssvni@gmail.com>"]
+keywords = []
 
 [[bin]]
-
 name = "piston-example-paint"
 path = "src/main.rs"
 
@@ -23,4 +22,3 @@ git = "https://github.com/pistondevelopers/graphics"
 
 [dependencies.image]
 git = "https://github.com/pistondevelopers/image"
-

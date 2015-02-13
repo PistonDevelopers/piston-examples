@@ -1,25 +1,31 @@
-#![feature(core)]
-
-extern crate quack;
+extern crate piston;
 extern crate shader_version;
-extern crate input;
-extern crate event;
-extern crate window;
 extern crate sdl2_window;
-// extern crate glfw_window;
 
-use quack::{ Set };
 use std::cell::RefCell;
+use piston::quack::Set;
+use piston::window::{ WindowSettings, CaptureCursor };
+use piston::input::Button;
+use piston::input::keyboard::Key;
+use piston::event::{
+    PressEvent,
+    ReleaseEvent,
+    MouseCursorEvent,
+    MouseScrollEvent,
+    MouseRelativeEvent,
+    TextEvent,
+    ResizeEvent,
+    FocusEvent,
+    RenderEvent,
+    UpdateEvent
+};
+use shader_version::OpenGL;
 use sdl2_window::Sdl2Window as Window;
-// use glfw_window::GlfwWindow as Window;
-use input::Button;
-use input::keyboard::Key;
-use window::{ CaptureCursor };
 
 fn main() {
     let window = Window::new(
-        shader_version::OpenGL::_3_2,
-        window::WindowSettings {
+        OpenGL::_3_2,
+        WindowSettings {
             title: "piston-examples/user_input".to_string(),
             size: [300, 300],
             fullscreen: false,
@@ -32,9 +38,7 @@ fn main() {
 
     let mut capture_cursor = false;
     let ref window = RefCell::new(window);
-    for e in event::events(window) {
-        use event::*;
-
+    for e in piston::events(window) {
         if let Some(Button::Mouse(button)) = e.press_args() {
             println!("Pressed mouse button '{:?}'", button);
         }

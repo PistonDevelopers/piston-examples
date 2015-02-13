@@ -1,30 +1,21 @@
 [package]
-name = "cube"
+name = "piston-example-cube"
 version = "0.0.0"
 authors = ["Your Name <your@email.com>"]
-tags = []
+keywords = []
 
 [[bin]]
-name = "cube"
+name = "piston-example-cube"
 path = "src/main.rs"
 
-[dependencies.pistoncore-event]
-git = "https://github.com/PistonDevelopers/event"
-
-[dependencies.pistoncore-window]
-git = "https://github.com/PistonDevelopers/window"
+[dependencies.piston]
+git = "https://github.com/PistonDevelopers/piston"
 
 [dependencies.pistoncore-sdl2_window]
 git = "https://github.com/pistondevelopers/sdl2_window"
 
-[dependencies.pistoncore-input]
-git = "https://github.com/PistonDevelopers/input"
-
 [dependencies.piston3d-cam]
 git = "https://github.com/PistonDevelopers/cam"
-
-[dependencies.quack]
-git = "https://github.com/PistonDevelopers/quack"
 
 [dependencies.shader_version]
 git = "https://github.com/PistonDevelopers/shader_version"

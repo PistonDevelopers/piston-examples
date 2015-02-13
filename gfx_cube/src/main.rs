@@ -1,25 +1,29 @@
-#![feature(core, plugin)]
+#![feature(plugin)]
+#![plugin(gfx_macros)]
 
-extern crate quack;
+extern crate piston;
 extern crate shader_version;
 extern crate vecmath;
-extern crate event;
-extern crate window;
-extern crate input;
 extern crate cam;
 extern crate gfx;
 extern crate sdl2;
 extern crate sdl2_window;
-#[macro_use] #[plugin]
-extern crate gfx_macros;
 
-use quack::{ Set };
 use std::cell::RefCell;
-// use glfw_window::GlfwWindow;
+use std::mem::transmute;
+use piston::quack::Set;
+use piston::window::{ WindowSettings, CaptureCursor };
+use piston::event::RenderEvent;
+use shader_version::OpenGL;
+use cam::{
+    FirstPersonSettings,
+    FirstPerson,
+    CameraPerspective,
+    model_view_projection
+};
+use gfx::{ Device, DeviceExt, ToSlice };
+use sdl2::video::gl_get_proc_address;
 use sdl2_window::Sdl2Window;
-use gfx::{ Device, DeviceHelper, ToSlice };
-use gfx::batch::RefBatch;
-use window::{ CaptureCursor };
 
 //----------------------------------------
 // Cube associated data
@@ -48,8 +52,7 @@ struct Params {
     t_color: gfx::shade::TextureParam,
 }
 
-static VERTEX_SRC: gfx::ShaderSource<'static> = shaders! {
-glsl_120: b"
+const VERTEX_SRC: [&'static [u8]; 2] = [ b"
     #version 120
     attribute vec3 a_pos;
     attribute vec2 a_tex_coord;
@@ -59,8 +62,7 @@ glsl_120: b"
         v_TexCoord = a_tex_coord;
         gl_Position = u_model_view_proj * vec4(a_pos, 1.0);
     }
-",
-glsl_150: b"
+", b"
     #version 150 core
     in vec3 a_pos;
     in vec2 a_tex_coord;
@@ -70,11 +72,9 @@ glsl_150: b"
         v_TexCoord = a_tex_coord;
         gl_Position = u_model_view_proj * vec4(a_pos, 1.0);
     }
-",
-};
+"];
 
-static FRAGMENT_SRC: gfx::ShaderSource<'static> = shaders! {
-glsl_120: b"
+const FRAGMENT_SRC: [&'static [u8]; 2] = [ b"
     #version 120
     varying vec2 v_TexCoord;
     uniform sampler2D t_color;
@@ -83,8 +83,7 @@ glsl_120: b"
         float blend = dot(v_TexCoord-vec2(0.5,0.5), v_TexCoord-vec2(0.5,0.5));
         gl_FragColor = mix(tex, vec4(0.0,0.0,0.0,0.0), blend*1.0);
     }
-",
-glsl_150: b"
+", b"
     #version 150 core
     in vec2 v_TexCoord;
     out vec4 o_Color;
@@ -94,16 +93,15 @@ glsl_150: b"
         float blend = dot(v_TexCoord-vec2(0.5,0.5), v_TexCoord-vec2(0.5,0.5));
         o_Color = mix(tex, vec4(0.0,0.0,0.0,0.0), blend*1.0);
     }
-",
-};
+"];
 
 //----------------------------------------
 
 fn main() {
     let (win_width, win_height) = (640, 480);
     let mut window = Sdl2Window::new(
-        shader_version::OpenGL::_3_2,
-        window::WindowSettings {
+        OpenGL::_3_2,
+        WindowSettings {
             title: "cube".to_string(),
             size: [win_width, win_height],
             fullscreen: false,
@@ -114,8 +112,19 @@ fn main() {
 
     window.set_mut(CaptureCursor(true));
 
+    let vertex = gfx::ShaderSource {
+        glsl_120: Some(VERTEX_SRC[0]),
+        glsl_150: Some(VERTEX_SRC[1]),
+        .. gfx::ShaderSource::empty()
+    };
+    let fragment = gfx::ShaderSource {
+        glsl_120: Some(FRAGMENT_SRC[0]),
+        glsl_150: Some(FRAGMENT_SRC[1]),
+        .. gfx::ShaderSource::empty()
+    };
+
     let mut device = gfx::GlDevice::new(|s| unsafe {
-        std::mem::transmute(sdl2::video::gl_get_proc_address(s))
+        transmute(gl_get_proc_address(s))
     });
     let frame = gfx::Frame::new(win_width as u16, win_height as u16);
     let state = gfx::DrawState::new().depth(gfx::state::Comparison::LessEqual, true);
@@ -164,10 +173,9 @@ fn main() {
         20, 21, 22, 22, 23, 20, // back
     ];
 
-    let slice = device
-        .create_buffer_static::<u8>(index_data)
-        .to_slice(gfx::PrimitiveType::TriangleList);
-    
+    let slice = device.create_buffer_static::<u8>(index_data)
+                      .to_slice(gfx::PrimitiveType::TriangleList);
+
     let tinfo = gfx::tex::TextureInfo {
         width: 1,
         height: 1,
@@ -179,25 +187,28 @@ fn main() {
     let img_info = tinfo.to_image_info();
     let texture = device.create_texture(tinfo).unwrap();
     device.update_texture(
-            &texture, 
-            &img_info,
-            &[0x20u8, 0xA0u8, 0xC0u8, 0x00u8]
-        ).unwrap();
+        &texture,
+        &img_info,
+        &[0x20u8, 0xA0u8, 0xC0u8, 0x00u8]
+    ).unwrap();
 
     let sampler = device.create_sampler(
         gfx::tex::SamplerInfo::new(
-            gfx::tex::FilterMethod::Bilinear, 
+            gfx::tex::FilterMethod::Bilinear,
             gfx::tex::WrapMode::Clamp
         )
     );
-    
+
+    let shader_model = device.get_capabilities().shader_model;
+
     let program = device.link_program(
-            VERTEX_SRC.clone(), 
-            FRAGMENT_SRC.clone()
-        ).unwrap();
+        vertex.choose(shader_model).unwrap(),
+        fragment.choose(shader_model).unwrap()
+    ).unwrap();
 
     let mut graphics = gfx::Graphics::new(device);
-    let batch: RefBatch<Params> = graphics.make_batch(&program, &mesh, slice, &state).unwrap();
+    let batch: gfx::batch::RefBatch<Params> =
+        graphics.make_batch(&program, &mesh, slice, &state).unwrap();
 
     let mut data = Params {
         u_model_view_proj: vecmath::mat4_id(),
@@ -205,21 +216,19 @@ fn main() {
     };
 
     let model = vecmath::mat4_id();
-    let projection = cam::CameraPerspective {
-            fov: 90.0f32,
-            near_clip: 0.1,
-            far_clip: 1000.0,
-            aspect_ratio: (win_width as f32) / (win_height as f32)
-        }.projection();
-    let mut first_person = cam::FirstPerson::new(
+    let projection = CameraPerspective {
+        fov: 90.0f32,
+        near_clip: 0.1,
+        far_clip: 1000.0,
+        aspect_ratio: (win_width as f32) / (win_height as f32)
+    }.projection();
+    let mut first_person = FirstPerson::new(
         [0.5f32, 0.5, 4.0],
-        cam::FirstPersonSettings::keyboard_wasd()
+        FirstPersonSettings::keyboard_wasd()
     );
 
     let window = RefCell::new(window);
-    for e in event::events(&window) {
-        use event::RenderEvent;
-
+    for e in piston::events(&window) {
         first_person.event(&e);
         if let Some(args) = e.render_args() {
             graphics.clear(
@@ -231,15 +240,13 @@ fn main() {
                 gfx::COLOR | gfx::DEPTH,
                 &frame
             );
-            data.u_model_view_proj = cam::model_view_projection(
-                    model,
-                    first_person.camera(args.ext_dt).orthogonal(),
-                    projection
-                );
+            data.u_model_view_proj = model_view_projection(
+                model,
+                first_person.camera(args.ext_dt).orthogonal(),
+                projection
+            );
             graphics.draw(&batch, &data, &frame).unwrap();
             graphics.end_frame();
         }
     }
 }
-
-
