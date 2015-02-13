@@ -1,12 +1,10 @@
 [package]
-
 name = "piston-example-image"
 version = "0.0.0"
 authors = ["Your Name <your@email.com>"]
-tags = []
+keywords = []
 
 [[bin]]
-
 name = "piston-example-image"
 path = "src/main.rs"
 
@@ -17,9 +15,7 @@ git = "https://github.com/pistondevelopers/piston"
 git = "https://github.com/pistondevelopers/sdl2_window"
 
 [dependencies.piston2d-opengl_graphics]
-
 git = "https://github.com/pistondevelopers/opengl_graphics"
 
 [dependencies.piston2d-graphics]
 git = "https://github.com/pistondevelopers/graphics"
-
