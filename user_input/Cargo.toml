@@ -13,6 +13,22 @@ git = "https://github.com/PistonDevelopers/piston"
 
 [dependencies.pistoncore-sdl2_window]
 git = "https://github.com/pistondevelopers/sdl2_window"
+optional = true
+
+[dependencies.pistoncore-glfw_window]
+git = "https://github.com/pistondevelopers/glfw_window"
+optional = true
+
+[dependencies.pistoncore-glutin_window]
+git = "https://github.com/pistondevelopers/glutin_window"
+optional = true
 
 [dependencies.shader_version]
 git = "https://github.com/pistondevelopers/shader_version"
+
+[features]
+default = ["include_glfw"]
+include_sdl2 = ["pistoncore-sdl2_window"]
+include_glfw = ["pistoncore-glfw_window"]
+include_glutin = ["pistoncore-glutin_window"]
+

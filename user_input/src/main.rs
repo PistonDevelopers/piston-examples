@@ -1,6 +1,11 @@
 extern crate piston;
 extern crate shader_version;
+#[cfg(feature = "include_sdl2")]
 extern crate sdl2_window;
+#[cfg(feature = "include_glfw")]
+extern crate glfw_window;
+#[cfg(feature = "include_glutin")]
+extern crate glutin_window;
 
 use std::cell::RefCell;
 use piston::quack::Set;
@@ -20,7 +25,12 @@ use piston::event::{
     UpdateEvent
 };
 use shader_version::OpenGL;
+#[cfg(feature = "include_sdl2")]
 use sdl2_window::Sdl2Window as Window;
+#[cfg(feature = "include_glfw")]
+use glfw_window::GlfwWindow as Window;
+#[cfg(feature = "include_glutin")]
+use glutin_window::GlutinWindow as Window;
 
 fn main() {
     let window = Window::new(
