@@ -1,4 +1,4 @@
-#![feature(plugin)]
+#![feature(plugin, custom_attribute)]
 #![plugin(gfx_macros)]
 
 extern crate piston;
@@ -162,7 +162,7 @@ fn main() {
         Vertex::new([ 1, -1, -1], [0, 1]),
     ];
 
-    let mesh = device.create_mesh(&vertex_data[]);
+    let mesh = device.create_mesh(&vertex_data);
 
     let index_data: &[u8] = &[
          0,  1,  2,  2,  3,  0, // top
@@ -207,7 +207,7 @@ fn main() {
     ).unwrap();
 
     let mut graphics = gfx::Graphics::new(device);
-    let batch: gfx::batch::RefBatch<Params> =
+    let batch: gfx::batch::RefBatch<Params, gfx::GlResources> =
         graphics.make_batch(&program, &mesh, slice, &state).unwrap();
 
     let mut data = Params {
