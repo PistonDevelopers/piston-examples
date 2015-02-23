@@ -49,7 +49,7 @@ impl Vertex {
 #[shader_param]
 struct Params {
     u_model_view_proj: [[f32; 4]; 4],
-    t_color: gfx::shade::TextureParam,
+    t_color: gfx::shade::TextureParam<gfx::GlResources>,
 }
 
 const VERTEX_SRC: [&'static [u8]; 2] = [ b"
@@ -207,7 +207,7 @@ fn main() {
     ).unwrap();
 
     let mut graphics = gfx::Graphics::new(device);
-    let batch: gfx::batch::RefBatch<Params, gfx::GlResources> =
+    let batch: gfx::batch::RefBatch<Params> =
         graphics.make_batch(&program, &mesh, slice, &state).unwrap();
 
     let mut data = Params {
