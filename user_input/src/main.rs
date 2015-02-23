@@ -1,4 +1,6 @@
 extern crate piston;
+extern crate opengl_graphics;
+extern crate graphics;
 extern crate shader_version;
 #[cfg(feature = "include_sdl2")]
 extern crate sdl2_window;
@@ -7,6 +9,8 @@ extern crate glfw_window;
 #[cfg(feature = "include_glutin")]
 extern crate glutin_window;
 
+use opengl_graphics::Gl;
+use graphics::Context;
 use std::cell::RefCell;
 use piston::quack::Set;
 use piston::window::{ WindowSettings, CaptureCursor };
@@ -33,11 +37,12 @@ use glfw_window::GlfwWindow as Window;
 use glutin_window::GlutinWindow as Window;
 
 fn main() {
+    let opengl = OpenGL::_3_2;
     let window = Window::new(
-        OpenGL::_3_2,
+        opengl,
         WindowSettings {
             title: "piston-examples/user_input".to_string(),
-            size: [300, 300],
+            size: [600, 600],
             fullscreen: false,
             exit_on_esc: true,
             samples: 0,
@@ -48,6 +53,7 @@ fn main() {
 
     let mut capture_cursor = false;
     let ref window = RefCell::new(window);
+    let ref mut gl = Gl::new(opengl);
     for e in piston::events(window) {
         if let Some(Button::Mouse(button)) = e.press_args() {
             println!("Pressed mouse button '{:?}'", button);
@@ -76,8 +82,33 @@ fn main() {
             if focused { println!("Gained focus"); }
             else { println!("Lost focus"); }
         };
-        e.render(|_| {});
+        if let Some(args) = e.render_args() {
+            gl.draw(
+                [0, 0, args.width as i32, args.height as i32],
+                |c, g| {
+                    graphics::clear([1.0; 4], g);
+                    draw_rectangles(&c, g);
+                }
+            );
+        }
         e.update(|_| {});
     }
 }
 
+fn draw_rectangles(
+    c: &Context,
+    g: &mut Gl
+) {
+    let rect_border = graphics::Rectangle::border([1.0, 0.0, 0.0, 1.0], 1.0);
+    // Desktop.
+    rect_border.draw([0.0, 0.0, 100.0, 100.0], c, g);
+    // Outer window.
+    rect_border.draw([0.0, 0.0, 50.0, 50.0], c, g);
+    // Inner window.
+    rect_border.draw([2.0, 5.0, 46.0, 43.0], c, g);
+
+    // User coordinates.
+    rect_border.draw([0.0, 120.0, 100.0, 100.0], c, g);
+    let rect_border = graphics::Rectangle::border([0.0, 0.0, 1.0, 1.0], 1.0);
+    rect_border.draw([0.0, 120.0, 200.0, 200.0], c, g);
+}
