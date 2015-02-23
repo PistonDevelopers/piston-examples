@@ -26,9 +26,14 @@ optional = true
 [dependencies.shader_version]
 git = "https://github.com/pistondevelopers/shader_version"
 
+[dependencies.piston2d-opengl_graphics]
+git = "https://github.com/pistondevelopers/opengl_graphics"
+
+[dependencies.piston2d-graphics]
+git = "https://github.com/pistondevelopers/graphics"
+
 [features]
 default = ["include_glfw"]
 include_sdl2 = ["pistoncore-sdl2_window"]
 include_glfw = ["pistoncore-glfw_window"]
 include_glutin = ["pistoncore-glutin_window"]
-
