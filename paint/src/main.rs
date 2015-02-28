@@ -5,7 +5,7 @@ extern crate sdl2_window;
 extern crate opengl_graphics;
 
 use std::cell::RefCell;
-use opengl_graphics::{ Gl, OpenGL, Texture };
+use opengl_graphics::{ GlGraphics, OpenGL, Texture };
 use sdl2_window::Sdl2Window;
 use image::GenericImage;
 use piston::input::{ Button, MouseButton };
@@ -27,7 +27,7 @@ fn main() {
     let mut image = image::ImageBuffer::new(width, height);
     let mut draw = false;
     let mut texture = Texture::from_image(&image);
-    let ref mut gl = Gl::new(opengl);
+    let ref mut gl = GlGraphics::new(opengl);
     let window = RefCell::new(window);
     for e in piston::events(&window) {
         use piston::event::{ MouseCursorEvent, PressEvent, ReleaseEvent, RenderEvent };
