@@ -7,7 +7,7 @@ extern crate opengl_graphics;
 
 use std::cell::RefCell;
 use opengl_graphics::{
-    Gl,
+    GlGraphics,
     OpenGL,
     Texture,
 };
@@ -28,7 +28,7 @@ fn main() {
 
     let image = Path::new("./bin/assets/rust-logo.png");
     let image = Texture::from_path(&image).unwrap();
-    let ref mut gl = Gl::new(opengl);
+    let ref mut gl = GlGraphics::new(opengl);
     let window = RefCell::new(window);
     for e in piston::events(&window) {
         use piston::event::RenderEvent;

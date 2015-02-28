@@ -13,7 +13,7 @@ use drag_controller::{
     DragController,
     Drag
 };
-use opengl_graphics::{ Gl, OpenGL, Texture };
+use opengl_graphics::{ GlGraphics, OpenGL, Texture };
 use sdl2_window::Sdl2Window as Window;
 
 fn main() {
@@ -47,7 +47,7 @@ fn main() {
     let mut drag = DragController::new();
     let mut draw_grid = true;
 
-    let mut gl = Gl::new(opengl);
+    let mut gl = GlGraphics::new(opengl);
     let window = RefCell::new(window);
     for e in piston::events(&window) {
         use piston::event::{ RenderEvent, PressEvent };

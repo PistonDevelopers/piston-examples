@@ -9,8 +9,8 @@ extern crate glfw_window;
 #[cfg(feature = "include_glutin")]
 extern crate glutin_window;
 
-use opengl_graphics::Gl;
-use graphics::Context;
+use opengl_graphics::GlGraphics;
+use graphics::{ Context, Graphics };
 use std::cell::RefCell;
 use piston::quack::Set;
 use piston::window::{ WindowSettings, CaptureCursor };
@@ -53,7 +53,7 @@ fn main() {
 
     let mut capture_cursor = false;
     let ref window = RefCell::new(window);
-    let ref mut gl = Gl::new(opengl);
+    let ref mut gl = GlGraphics::new(opengl);
     for e in piston::events(window) {
         if let Some(Button::Mouse(button)) = e.press_args() {
             println!("Pressed mouse button '{:?}'", button);
@@ -95,9 +95,9 @@ fn main() {
     }
 }
 
-fn draw_rectangles(
+fn draw_rectangles<G: Graphics>(
     c: &Context,
-    g: &mut Gl
+    g: &mut G
 ) {
     let rect_border = graphics::Rectangle::border([1.0, 0.0, 0.0, 1.0], 1.0);
     // Desktop.

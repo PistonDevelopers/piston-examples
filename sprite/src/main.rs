@@ -21,7 +21,7 @@ use ai_behavior::{
 
 use sdl2_window::Sdl2Window;
 use opengl_graphics::{
-    Gl,
+    GlGraphics,
     OpenGL,
     Texture,
 };
@@ -71,7 +71,7 @@ fn main() {
 
     println!("Press any key to pause/resume the animation!");
 
-    let ref mut gl = Gl::new(opengl);
+    let ref mut gl = GlGraphics::new(opengl);
     let window = RefCell::new(window);
     for e in piston::events(&window) {
         use piston::event::{ PressEvent, RenderEvent };
