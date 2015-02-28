@@ -87,7 +87,7 @@ fn main() {
                 [0, 0, args.width as i32, args.height as i32],
                 |c, g| {
                     graphics::clear([1.0; 4], g);
-                    draw_rectangles(&c, g);
+                    draw_rectangles(&window, &c, g);
                 }
             );
         }
@@ -96,19 +96,21 @@ fn main() {
 }
 
 fn draw_rectangles<G: Graphics>(
+    window: &RefCell<Window>,
     c: &Context,
-    g: &mut G
+    g: &mut G,
 ) {
+    use piston::window::{ Size, DrawSize };
+    use piston::quack::Get;
+
     let rect_border = graphics::Rectangle::border([1.0, 0.0, 0.0, 1.0], 1.0);
-    // Desktop.
-    rect_border.draw([0.0, 0.0, 100.0, 100.0], c, g);
-    // Outer window.
-    rect_border.draw([0.0, 0.0, 50.0, 50.0], c, g);
-    // Inner window.
-    rect_border.draw([2.0, 5.0, 46.0, 43.0], c, g);
+
+    let Size([w, h]) = window.get();
+    let DrawSize([dw, dh]) = window.get();
+    let zoom = 0.2;
 
     // User coordinates.
-    rect_border.draw([0.0, 120.0, 100.0, 100.0], c, g);
+    rect_border.draw([0.0, 0.0, w as f64 * zoom, h as f64 * zoom], c, g);
     let rect_border = graphics::Rectangle::border([0.0, 0.0, 1.0, 1.0], 1.0);
-    rect_border.draw([0.0, 120.0, 200.0, 200.0], c, g);
+    rect_border.draw([w as f64 * zoom, 0.0, dw as f64 * zoom, dh as f64 * zoom], c, g);
 }
