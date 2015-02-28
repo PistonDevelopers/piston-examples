@@ -6,6 +6,7 @@ extern crate shader_version;
 extern crate vecmath;
 extern crate cam;
 extern crate gfx;
+extern crate gfx_device_gl;
 extern crate sdl2;
 extern crate sdl2_window;
 
@@ -22,6 +23,7 @@ use cam::{
     model_view_projection
 };
 use gfx::{ Device, DeviceExt, ToSlice };
+use gfx_device_gl::{ GlResources, GlDevice };
 use sdl2::video::gl_get_proc_address;
 use sdl2_window::Sdl2Window;
 
@@ -46,10 +48,10 @@ impl Vertex {
     }
 }
 
-#[shader_param]
+#[shader_param(GlResources)]
 struct Params {
     u_model_view_proj: [[f32; 4]; 4],
-    t_color: gfx::shade::TextureParam<gfx::GlResources>,
+    t_color: gfx::shade::TextureParam<GlResources>,
 }
 
 const VERTEX_SRC: [&'static [u8]; 2] = [ b"
@@ -123,7 +125,7 @@ fn main() {
         .. gfx::ShaderSource::empty()
     };
 
-    let mut device = gfx::GlDevice::new(|s| unsafe {
+    let mut device = GlDevice::new(|s| unsafe {
         transmute(gl_get_proc_address(s))
     });
     let frame = gfx::Frame::new(win_width as u16, win_height as u16);

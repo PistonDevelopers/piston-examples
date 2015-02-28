@@ -29,5 +29,8 @@ git = "https://github.com/AngryLawyer/rust-sdl2"
 [dependencies.gfx]
 git = "https://github.com/gfx-rs/gfx-rs"
 
+[dependencies.gfx_device_gl]
+git = "https://github.com/gfx-rs/gfx_device_gl"
+
 [dependencies.gfx_macros]
 git = "https://github.com/gfx-rs/gfx-rs"
