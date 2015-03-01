@@ -22,7 +22,7 @@ use cam::{
     CameraPerspective,
     model_view_projection
 };
-use gfx::{ Device, DeviceExt, ToSlice };
+use gfx::{ Resources, Device, DeviceExt, ToSlice };
 use gfx_device_gl::{ GlResources, GlDevice };
 use sdl2::video::gl_get_proc_address;
 use sdl2_window::Sdl2Window;
@@ -48,10 +48,10 @@ impl Vertex {
     }
 }
 
-#[shader_param(GlResources)]
-struct Params {
+#[shader_param]
+struct Params<R: Resources> {
     u_model_view_proj: [[f32; 4]; 4],
-    t_color: gfx::shade::TextureParam<GlResources>,
+    t_color: gfx::shade::TextureParam<R>,
 }
 
 const VERTEX_SRC: [&'static [u8]; 2] = [ b"
@@ -209,7 +209,7 @@ fn main() {
     ).unwrap();
 
     let mut graphics = gfx::Graphics::new(device);
-    let batch: gfx::batch::RefBatch<Params> =
+    let batch: gfx::batch::RefBatch<Params<GlResources>> =
         graphics.make_batch(&program, &mesh, slice, &state).unwrap();
 
     let mut data = Params {
