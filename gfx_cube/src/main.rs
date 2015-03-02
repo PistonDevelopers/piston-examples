@@ -4,7 +4,7 @@
 extern crate piston;
 extern crate shader_version;
 extern crate vecmath;
-extern crate cam;
+extern crate camera_controllers;
 extern crate gfx;
 extern crate gfx_device_gl;
 extern crate sdl2;
@@ -16,7 +16,7 @@ use piston::quack::Set;
 use piston::window::{ WindowSettings, CaptureCursor };
 use piston::event::RenderEvent;
 use shader_version::OpenGL;
-use cam::{
+use camera_controllers::{
     FirstPersonSettings,
     FirstPerson,
     CameraPerspective,
