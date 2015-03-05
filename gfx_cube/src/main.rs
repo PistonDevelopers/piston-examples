@@ -23,7 +23,6 @@ use camera_controllers::{
     model_view_projection
 };
 use gfx::{ Resources, Device, DeviceExt, ToSlice };
-use gfx_device_gl::{ GlResources, GlDevice };
 use sdl2::video::gl_get_proc_address;
 use sdl2_window::Sdl2Window;
 
@@ -125,7 +124,7 @@ fn main() {
         .. gfx::ShaderSource::empty()
     };
 
-    let mut device = GlDevice::new(|s| unsafe {
+    let mut device = gfx_device_gl::GlDevice::new(|s| unsafe {
         transmute(gl_get_proc_address(s))
     });
     let frame = gfx::Frame::new(win_width as u16, win_height as u16);
@@ -175,7 +174,7 @@ fn main() {
         20, 21, 22, 22, 23, 20, // back
     ];
 
-    let slice = device.create_buffer_static::<u8>(index_data)
+    let slice = device.create_buffer_static(index_data)
                       .to_slice(gfx::PrimitiveType::TriangleList);
 
     let tinfo = gfx::tex::TextureInfo {
@@ -191,7 +190,7 @@ fn main() {
     device.update_texture(
         &texture,
         &img_info,
-        &[0x20u8, 0xA0u8, 0xC0u8, 0x00u8]
+        &[0x20u8, 0xA0, 0xC0, 0x00]
     ).unwrap();
 
     let sampler = device.create_sampler(
@@ -209,23 +208,23 @@ fn main() {
     ).unwrap();
 
     let mut graphics = gfx::Graphics::new(device);
-    let batch: gfx::batch::RefBatch<Params<GlResources>> =
-        graphics.make_batch(&program, &mesh, slice, &state).unwrap();
 
-    let mut data = Params {
+    let data = Params {
         u_model_view_proj: vecmath::mat4_id(),
         t_color: (texture, Some(sampler)),
     };
 
+    let mut batch = graphics.make_batch(&program, data, &mesh, slice, &state).unwrap();
+
     let model = vecmath::mat4_id();
     let projection = CameraPerspective {
-        fov: 90.0f32,
+        fov: 90.0,
         near_clip: 0.1,
         far_clip: 1000.0,
         aspect_ratio: (win_width as f32) / (win_height as f32)
     }.projection();
     let mut first_person = FirstPerson::new(
-        [0.5f32, 0.5, 4.0],
+        [0.5, 0.5, 4.0],
         FirstPersonSettings::keyboard_wasd()
     );
 
@@ -242,12 +241,12 @@ fn main() {
                 gfx::COLOR | gfx::DEPTH,
                 &frame
             );
-            data.u_model_view_proj = model_view_projection(
+            batch.params.u_model_view_proj = model_view_projection(
                 model,
                 first_person.camera(args.ext_dt).orthogonal(),
                 projection
             );
-            graphics.draw(&batch, &data, &frame).unwrap();
+            graphics.draw(&batch, &frame).unwrap();
             graphics.end_frame();
         }
     }
