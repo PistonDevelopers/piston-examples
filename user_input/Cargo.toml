@@ -37,8 +37,3 @@ default = ["include_glfw"]
 include_sdl2 = ["pistoncore-sdl2_window"]
 include_glfw = ["pistoncore-glfw_window"]
 include_glutin = ["pistoncore-glutin_window"]
-
-### Workaround rustc ICE ###
-[profile.dev]
-debug = false
-############################
