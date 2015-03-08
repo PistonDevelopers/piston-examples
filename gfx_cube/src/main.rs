@@ -22,7 +22,14 @@ use camera_controllers::{
     CameraPerspective,
     model_view_projection
 };
-use gfx::{ Resources, Device, DeviceExt, ToSlice };
+use gfx::Resources;
+use gfx::traits::{
+    Device,
+    DeviceExt,
+    Factory,
+    FactoryExt,
+    ToSlice
+};
 use sdl2::video::gl_get_proc_address;
 use sdl2_window::Sdl2Window;
 
@@ -207,7 +214,7 @@ fn main() {
         fragment.choose(shader_model).unwrap()
     ).unwrap();
 
-    let mut graphics = gfx::Graphics::new(device);
+    let mut graphics = device.into_graphics();
 
     let data = Params {
         u_model_view_proj: vecmath::mat4_id(),
