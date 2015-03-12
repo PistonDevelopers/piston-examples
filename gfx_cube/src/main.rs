@@ -23,13 +23,7 @@ use camera_controllers::{
     model_view_projection
 };
 use gfx::Resources;
-use gfx::traits::{
-    Device,
-    DeviceExt,
-    Factory,
-    FactoryExt,
-    ToSlice
-};
+use gfx::traits::*;
 use sdl2::video::gl_get_proc_address;
 use sdl2_window::Sdl2Window;
 
@@ -181,7 +175,7 @@ fn main() {
         20, 21, 22, 22, 23, 20, // back
     ];
 
-    let slice = device.create_buffer_static(index_data)
+    let slice = device.create_buffer_index(index_data)
                       .to_slice(gfx::PrimitiveType::TriangleList);
 
     let tinfo = gfx::tex::TextureInfo {
