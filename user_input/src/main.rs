@@ -10,7 +10,7 @@ extern crate glfw_window;
 extern crate glutin_window;
 
 use opengl_graphics::GlGraphics;
-use graphics::{ Context, Graphics };
+use graphics::{ Graphics };
 use std::cell::RefCell;
 use piston::quack::Set;
 use piston::window::{ WindowSettings, CaptureCursor };
@@ -85,9 +85,9 @@ fn main() {
         if let Some(args) = e.render_args() {
             gl.draw(
                 [0, 0, args.width as i32, args.height as i32],
-                |c, g| {
+                |_, g| {
                     graphics::clear([1.0; 4], g);
-                    draw_rectangles(&window, &c, g);
+                    draw_rectangles(&window, g);
                 }
             );
         }
@@ -97,7 +97,6 @@ fn main() {
 
 fn draw_rectangles<G: Graphics>(
     window: &RefCell<Window>,
-    c: &Context,
     g: &mut G,
 ) {
     use piston::window::{ Size, DrawSize };
@@ -110,7 +109,11 @@ fn draw_rectangles<G: Graphics>(
     let zoom = 0.2;
 
     // User coordinates.
-    rect_border.draw([0.0, 0.0, w as f64 * zoom, h as f64 * zoom], c, g);
+    let draw_state = graphics::default_draw_state();
+    let transform = graphics::abs_transform(w as f64, h as f64);
+    rect_border.draw([0.0, 0.0, w as f64 * zoom, h as f64 * zoom],
+        draw_state, transform, g);
     let rect_border = graphics::Rectangle::border([0.0, 0.0, 1.0, 1.0], 1.0);
-    rect_border.draw([w as f64 * zoom, 0.0, dw as f64 * zoom, dh as f64 * zoom], c, g);
+    rect_border.draw([w as f64 * zoom, 0.0, dw as f64 * zoom, dh as f64 * zoom],
+        draw_state, transform, g);
 }
