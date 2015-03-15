@@ -33,7 +33,7 @@ git = "https://github.com/pistondevelopers/opengl_graphics"
 git = "https://github.com/pistondevelopers/graphics"
 
 [features]
-default = ["include_glfw"]
+default = ["include_glutin"]
 include_sdl2 = ["pistoncore-sdl2_window"]
 include_glfw = ["pistoncore-glfw_window"]
 include_glutin = ["pistoncore-glutin_window"]
