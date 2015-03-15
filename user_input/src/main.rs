@@ -110,6 +110,7 @@ fn draw_rectangles<G: Graphics>(
     let Size([w, h]) = window.get();
     let DrawSize([dw, dh]) = window.get();
     let zoom = 0.2;
+    let offset = 30.0;
     
     let draw_state = graphics::default_draw_state();
     let transform = graphics::abs_transform(w as f64, h as f64);
@@ -117,7 +118,7 @@ fn draw_rectangles<G: Graphics>(
 
     // Cursor.
     let cursor_color = [0.0, 0.0, 0.0, 1.0];
-    let zoomed_cursor = [cursor[0] * zoom, cursor[1] * zoom];
+    let zoomed_cursor = [offset + cursor[0] * zoom, offset + cursor[1] * zoom];
     graphics::ellipse(
         cursor_color,
         graphics::ellipse::circle(zoomed_cursor[0], zoomed_cursor[1], 4.0),
@@ -126,9 +127,9 @@ fn draw_rectangles<G: Graphics>(
     );
 
     // User coordinates.
-    rect_border.draw([0.0, 0.0, w as f64 * zoom, h as f64 * zoom],
+    rect_border.draw([offset, offset, w as f64 * zoom, h as f64 * zoom],
         draw_state, transform, g);
     let rect_border = graphics::Rectangle::border([0.0, 0.0, 1.0, 1.0], 1.0);
-    rect_border.draw([w as f64 * zoom, 0.0, dw as f64 * zoom, dh as f64 * zoom],
+    rect_border.draw([offset + w as f64 * zoom, offset, dw as f64 * zoom, dh as f64 * zoom],
         draw_state, transform, g);
 }
