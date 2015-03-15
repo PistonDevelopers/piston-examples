@@ -103,25 +103,27 @@ fn main() {
             graphics::clear(graphics::color::WHITE, g);
 
             // Draw deformed image.
-            grid.draw_image(&image, &c, g);
+            grid.draw_image(&image, &c.draw_state, c.transform, g);
 
             if draw_grid {
                 // Draw grid.
                 grid.draw_vertical_lines(
                     &graphics::Line::new([0.0, 1.0, 0.0, 1.0], 0.5),
-                    &c,     
+                    &c.draw_state,
+                    c.transform,     
                     g
                 );
                 grid.draw_horizontal_lines(
                     &graphics::Line::new([0.0, 0.0, 1.0, 1.0], 0.5),
-                    &c,
+                    &c.draw_state,
+                    c.transform,
                     g
                 );
             }
             
             // Draw rect of the original grid.
             graphics::Rectangle::border([1.0, 0.0, 0.0, 1.0], 1.5)
-                .draw([0.0, 0.0, width, height], &c, g);
+                .draw([0.0, 0.0, width, height], &c.draw_state, c.transform, g);
 
             // Draw control points.
             let original = graphics::Ellipse::new([1.0, 0.0, 0.0, 0.5]);
@@ -132,12 +134,12 @@ fn main() {
                 // Original positions.
                 let x = grid.ps[i][0];
                 let y = grid.ps[i][1];
-                original.draw(circle(x, y, 3.0), &c, g);
+                original.draw(circle(x, y, 3.0), &c.draw_state, c.transform, g);
 
                 // Current positions.
                 let x = grid.qs[i][0];
                 let y = grid.qs[i][1];
-                current.draw(circle(x, y, 3.0), &c, g);
+                current.draw(circle(x, y, 3.0), &c.draw_state, c.transform, g);
             };
 
             });
