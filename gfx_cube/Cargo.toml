@@ -24,7 +24,8 @@ git = "https://github.com/PistonDevelopers/shader_version"
 git = "https://github.com/PistonDevelopers/vecmath"
 
 [dependencies.sdl2]
-git = "https://github.com/AngryLawyer/rust-sdl2"
+#git = "https://github.com/AngryLawyer/rust-sdl2"
+git = "https://github.com/PistonDevelopers/rust-sdl2"
 
 [dependencies.gfx]
 git = "https://github.com/gfx-rs/gfx-rs"
