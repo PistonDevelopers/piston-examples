@@ -54,6 +54,7 @@ fn main() {
     let mut capture_cursor = false;
     let ref window = RefCell::new(window);
     let ref mut gl = GlGraphics::new(opengl);
+    let mut cursor = [0.0, 0.0];
     for e in piston::events(window) {
         if let Some(Button::Mouse(button)) = e.press_args() {
             println!("Pressed mouse button '{:?}'", button);
@@ -62,7 +63,7 @@ fn main() {
             if key == Key::C {
                 println!("Turned capture cursor on");
                 capture_cursor = !capture_cursor;
-                window.set(CaptureCursor(capture_cursor));
+                // window.set(CaptureCursor(capture_cursor));
             }
 
             println!("Pressed keyboard key '{:?}'", key);
@@ -73,7 +74,10 @@ fn main() {
                 Button::Mouse(button) => println!("Released mouse button '{:?}'", button),
             }
         };
-        e.mouse_cursor(|x, y| println!("Mouse moved '{} {}'", x, y));
+        e.mouse_cursor(|x, y| {
+            cursor = [x, y];
+            println!("Mouse moved '{} {}'", x, y);
+        });
         e.mouse_scroll(|dx, dy| println!("Scrolled mouse '{}, {}'", dx, dy));
         e.mouse_relative(|dx, dy| println!("Relative mouse moved '{} {}'", dx, dy));
         e.text(|text| println!("Typed '{}'", text));
@@ -87,7 +91,7 @@ fn main() {
                 [0, 0, args.width as i32, args.height as i32],
                 |_, g| {
                     graphics::clear([1.0; 4], g);
-                    draw_rectangles(&window, g);
+                    draw_rectangles(cursor, &window, g);
                 }
             );
         }
@@ -96,21 +100,32 @@ fn main() {
 }
 
 fn draw_rectangles<G: Graphics>(
+    cursor: [f64; 2],
     window: &RefCell<Window>,
     g: &mut G,
 ) {
     use piston::window::{ Size, DrawSize };
     use piston::quack::Get;
 
-    let rect_border = graphics::Rectangle::border([1.0, 0.0, 0.0, 1.0], 1.0);
-
     let Size([w, h]) = window.get();
     let DrawSize([dw, dh]) = window.get();
     let zoom = 0.2;
-
-    // User coordinates.
+    
     let draw_state = graphics::default_draw_state();
     let transform = graphics::abs_transform(w as f64, h as f64);
+    let rect_border = graphics::Rectangle::border([1.0, 0.0, 0.0, 1.0], 1.0);
+
+    // Cursor.
+    let cursor_color = [0.0, 0.0, 0.0, 1.0];
+    let zoomed_cursor = [cursor[0] * zoom, cursor[1] * zoom];
+    graphics::ellipse(
+        cursor_color,
+        graphics::ellipse::circle(zoomed_cursor[0], zoomed_cursor[1], 4.0),
+        transform,
+        g
+    );
+
+    // User coordinates.
     rect_border.draw([0.0, 0.0, w as f64 * zoom, h as f64 * zoom],
         draw_state, transform, g);
     let rect_border = graphics::Rectangle::border([0.0, 0.0, 1.0, 1.0], 1.0);
