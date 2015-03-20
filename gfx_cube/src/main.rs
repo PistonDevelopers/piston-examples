@@ -2,7 +2,6 @@
 #![plugin(gfx_macros)]
 
 extern crate piston;
-extern crate shader_version;
 extern crate vecmath;
 extern crate camera_controllers;
 extern crate gfx;
@@ -13,16 +12,14 @@ use std::cell::RefCell;
 use piston::quack::Set;
 use piston::window::{ WindowSettings, CaptureCursor };
 use piston::event::RenderEvent;
-use shader_version::OpenGL;
 use camera_controllers::{
     FirstPersonSettings,
     FirstPerson,
     CameraPerspective,
     model_view_projection
 };
-use gfx::Resources;
 use gfx::traits::*;
-use sdl2_window::Sdl2Window;
+use sdl2_window::{ Sdl2Window, OpenGL };
 
 //----------------------------------------
 // Cube associated data
@@ -46,7 +43,7 @@ impl Vertex {
 }
 
 #[shader_param]
-struct Params<R: Resources> {
+struct Params<R: gfx::Resources> {
     u_model_view_proj: [[f32; 4]; 4],
     t_color: gfx::shade::TextureParam<R>,
 }
