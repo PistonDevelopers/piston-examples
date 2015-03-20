@@ -7,11 +7,9 @@ extern crate vecmath;
 extern crate camera_controllers;
 extern crate gfx;
 extern crate gfx_device_gl;
-extern crate sdl2;
 extern crate sdl2_window;
 
 use std::cell::RefCell;
-use std::mem::transmute;
 use piston::quack::Set;
 use piston::window::{ WindowSettings, CaptureCursor };
 use piston::event::RenderEvent;
@@ -24,7 +22,6 @@ use camera_controllers::{
 };
 use gfx::Resources;
 use gfx::traits::*;
-use sdl2::video::gl_get_proc_address;
 use sdl2_window::Sdl2Window;
 
 //----------------------------------------
@@ -125,9 +122,7 @@ fn main() {
         .. gfx::ShaderSource::empty()
     };
 
-    let mut device = gfx_device_gl::GlDevice::new(|s| unsafe {
-        transmute(gl_get_proc_address(s))
-    });
+    let mut device = gfx_device_gl::GlDevice::new(Sdl2Window::get_proc_address);
     let frame = gfx::Frame::new(win_width as u16, win_height as u16);
     let state = gfx::DrawState::new().depth(gfx::state::Comparison::LessEqual, true);
 
