@@ -7,6 +7,8 @@ extern crate graphics;
 extern crate sdl2_window;
 extern crate opengl_graphics;
 
+use std::old_path::*;
+
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -65,7 +67,7 @@ fn main() {
     scene.run(id.clone(), &seq);
 
     // This animation and the one above can run in parallel.
-    let rotate = Action(Ease(EaseFunction::ExponentialInOut, 
+    let rotate = Action(Ease(EaseFunction::ExponentialInOut,
         Box::new(RotateTo(2.0, 360.0))));
     scene.run(id.clone(), &rotate);
 
@@ -74,7 +76,7 @@ fn main() {
     let ref mut gl = GlGraphics::new(opengl);
     let window = RefCell::new(window);
     for e in piston::events(&window) {
-        use piston::event::{ PressEvent, RenderEvent };
+        use piston::event::*;
 
         scene.event(&e);
 
