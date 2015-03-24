@@ -6,6 +6,8 @@ extern crate opengl_graphics;
 extern crate drag_controller;
 extern crate sdl2_window;
 
+use std::old_path::*;
+
 use std::cell::RefCell;
 
 use graphics::ImageSize;
@@ -32,7 +34,7 @@ fn main() {
             samples: 4,
         }
     );
-    
+
     let image = Path::new("./bin/assets/rust-logo.png");
     let image = Texture::from_path(&image).unwrap();
 
@@ -50,7 +52,7 @@ fn main() {
     let mut gl = GlGraphics::new(opengl);
     let window = RefCell::new(window);
     for e in piston::events(&window) {
-        use piston::event::{ RenderEvent, PressEvent };
+        use piston::event::*;
 
         drag.event(&e, |action| {
             match action {
@@ -110,7 +112,7 @@ fn main() {
                 grid.draw_vertical_lines(
                     &graphics::Line::new([0.0, 1.0, 0.0, 1.0], 0.5),
                     &c.draw_state,
-                    c.transform,     
+                    c.transform,
                     g
                 );
                 grid.draw_horizontal_lines(
@@ -120,7 +122,7 @@ fn main() {
                     g
                 );
             }
-            
+
             // Draw rect of the original grid.
             graphics::Rectangle::border([1.0, 0.0, 0.0, 1.0], 1.5)
                 .draw([0.0, 0.0, width, height], &c.draw_state, c.transform, g);
