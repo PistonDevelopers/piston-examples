@@ -23,9 +23,6 @@ optional = true
 git = "https://github.com/pistondevelopers/glutin_window"
 optional = true
 
-[dependencies.shader_version]
-git = "https://github.com/pistondevelopers/shader_version"
-
 [dependencies.piston2d-opengl_graphics]
 git = "https://github.com/pistondevelopers/opengl_graphics"
 
