@@ -30,8 +30,8 @@ fn main() {
     let ref mut gl = GlGraphics::new(opengl);
     let window = RefCell::new(window);
     for e in piston::events(&window) {
-        use piston::event::{ MouseCursorEvent, PressEvent, ReleaseEvent, RenderEvent };
-        
+        use piston::event::*;
+
         if let Some(args) = e.render_args() {
             gl.draw([0, 0, args.width as i32, args.height as i32], |c, gl| {
                 graphics::clear([1.0; 4], gl);

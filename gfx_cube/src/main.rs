@@ -11,7 +11,6 @@ extern crate sdl2_window;
 use std::cell::RefCell;
 use piston::quack::Set;
 use piston::window::{ WindowSettings, CaptureCursor };
-use piston::event::RenderEvent;
 use camera_controllers::{
     FirstPersonSettings,
     FirstPerson,
@@ -223,7 +222,10 @@ fn main() {
 
     let window = RefCell::new(window);
     for e in piston::events(&window) {
+        use piston::event::*;
+
         first_person.event(&e);
+
         if let Some(args) = e.render_args() {
             graphics.clear(
                 gfx::ClearData {
@@ -241,6 +243,10 @@ fn main() {
             );
             graphics.draw(&batch, &frame).unwrap();
             graphics.end_frame();
+        }
+
+        if let Some(_) = e.after_render_args() {
+            graphics.device.after_frame();
         }
     }
 }

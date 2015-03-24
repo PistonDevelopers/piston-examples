@@ -1,7 +1,6 @@
 extern crate piston;
 extern crate opengl_graphics;
 extern crate graphics;
-extern crate shader_version;
 #[cfg(feature = "include_sdl2")]
 extern crate sdl2_window;
 #[cfg(feature = "include_glfw")]
@@ -9,26 +8,12 @@ extern crate glfw_window;
 #[cfg(feature = "include_glutin")]
 extern crate glutin_window;
 
-use opengl_graphics::GlGraphics;
-use graphics::{ Graphics };
+use opengl_graphics::{ GlGraphics, OpenGL };
+use graphics::Graphics;
 use std::cell::RefCell;
-use piston::quack::Set;
-use piston::window::{ WindowSettings, CaptureCursor };
+use piston::window::WindowSettings;
 use piston::input::Button;
 use piston::input::keyboard::Key;
-use piston::event::{
-    PressEvent,
-    ReleaseEvent,
-    MouseCursorEvent,
-    MouseScrollEvent,
-    MouseRelativeEvent,
-    TextEvent,
-    ResizeEvent,
-    FocusEvent,
-    RenderEvent,
-    UpdateEvent
-};
-use shader_version::OpenGL;
 #[cfg(feature = "include_sdl2")]
 use sdl2_window::Sdl2Window as Window;
 #[cfg(feature = "include_glfw")]
@@ -56,6 +41,8 @@ fn main() {
     let ref mut gl = GlGraphics::new(opengl);
     let mut cursor = [0.0, 0.0];
     for e in piston::events(window) {
+        use piston::event::*;
+
         if let Some(Button::Mouse(button)) = e.press_args() {
             println!("Pressed mouse button '{:?}'", button);
         }
@@ -111,7 +98,7 @@ fn draw_rectangles<G: Graphics>(
     let DrawSize([dw, dh]) = window.get();
     let zoom = 0.2;
     let offset = 30.0;
-    
+
     let draw_state = graphics::default_draw_state();
     let transform = graphics::abs_transform(w as f64, h as f64);
     let rect_border = graphics::Rectangle::border([1.0, 0.0, 0.0, 1.0], 1.0);
