@@ -16,7 +16,7 @@ fn main() {
     let window = Sdl2Window::new(
         opengl,
         piston::window::WindowSettings {
-            title: "Paint".to_string(),
+            title: "piston-example-paint".to_string(),
             size: [width, height],
             fullscreen: false,
             exit_on_esc: true,
