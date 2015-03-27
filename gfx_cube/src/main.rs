@@ -97,7 +97,7 @@ fn main() {
     let mut window = Sdl2Window::new(
         OpenGL::_3_2,
         WindowSettings {
-            title: "cube".to_string(),
+            title: "piston-example-gfx_cube".to_string(),
             size: [win_width, win_height],
             fullscreen: false,
             exit_on_esc: true,
