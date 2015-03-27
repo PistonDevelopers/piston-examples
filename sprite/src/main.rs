@@ -1,5 +1,3 @@
-#![feature(old_path)]
-
 extern crate piston;
 extern crate ai_behavior;
 extern crate sprite;
@@ -7,8 +5,7 @@ extern crate graphics;
 extern crate sdl2_window;
 extern crate opengl_graphics;
 
-use std::old_path::*;
-
+use std::path::Path;
 use std::cell::RefCell;
 use std::rc::Rc;
 
