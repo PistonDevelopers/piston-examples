@@ -26,7 +26,7 @@ fn main() {
     let window = Window::new(
         opengl,
         WindowSettings {
-            title: "piston-examples/user_input".to_string(),
+            title: "piston-example-user_input".to_string(),
             size: [600, 600],
             fullscreen: false,
             exit_on_esc: true,
