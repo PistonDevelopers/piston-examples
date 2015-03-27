@@ -1,13 +1,10 @@
-#![feature(old_path)]
-
 extern crate piston;
 extern crate graphics;
 extern crate opengl_graphics;
 extern crate drag_controller;
 extern crate sdl2_window;
 
-use std::old_path::*;
-
+use std::path::Path;
 use std::cell::RefCell;
 
 use graphics::ImageSize;
@@ -27,7 +24,7 @@ fn main() {
     let window = Window::new(
         opengl,
         piston::window::WindowSettings {
-            title: "Deform".to_string(),
+            title: "piston-example-deform".to_string(),
             size: [300, 300],
             fullscreen: false,
             exit_on_esc: true,

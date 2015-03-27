@@ -1,5 +1,3 @@
-#![feature(old_path)]
-
 extern crate piston;
 extern crate ai_behavior;
 extern crate sprite;
@@ -7,8 +5,7 @@ extern crate graphics;
 extern crate sdl2_window;
 extern crate opengl_graphics;
 
-use std::old_path::*;
-
+use std::path::Path;
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -34,7 +31,7 @@ fn main() {
     let window = Sdl2Window::new(
         opengl,
         piston::window::WindowSettings {
-            title: "Sprite".to_string(),
+            title: "piston-example-sprite".to_string(),
             size: [width, height],
             fullscreen: false,
             exit_on_esc: true,
@@ -43,7 +40,7 @@ fn main() {
     );
 
     let mut scene = Scene::new();
-    let tex = Path::new("./rust-logo.png");
+    let tex = Path::new("./bin/assets/rust-logo.png");
     let tex = Rc::new(Texture::from_path(&tex).unwrap());
     let mut sprite = Sprite::from_texture(tex.clone());
     sprite.set_position(width as f64 / 2.0, height as f64 / 2.0);

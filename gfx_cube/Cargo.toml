@@ -1,11 +1,11 @@
 [package]
-name = "piston-example-cube"
+name = "piston-example-gfx_cube"
 version = "0.0.0"
 authors = ["Your Name <your@email.com>"]
 keywords = []
 
 [[bin]]
-name = "piston-example-cube"
+name = "piston-example-gfx_cube"
 path = "src/main.rs"
 
 [dependencies.piston]

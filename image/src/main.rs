@@ -1,12 +1,9 @@
-#![feature(old_path)]
-
 extern crate piston;
 extern crate graphics;
 extern crate sdl2_window;
 extern crate opengl_graphics;
 
-use std::old_path::*;
-
+use std::path::Path;
 use std::cell::RefCell;
 use opengl_graphics::{
     GlGraphics,
@@ -20,7 +17,7 @@ fn main() {
     let window = Sdl2Window::new(
         opengl,
         piston::window::WindowSettings {
-            title: "Image".to_string(),
+            title: "piston-example-image".to_string(),
             size: [300, 300],
             fullscreen: false,
             exit_on_esc: true,
