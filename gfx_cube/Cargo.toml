@@ -5,7 +5,7 @@ authors = ["Your Name <your@email.com>"]
 keywords = []
 
 [[bin]]
-name = "piston-example-gfx_cube"
+name = "piston_example_gfx_cube"
 path = "src/main.rs"
 
 [dependencies.piston]
