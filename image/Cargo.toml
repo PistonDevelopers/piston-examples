@@ -5,7 +5,7 @@ authors = ["Your Name <your@email.com>"]
 keywords = []
 
 [[bin]]
-name = "piston-example-image"
+name = "piston_example_image"
 path = "src/main.rs"
 
 [dependencies.piston]

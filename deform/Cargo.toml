@@ -5,7 +5,7 @@ authors = ["Sven Nilsen <bvssvni@gmail.com>"]
 keywords = []
 
 [[bin]]
-name = "piston-examples-deform"
+name = "piston_examples_deform"
 path = "src/main.rs"
 
 [dependencies.piston]

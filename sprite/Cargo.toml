@@ -5,7 +5,7 @@ authors = ["Coeuvre Wong <coeuvre@gmail.com>"]
 keywords = []
 
 [[bin]]
-name = "piston-example-sprite"
+name = "piston_example_sprite"
 path = "src/main.rs"
 
 [dependencies.pistoncore-sdl2_window]
