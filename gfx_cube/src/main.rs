@@ -8,6 +8,7 @@ extern crate gfx;
 extern crate gfx_device_gl;
 extern crate sdl2_window;
 
+use std::rc::Rc;
 use std::cell::RefCell;
 use piston::quack::Set;
 use piston::window::{ WindowSettings, CaptureCursor };
@@ -220,8 +221,8 @@ fn main() {
         FirstPersonSettings::keyboard_wasd()
     );
 
-    let window = RefCell::new(window);
-    for e in piston::events(&window) {
+    let window = Rc::new(RefCell::new(window));
+    for e in piston::events(window) {
         use piston::event::*;
 
         first_person.event(&e);
