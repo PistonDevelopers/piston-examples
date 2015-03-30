@@ -4,6 +4,7 @@ extern crate sdl2_window;
 extern crate opengl_graphics;
 
 use std::path::Path;
+use std::rc::Rc;
 use std::cell::RefCell;
 use opengl_graphics::{
     GlGraphics,
@@ -28,8 +29,8 @@ fn main() {
     let rust_logo = Path::new("./bin/assets/rust-logo.png");
     let rust_logo = Texture::from_path(&rust_logo).unwrap();
     let ref mut gl = GlGraphics::new(opengl);
-    let window = RefCell::new(window);
-    for e in piston::events(&window) {
+    let window = Rc::new(RefCell::new(window));
+    for e in piston::events(window) {
         use piston::event::*;
 
         if let Some(args) = e.render_args() {
