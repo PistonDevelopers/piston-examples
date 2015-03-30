@@ -10,6 +10,7 @@ extern crate glutin_window;
 
 use opengl_graphics::{ GlGraphics, OpenGL };
 use graphics::Graphics;
+use std::rc::Rc;
 use std::cell::RefCell;
 use piston::window::WindowSettings;
 use piston::input::Button;
@@ -37,10 +38,10 @@ fn main() {
     println!("Press C to turn capture cursor on/off");
 
     let mut capture_cursor = false;
-    let ref window = RefCell::new(window);
+    let window = Rc::new(RefCell::new(window));
     let ref mut gl = GlGraphics::new(opengl);
     let mut cursor = [0.0, 0.0];
-    for e in piston::events(window) {
+    for e in piston::events(window.clone()) {
         use piston::event::*;
 
         if let Some(Button::Mouse(button)) = e.press_args() {
@@ -94,13 +95,13 @@ fn draw_rectangles<G: Graphics>(
     use piston::window::{ Size, DrawSize };
     use piston::quack::Get;
 
-    let Size([w, h]) = window.get();
-    let DrawSize([dw, dh]) = window.get();
+    let Size(size) = window.get();
+    let DrawSize(draw_size) = window.get();
     let zoom = 0.2;
     let offset = 30.0;
 
     let draw_state = graphics::default_draw_state();
-    let transform = graphics::abs_transform(w as f64, h as f64);
+    let transform = graphics::abs_transform(size[0] as f64, size[1] as f64);
     let rect_border = graphics::Rectangle::border([1.0, 0.0, 0.0, 1.0], 1.0);
 
     // Cursor.
@@ -114,9 +115,15 @@ fn draw_rectangles<G: Graphics>(
     );
 
     // User coordinates.
-    rect_border.draw([offset, offset, w as f64 * zoom, h as f64 * zoom],
+    rect_border.draw([offset, offset, size[0] as f64 * zoom, size[1] as f64 * zoom],
         draw_state, transform, g);
     let rect_border = graphics::Rectangle::border([0.0, 0.0, 1.0, 1.0], 1.0);
-    rect_border.draw([offset + w as f64 * zoom, offset, dw as f64 * zoom, dh as f64 * zoom],
+    rect_border.draw(
+        [
+            offset + size[0] as f64 * zoom,
+            offset,
+            draw_size[0] as f64 * zoom,
+            draw_size[1] as f64 * zoom
+        ],
         draw_state, transform, g);
 }
