@@ -49,9 +49,11 @@ fn main() {
         }
         if let Some(Button::Keyboard(key)) = e.press_args() {
             if key == Key::C {
+                use piston::quack::Set;
+
                 println!("Turned capture cursor on");
                 capture_cursor = !capture_cursor;
-                // window.set(CaptureCursor(capture_cursor));
+                window.borrow_mut().set_mut(piston::window::CaptureCursor(capture_cursor));
             }
 
             println!("Pressed keyboard key '{:?}'", key);
