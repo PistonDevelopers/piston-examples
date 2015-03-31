@@ -39,13 +39,14 @@ fn main() {
         }
     );
 
+    let id;
     let mut scene = Scene::new();
     let tex = Path::new("./bin/assets/rust-logo.png");
     let tex = Rc::new(Texture::from_path(&tex).unwrap());
     let mut sprite = Sprite::from_texture(tex.clone());
     sprite.set_position(width as f64 / 2.0, height as f64 / 2.0);
 
-    let id = scene.add_child(sprite);
+    id = scene.add_child(sprite);
 
     // Run a sequence or animations.
     let seq = Sequence(vec![
@@ -61,12 +62,12 @@ fn main() {
             Action(Ease(EaseFunction::QuadraticOut, Box::new(FadeIn(1.0)))),
         ]),
     ]);
-    scene.run(id.clone(), &seq);
+    scene.run(&id, &seq);
 
     // This animation and the one above can run in parallel.
     let rotate = Action(Ease(EaseFunction::ExponentialInOut,
         Box::new(RotateTo(2.0, 360.0))));
-    scene.run(id.clone(), &rotate);
+    scene.run(&id, &rotate);
 
     println!("Press any key to pause/resume the animation!");
 
@@ -85,8 +86,8 @@ fn main() {
             });
         }
         if let Some(_) = e.press_args() {
-            scene.toggle(id.clone(), &seq);
-            scene.toggle(id.clone(), &rotate);
+            scene.toggle(&id, &seq);
+            scene.toggle(&id, &rotate);
         }
     }
 }
