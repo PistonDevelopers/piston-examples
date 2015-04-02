@@ -19,7 +19,7 @@ use camera_controllers::{
     model_view_projection
 };
 use gfx::traits::*;
-use sdl2_window::{ Sdl2Window, OpenGL };
+use sdl2_window::{ Sdl2Window, OpenGL, OpenGLWindow };
 
 //----------------------------------------
 // Cube associated data
@@ -119,7 +119,7 @@ fn main() {
         .. gfx::ShaderSource::empty()
     };
 
-    let mut device = gfx_device_gl::GlDevice::new(Sdl2Window::get_proc_address);
+    let mut device = gfx_device_gl::GlDevice::new(|s| window.get_proc_address(s));
     let frame = gfx::Frame::new(win_width as u16, win_height as u16);
     let state = gfx::DrawState::new().depth(gfx::state::Comparison::LessEqual, true);
 
