@@ -10,8 +10,7 @@ extern crate sdl2_window;
 
 use std::rc::Rc;
 use std::cell::RefCell;
-use piston::quack::Set;
-use piston::window::{ WindowSettings, CaptureCursor };
+use piston::window::{ AdvancedWindow, WindowSettings, Size };
 use camera_controllers::{
     FirstPersonSettings,
     FirstPerson,
@@ -25,7 +24,7 @@ use sdl2_window::{ Sdl2Window, OpenGL, OpenGLWindow };
 // Cube associated data
 
 #[vertex_format]
-#[derive(Copy)]
+#[derive(Copy, Clone)]
 struct Vertex {
     #[as_float]
     a_pos: [i8; 3],
@@ -97,16 +96,15 @@ fn main() {
     let (win_width, win_height) = (640, 480);
     let mut window = Sdl2Window::new(
         OpenGL::_3_2,
-        WindowSettings {
-            title: "piston-example-gfx_cube".to_string(),
-            size: [win_width, win_height],
-            fullscreen: false,
-            exit_on_esc: true,
-            samples: 4,
-        }
+        WindowSettings::new(
+            "piston-example-gfx_cube".to_string(),
+            Size { width: win_width, height: win_height }
+        )
+        .exit_on_esc(true)
+        .samples(4)
     );
 
-    window.set_mut(CaptureCursor(true));
+    window.set_capture_cursor(true);
 
     let vertex = gfx::ShaderSource {
         glsl_120: Some(VERTEX_SRC[0]),
