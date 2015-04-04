@@ -21,3 +21,4 @@ script:
     - (cd deform && cargo build -v)
     - (cd user_input && cargo build -v)
     - (cd sprite && cargo build -v)
+    - (cd freetype && cargo build -v)
