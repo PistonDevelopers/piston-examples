@@ -15,6 +15,7 @@ use drag_controller::{
 };
 use opengl_graphics::{ GlGraphics, OpenGL, Texture };
 use sdl2_window::Sdl2Window as Window;
+use piston::window::{ WindowSettings, Size };
 
 fn main() {
     println!("Click in the red square and drag.");
@@ -24,13 +25,12 @@ fn main() {
     let opengl = OpenGL::_3_2;
     let window = Window::new(
         opengl,
-        piston::window::WindowSettings {
-            title: "piston-example-deform".to_string(),
-            size: [300, 300],
-            fullscreen: false,
-            exit_on_esc: true,
-            samples: 4,
-        }
+        WindowSettings::new(
+            "piston-example-deform".to_string(),
+            Size { width: 300, height: 300 }
+        )
+        .exit_on_esc(true)
+        .samples(4)
     );
 
     let image = Path::new("./bin/assets/rust-logo.png");
@@ -122,7 +122,7 @@ fn main() {
             }
 
             // Draw rect of the original grid.
-            graphics::Rectangle::border([1.0, 0.0, 0.0, 1.0], 1.5)
+            graphics::Rectangle::new_border([1.0, 0.0, 0.0, 1.0], 1.5)
                 .draw([0.0, 0.0, width, height], &c.draw_state, c.transform, g);
 
             // Draw control points.
