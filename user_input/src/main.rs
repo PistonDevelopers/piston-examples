@@ -12,7 +12,7 @@ use opengl_graphics::{ GlGraphics, OpenGL };
 use graphics::Graphics;
 use std::rc::Rc;
 use std::cell::RefCell;
-use piston::window::WindowSettings;
+use piston::window::{ AdvancedWindow, WindowSettings, Size };
 use piston::input::Button;
 use piston::input::keyboard::Key;
 #[cfg(feature = "include_sdl2")]
@@ -26,13 +26,11 @@ fn main() {
     let opengl = OpenGL::_3_2;
     let window = Window::new(
         opengl,
-        WindowSettings {
-            title: "piston-example-user_input".to_string(),
-            size: [600, 600],
-            fullscreen: false,
-            exit_on_esc: true,
-            samples: 0,
-        }
+        WindowSettings::new(
+            "piston-example-user_input".to_string(),
+            Size { width: 600, height: 600 }
+        )
+        .exit_on_esc(true)
     );
 
     println!("Press C to turn capture cursor on/off");
@@ -49,11 +47,9 @@ fn main() {
         }
         if let Some(Button::Keyboard(key)) = e.press_args() {
             if key == Key::C {
-                use piston::quack::Set;
-
                 println!("Turned capture cursor on");
                 capture_cursor = !capture_cursor;
-                window.borrow_mut().set_mut(piston::window::CaptureCursor(capture_cursor));
+                window.borrow_mut().set_capture_cursor(capture_cursor);
             }
 
             println!("Pressed keyboard key '{:?}'", key);
@@ -81,7 +77,7 @@ fn main() {
                 [0, 0, args.width as i32, args.height as i32],
                 |_, g| {
                     graphics::clear([1.0; 4], g);
-                    draw_rectangles(cursor, &window, g);
+                    draw_rectangles(cursor, &window.borrow(), g);
                 }
             );
         }
@@ -91,20 +87,19 @@ fn main() {
 
 fn draw_rectangles<G: Graphics>(
     cursor: [f64; 2],
-    window: &RefCell<Window>,
+    window: &Window,
     g: &mut G,
 ) {
-    use piston::window::{ Size, DrawSize };
-    use piston::quack::Get;
+    use piston::window::Window;
 
-    let Size(size) = window.get();
-    let DrawSize(draw_size) = window.get();
+    let size = window.size();
+    let draw_size = window.draw_size();
     let zoom = 0.2;
     let offset = 30.0;
 
     let draw_state = graphics::default_draw_state();
-    let transform = graphics::abs_transform(size[0] as f64, size[1] as f64);
-    let rect_border = graphics::Rectangle::border([1.0, 0.0, 0.0, 1.0], 1.0);
+    let transform = graphics::abs_transform(size.width as f64, size.height as f64);
+    let rect_border = graphics::Rectangle::new_border([1.0, 0.0, 0.0, 1.0], 1.0);
 
     // Cursor.
     let cursor_color = [0.0, 0.0, 0.0, 1.0];
@@ -117,15 +112,20 @@ fn draw_rectangles<G: Graphics>(
     );
 
     // User coordinates.
-    rect_border.draw([offset, offset, size[0] as f64 * zoom, size[1] as f64 * zoom],
+    rect_border.draw([
+            offset,
+            offset,
+            size.width as f64 * zoom,
+            size.height as f64 * zoom
+        ],
         draw_state, transform, g);
-    let rect_border = graphics::Rectangle::border([0.0, 0.0, 1.0, 1.0], 1.0);
+    let rect_border = graphics::Rectangle::new_border([0.0, 0.0, 1.0, 1.0], 1.0);
     rect_border.draw(
         [
-            offset + size[0] as f64 * zoom,
+            offset + size.width as f64 * zoom,
             offset,
-            draw_size[0] as f64 * zoom,
-            draw_size[1] as f64 * zoom
+            draw_size.width as f64 * zoom,
+            draw_size.height as f64 * zoom
         ],
         draw_state, transform, g);
 }
