@@ -1,0 +1,24 @@
+[package]
+name = "piston-example-freetype"
+version = "0.0.0"
+authors = ["Your Name <your@email.com>"]
+keywords = []
+
+[[bin]]
+name = "piston-example-freetype"
+path = "src/main.rs"
+
+[dependencies.piston]
+git = "https://github.com/PistonDevelopers/piston"
+
+[dependencies.piston2d-opengl_graphics]
+git = "https://github.com/PistonDevelopers/opengl_graphics"
+
+[dependencies.piston2d-graphics]
+git = "https://github.com/PistonDevelopers/graphics"
+
+[dependencies.pistoncore-sdl2_window]
+git = "https://github.com/PistonDevelopers/sdl2_window"
+
+[dependencies.freetype-rs]
+git = "https://github.com/PistonDevelopers/freetype-rs"
