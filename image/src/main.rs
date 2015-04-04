@@ -12,18 +12,16 @@ use opengl_graphics::{
     Texture,
 };
 use sdl2_window::Sdl2Window;
+use piston::window::{ WindowSettings, Size };
 
 fn main() {
     let opengl = OpenGL::_3_2;
     let window = Sdl2Window::new(
         opengl,
-        piston::window::WindowSettings {
-            title: "piston-example-image".to_string(),
-            size: [300, 300],
-            fullscreen: false,
-            exit_on_esc: true,
-            samples: 0,
-        }
+        WindowSettings::new(
+            "piston-example-image".to_string(),
+            Size { width: 300, height: 300 })
+            .exit_on_esc(true)
     );
 
     let rust_logo = Path::new("./bin/assets/rust-logo.png");
