@@ -10,7 +10,7 @@ extern crate sdl2_window;
 
 use std::rc::Rc;
 use std::cell::RefCell;
-use piston::window::{ AdvancedWindow, WindowSettings, Size };
+use piston::window::{ AdvancedWindow, WindowSettings, Size, OpenGLWindow };
 use camera_controllers::{
     FirstPersonSettings,
     FirstPerson,
@@ -18,7 +18,7 @@ use camera_controllers::{
     model_view_projection
 };
 use gfx::traits::*;
-use sdl2_window::{ Sdl2Window, OpenGL, OpenGLWindow };
+use sdl2_window::{ Sdl2Window, OpenGL };
 
 //----------------------------------------
 // Cube associated data
@@ -181,7 +181,8 @@ fn main() {
     device.update_texture(
         &texture,
         &img_info,
-        &[0x20u8, 0xA0, 0xC0, 0x00]
+        &[0x20u8, 0xA0, 0xC0, 0x00],
+        Some(gfx::tex::TextureKind::Texture2D)
     ).unwrap();
 
     let sampler = device.create_sampler(
