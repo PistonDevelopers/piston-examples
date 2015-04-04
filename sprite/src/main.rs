@@ -24,19 +24,18 @@ use opengl_graphics::{
     OpenGL,
     Texture,
 };
+use piston::window::{ WindowSettings, Size };
 
 fn main() {
     let (width, height) = (300, 300);
     let opengl = OpenGL::_3_2;
     let window = Sdl2Window::new(
         opengl,
-        piston::window::WindowSettings {
-            title: "piston-example-sprite".to_string(),
-            size: [width, height],
-            fullscreen: false,
-            exit_on_esc: true,
-            samples: 0,
-        }
+        WindowSettings::new(
+            "piston-example-sprite".to_string(),
+            Size { width: width, height: height }
+        )
+        .exit_on_esc(true)
     );
 
     let id;
