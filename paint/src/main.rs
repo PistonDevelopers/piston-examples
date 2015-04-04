@@ -10,19 +10,18 @@ use opengl_graphics::{ GlGraphics, OpenGL, Texture };
 use sdl2_window::Sdl2Window;
 use image::GenericImage;
 use piston::input::{ Button, MouseButton };
+use piston::window::{ WindowSettings, Size };
 
 fn main() {
     let opengl = OpenGL::_3_2;
     let (width, height) = (300, 300);
     let window = Sdl2Window::new(
         opengl,
-        piston::window::WindowSettings {
-            title: "piston-example-paint".to_string(),
-            size: [width, height],
-            fullscreen: false,
-            exit_on_esc: true,
-            samples: 0,
-        }
+        WindowSettings::new(
+            "piston-example-paint".to_string(),
+            Size { width: width, height: height }
+        )
+        .exit_on_esc(true)
     );
 
     let mut image = image::ImageBuffer::new(width, height);
