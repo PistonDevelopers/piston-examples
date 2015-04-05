@@ -61,12 +61,12 @@ fn main() {
             Action(Ease(EaseFunction::QuadraticOut, Box::new(FadeIn(1.0)))),
         ]),
     ]);
-    scene.run(&id, &seq);
+    scene.run(id, &seq);
 
     // This animation and the one above can run in parallel.
     let rotate = Action(Ease(EaseFunction::ExponentialInOut,
         Box::new(RotateTo(2.0, 360.0))));
-    scene.run(&id, &rotate);
+    scene.run(id, &rotate);
 
     println!("Press any key to pause/resume the animation!");
 
@@ -85,8 +85,8 @@ fn main() {
             });
         }
         if let Some(_) = e.press_args() {
-            scene.toggle(&id, &seq);
-            scene.toggle(&id, &rotate);
+            scene.toggle(id, &seq);
+            scene.toggle(id, &rotate);
         }
     }
 }
