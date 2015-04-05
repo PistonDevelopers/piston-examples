@@ -117,7 +117,7 @@ fn main() {
         .. gfx::ShaderSource::empty()
     };
 
-    let mut device = gfx_device_gl::GlDevice::new(|s| window.get_proc_address(s));
+    let (device, mut factory) = gfx_device_gl::create(|s| window.get_proc_address(s));
     let frame = gfx::Frame::new(win_width as u16, win_height as u16);
     let state = gfx::DrawState::new().depth(gfx::state::Comparison::LessEqual, true);
 
@@ -154,7 +154,7 @@ fn main() {
         Vertex::new([ 1, -1, -1], [0, 1]),
     ];
 
-    let mesh = device.create_mesh(&vertex_data);
+    let mesh = factory.create_mesh(&vertex_data);
 
     let index_data: &[u8] = &[
          0,  1,  2,  2,  3,  0, // top
@@ -165,7 +165,7 @@ fn main() {
         20, 21, 22, 22, 23, 20, // back
     ];
 
-    let slice = device.create_buffer_index(index_data)
+    let slice = factory.create_buffer_index(index_data)
                       .to_slice(gfx::PrimitiveType::TriangleList);
 
     let tinfo = gfx::tex::TextureInfo {
@@ -177,15 +177,15 @@ fn main() {
         format: gfx::tex::RGBA8,
     };
     let img_info = tinfo.to_image_info();
-    let texture = device.create_texture(tinfo).unwrap();
-    device.update_texture(
+    let texture = factory.create_texture(tinfo).unwrap();
+    factory.update_texture(
         &texture,
         &img_info,
         &[0x20u8, 0xA0, 0xC0, 0x00],
         Some(gfx::tex::TextureKind::Texture2D)
     ).unwrap();
 
-    let sampler = device.create_sampler(
+    let sampler = factory.create_sampler(
         gfx::tex::SamplerInfo::new(
             gfx::tex::FilterMethod::Bilinear,
             gfx::tex::WrapMode::Clamp
@@ -194,12 +194,12 @@ fn main() {
 
     let shader_model = device.get_capabilities().shader_model;
 
-    let program = device.link_program(
+    let program = factory.link_program(
         vertex.choose(shader_model).unwrap(),
         fragment.choose(shader_model).unwrap()
     ).unwrap();
 
-    let mut graphics = device.into_graphics();
+    let mut graphics = (device, factory).into_graphics();
 
     let data = Params {
         u_model_view_proj: vecmath::mat4_id(),
