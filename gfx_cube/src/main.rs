@@ -246,7 +246,7 @@ fn main() {
         }
 
         if let Some(_) = e.after_render_args() {
-            graphics.device.after_frame();
+            graphics.cleanup();
         }
     }
 }
