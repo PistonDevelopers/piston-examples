@@ -5,8 +5,6 @@ extern crate drag_controller;
 extern crate sdl2_window;
 
 use std::path::Path;
-use std::rc::Rc;
-use std::cell::RefCell;
 
 use graphics::ImageSize;
 use drag_controller::{
@@ -49,7 +47,6 @@ fn main() {
     let mut draw_grid = true;
 
     let mut gl = GlGraphics::new(opengl);
-    let window = Rc::new(RefCell::new(window));
     for e in window.events() {
         drag.event(&e, |action| {
             match action {
