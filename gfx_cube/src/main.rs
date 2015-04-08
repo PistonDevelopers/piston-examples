@@ -8,8 +8,7 @@ extern crate gfx;
 extern crate gfx_device_gl;
 extern crate sdl2_window;
 
-use std::rc::Rc;
-use std::cell::RefCell;
+use piston::event::*;
 use piston::window::{ AdvancedWindow, WindowSettings, Size, OpenGLWindow };
 use camera_controllers::{
     FirstPersonSettings,
@@ -220,10 +219,7 @@ fn main() {
         FirstPersonSettings::keyboard_wasd()
     );
 
-    let window = Rc::new(RefCell::new(window));
-    for e in piston::events(window) {
-        use piston::event::*;
-
+    for e in window.events() {
         first_person.event(&e);
 
         if let Some(args) = e.render_args() {
