@@ -13,8 +13,8 @@ use graphics::Graphics;
 use std::rc::Rc;
 use std::cell::RefCell;
 use piston::window::{ AdvancedWindow, WindowSettings, Size };
-use piston::input::Button;
-use piston::input::keyboard::Key;
+use piston::input::{ Button, Key };
+use piston::event::*;
 #[cfg(feature = "include_sdl2")]
 use sdl2_window::Sdl2Window as Window;
 #[cfg(feature = "include_glfw")]
@@ -39,9 +39,7 @@ fn main() {
     let window = Rc::new(RefCell::new(window));
     let ref mut gl = GlGraphics::new(opengl);
     let mut cursor = [0.0, 0.0];
-    for e in piston::events(window.clone()) {
-        use piston::event::*;
-
+    for e in window.clone().events() {
         if let Some(Button::Mouse(button)) = e.press_args() {
             println!("Pressed mouse button '{:?}'", button);
         }
