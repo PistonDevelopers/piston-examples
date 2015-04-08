@@ -16,6 +16,7 @@ use drag_controller::{
 use opengl_graphics::{ GlGraphics, OpenGL, Texture };
 use sdl2_window::Sdl2Window as Window;
 use piston::window::{ WindowSettings, Size };
+use piston::event::*;
 
 fn main() {
     println!("Click in the red square and drag.");
@@ -49,9 +50,7 @@ fn main() {
 
     let mut gl = GlGraphics::new(opengl);
     let window = Rc::new(RefCell::new(window));
-    for e in piston::events(window) {
-        use piston::event::*;
-
+    for e in window.events() {
         drag.event(&e, |action| {
             match action {
                 Drag::Start(x, y) => {
