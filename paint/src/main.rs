@@ -4,13 +4,12 @@ extern crate graphics;
 extern crate sdl2_window;
 extern crate opengl_graphics;
 
-use std::rc::Rc;
-use std::cell::RefCell;
 use opengl_graphics::{ GlGraphics, OpenGL, Texture };
 use sdl2_window::Sdl2Window;
 use image::GenericImage;
 use piston::input::{ Button, MouseButton };
 use piston::window::{ WindowSettings, Size };
+use piston::event::*;
 
 fn main() {
     let opengl = OpenGL::_3_2;
@@ -28,8 +27,7 @@ fn main() {
     let mut draw = false;
     let mut texture = Texture::from_image(&image);
     let ref mut gl = GlGraphics::new(opengl);
-    let window = Rc::new(RefCell::new(window));
-    for e in piston::events(window) {
+    for e in window.events() {
         use piston::event::*;
 
         if let Some(args) = e.render_args() {
