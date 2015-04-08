@@ -25,6 +25,7 @@ use opengl_graphics::{
     Texture,
 };
 use piston::window::{ WindowSettings, Size };
+use piston::event::*;
 
 fn main() {
     let (width, height) = (300, 300);
@@ -72,9 +73,7 @@ fn main() {
 
     let ref mut gl = GlGraphics::new(opengl);
     let window = Rc::new(RefCell::new(window));
-    for e in piston::events(window) {
-        use piston::event::*;
-
+    for e in window.events() {
         scene.event(&e);
 
         if let Some(args) = e.render_args() {
