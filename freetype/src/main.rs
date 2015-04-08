@@ -4,13 +4,12 @@ extern crate sdl2_window;
 extern crate opengl_graphics;
 extern crate piston;
 
-use std::rc::Rc;
-use std::cell::RefCell;
 use std::path::Path;
 use sdl2_window::Sdl2Window;
 use opengl_graphics::{ GlGraphics, Texture, OpenGL };
 use graphics::math::Matrix2d;
 use piston::window::{ WindowSettings, Size };
+use piston::event::*;
 
 fn render_text(face: &mut ft::Face, gl: &mut GlGraphics, t: Matrix2d, text: &str) {
     use graphics::*;
@@ -53,10 +52,7 @@ fn main() {
 
     let ref mut gl = GlGraphics::new(opengl);
 
-    let window = Rc::new(RefCell::new(window));
-    for e in piston::events(window) {
-        use piston::event::*;
-
+    for e in window.events() {
         if let Some(args) = e.render_args() {
             use graphics::*;
 
