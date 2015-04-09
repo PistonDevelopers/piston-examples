@@ -6,7 +6,7 @@ extern crate vecmath;
 extern crate camera_controllers;
 extern crate gfx;
 extern crate gfx_device_gl;
-extern crate sdl2_window;
+extern crate glfw_window;
 
 use piston::event::*;
 use piston::window::{ AdvancedWindow, WindowSettings, Size, OpenGLWindow };
@@ -17,7 +17,7 @@ use camera_controllers::{
     model_view_projection
 };
 use gfx::traits::*;
-use sdl2_window::{ Sdl2Window, OpenGL };
+use glfw_window::{ GlfwWindow, OpenGL };
 
 //----------------------------------------
 // Cube associated data
@@ -93,7 +93,7 @@ const FRAGMENT_SRC: [&'static [u8]; 2] = [ b"
 
 fn main() {
     let (win_width, win_height) = (640, 480);
-    let mut window = Sdl2Window::new(
+    let mut window = GlfwWindow::new(
         OpenGL::_3_2,
         WindowSettings::new(
             "piston-example-gfx_cube".to_string(),
