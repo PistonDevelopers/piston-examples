@@ -101,20 +101,7 @@ fn main() {
         )
         .exit_on_esc(true)
         .samples(4)
-    );
-
-    window.set_capture_cursor(true);
-
-    let vertex = gfx::ShaderSource {
-        glsl_120: Some(VERTEX_SRC[0]),
-        glsl_150: Some(VERTEX_SRC[1]),
-        .. gfx::ShaderSource::empty()
-    };
-    let fragment = gfx::ShaderSource {
-        glsl_120: Some(FRAGMENT_SRC[0]),
-        glsl_150: Some(FRAGMENT_SRC[1]),
-        .. gfx::ShaderSource::empty()
-    };
+    ).capture_cursor(true);
 
     let (device, mut factory) = gfx_device_gl::create(|s| window.get_proc_address(s));
     let frame = gfx::Frame::new(win_width as u16, win_height as u16);
@@ -165,7 +152,7 @@ fn main() {
     ];
 
     let slice = factory.create_buffer_index(index_data)
-                      .to_slice(gfx::PrimitiveType::TriangleList);
+                       .to_slice(gfx::PrimitiveType::TriangleList);
 
     let tinfo = gfx::tex::TextureInfo {
         width: 1,
@@ -191,12 +178,23 @@ fn main() {
         )
     );
 
-    let shader_model = device.get_capabilities().shader_model;
-
-    let program = factory.link_program(
-        vertex.choose(shader_model).unwrap(),
-        fragment.choose(shader_model).unwrap()
-    ).unwrap();
+    let program = {
+        let vertex = gfx::ShaderSource {
+            glsl_120: Some(VERTEX_SRC[0]),
+            glsl_150: Some(VERTEX_SRC[1]),
+            .. gfx::ShaderSource::empty()
+        };
+        let fragment = gfx::ShaderSource {
+            glsl_120: Some(FRAGMENT_SRC[0]),
+            glsl_150: Some(FRAGMENT_SRC[1]),
+            .. gfx::ShaderSource::empty()
+        };
+        factory.link_program_source(
+            vertex,
+            fragment,
+            &device.get_capabilities()
+        ).unwrap()
+    };
 
     let mut graphics = (device, factory).into_graphics();
 
