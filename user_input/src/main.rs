@@ -9,7 +9,7 @@ extern crate glfw_window;
 extern crate glutin_window;
 
 use opengl_graphics::{ GlGraphics, OpenGL };
-use graphics::Graphics;
+use graphics::{ Context, Graphics };
 use std::rc::Rc;
 use std::cell::RefCell;
 use piston::window::{ AdvancedWindow, WindowSettings, Size };
@@ -71,9 +71,9 @@ fn main() {
             else { println!("Lost focus"); }
         };
         if let Some(args) = e.render_args() {
-            gl.draw(args.viewport(), |_, g| {
+            gl.draw(args.viewport(), |c, g| {
                     graphics::clear([1.0; 4], g);
-                    draw_rectangles(cursor, &window.borrow(), g);
+                    draw_rectangles(cursor, &window.borrow(), &c, g);
                 }
             );
         }
@@ -84,6 +84,7 @@ fn main() {
 fn draw_rectangles<G: Graphics>(
     cursor: [f64; 2],
     window: &Window,
+    c: &Context,
     g: &mut G,
 ) {
     use piston::window::Window;
@@ -93,8 +94,6 @@ fn draw_rectangles<G: Graphics>(
     let zoom = 0.2;
     let offset = 30.0;
 
-    let draw_state = graphics::default_draw_state();
-    let transform = graphics::abs_transform(size.width as f64, size.height as f64);
     let rect_border = graphics::Rectangle::new_border([1.0, 0.0, 0.0, 1.0], 1.0);
 
     // Cursor.
@@ -103,7 +102,7 @@ fn draw_rectangles<G: Graphics>(
     graphics::ellipse(
         cursor_color,
         graphics::ellipse::circle(zoomed_cursor[0], zoomed_cursor[1], 4.0),
-        transform,
+        c.transform,
         g
     );
 
@@ -114,7 +113,7 @@ fn draw_rectangles<G: Graphics>(
             size.width as f64 * zoom,
             size.height as f64 * zoom
         ],
-        draw_state, transform, g);
+        &c.draw_state, c.transform, g);
     let rect_border = graphics::Rectangle::new_border([0.0, 0.0, 1.0, 1.0], 1.0);
     rect_border.draw(
         [
@@ -123,5 +122,5 @@ fn draw_rectangles<G: Graphics>(
             draw_size.width as f64 * zoom,
             draw_size.height as f64 * zoom
         ],
-        draw_state, transform, g);
+        &c.draw_state, c.transform, g);
 }
