@@ -56,7 +56,7 @@ fn main() {
         if let Some(args) = e.render_args() {
             use graphics::*;
 
-            gl.draw([0, 0, args.width as i32, args.height as i32], |c, gl| {
+            gl.draw(args.viewport(), |c, gl| {
                 let transform = c.transform.trans(0.0, 100.0);
 
                 clear(color::WHITE, gl);
