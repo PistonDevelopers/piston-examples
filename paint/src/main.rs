@@ -31,7 +31,7 @@ fn main() {
         use piston::event::*;
 
         if let Some(args) = e.render_args() {
-            gl.draw([0, 0, args.width as i32, args.height as i32], |c, gl| {
+            gl.draw(args.viewport(), |c, gl| {
                 graphics::clear([1.0; 4], gl);
                 graphics::image(&texture, c.transform, gl);
             });

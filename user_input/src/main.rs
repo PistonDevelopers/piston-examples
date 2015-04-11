@@ -71,9 +71,7 @@ fn main() {
             else { println!("Lost focus"); }
         };
         if let Some(args) = e.render_args() {
-            gl.draw(
-                [0, 0, args.width as i32, args.height as i32],
-                |_, g| {
+            gl.draw(args.viewport(), |_, g| {
                     graphics::clear([1.0; 4], g);
                     draw_rectangles(cursor, &window.borrow(), g);
                 }
