@@ -24,7 +24,7 @@ use opengl_graphics::{
     OpenGL,
     Texture,
 };
-use piston::window::{ WindowSettings, Size };
+use piston::window::WindowSettings;
 use piston::event::*;
 
 fn main() {
@@ -32,10 +32,7 @@ fn main() {
     let opengl = OpenGL::_3_2;
     let window = Sdl2Window::new(
         opengl,
-        WindowSettings::new(
-            "piston-example-sprite".to_string(),
-            Size { width: width, height: height }
-        )
+        WindowSettings::new("piston-example-sprite", (width, height))
         .exit_on_esc(true)
     );
 

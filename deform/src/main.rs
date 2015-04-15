@@ -13,7 +13,7 @@ use drag_controller::{
 };
 use opengl_graphics::{ GlGraphics, OpenGL, Texture };
 use sdl2_window::Sdl2Window as Window;
-use piston::window::{ WindowSettings, Size };
+use piston::window::WindowSettings;
 use piston::event::*;
 
 fn main() {
@@ -24,10 +24,7 @@ fn main() {
     let opengl = OpenGL::_3_2;
     let window = Window::new(
         opengl,
-        WindowSettings::new(
-            "piston-example-deform".to_string(),
-            Size { width: 300, height: 300 }
-        )
+        WindowSettings::new("piston-example-deform", [300, 300])
         .exit_on_esc(true)
         .samples(4)
     );
