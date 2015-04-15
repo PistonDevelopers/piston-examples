@@ -13,7 +13,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use piston_window::*;
 use piston::event::*;
-use piston::window::{ AdvancedWindow, WindowSettings, Size };
+use piston::window::{ AdvancedWindow, WindowSettings };
 use camera_controllers::{
     FirstPersonSettings,
     FirstPerson,
@@ -56,10 +56,7 @@ fn main() {
     let (win_width, win_height) = (640, 480);
     let window = Rc::new(RefCell::new(GlfwWindow::new(
         OpenGL::_3_2,
-        WindowSettings::new(
-            "piston-example-gfx_cube".to_string(),
-            Size { width: win_width, height: win_height }
-        )
+        WindowSettings::new("piston-example-gfx_cube", [win_width, win_height])
         .exit_on_esc(true)
         .samples(4)
     ).capture_cursor(true)));

@@ -8,7 +8,7 @@ use opengl_graphics::{ GlGraphics, OpenGL, Texture };
 use sdl2_window::Sdl2Window;
 use image::GenericImage;
 use piston::input::{ Button, MouseButton };
-use piston::window::{ WindowSettings, Size };
+use piston::window::WindowSettings;
 use piston::event::*;
 
 fn main() {
@@ -16,10 +16,7 @@ fn main() {
     let (width, height) = (300, 300);
     let window = Sdl2Window::new(
         opengl,
-        WindowSettings::new(
-            "piston-example-paint".to_string(),
-            Size { width: width, height: height }
-        )
+        WindowSettings::new("piston-example-paint", (width, height))
         .exit_on_esc(true)
     );
 

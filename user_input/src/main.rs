@@ -12,7 +12,7 @@ use opengl_graphics::{ GlGraphics, OpenGL };
 use graphics::{ Context, Graphics };
 use std::rc::Rc;
 use std::cell::RefCell;
-use piston::window::{ AdvancedWindow, WindowSettings, Size };
+use piston::window::{ AdvancedWindow, WindowSettings };
 use piston::input::{ Button, Key };
 use piston::event::*;
 #[cfg(feature = "include_sdl2")]
@@ -26,10 +26,7 @@ fn main() {
     let opengl = OpenGL::_3_2;
     let window = Window::new(
         opengl,
-        WindowSettings::new(
-            "piston-example-user_input".to_string(),
-            Size { width: 600, height: 600 }
-        )
+        WindowSettings::new("piston-example-user_input", [600, 600])
         .exit_on_esc(true)
     );
 

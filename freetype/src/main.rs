@@ -8,13 +8,13 @@ use std::path::Path;
 use sdl2_window::Sdl2Window;
 use opengl_graphics::{ GlGraphics, Texture, OpenGL };
 use graphics::math::Matrix2d;
-use piston::window::{ WindowSettings, Size };
+use piston::window::WindowSettings;
 use piston::event::*;
 
 fn render_text(face: &mut ft::Face, gl: &mut GlGraphics, t: Matrix2d, text: &str) {
     use graphics::*;
 
-    let mut x = 0;
+    let mut x = 10;
     let mut y = 0;
     for ch in text.chars() {
         face.load_char(ch as usize, ft::face::RENDER).unwrap();
@@ -40,9 +40,8 @@ fn main() {
     let opengl = OpenGL::_3_2;
     let window = Sdl2Window::new(
         opengl,
-        WindowSettings::new("piston-example-freetype".to_string(),
-                            Size { width: 300, height: 300 })
-                           .exit_on_esc(true)
+        WindowSettings::new("piston-example-freetype", [300, 300])
+        .exit_on_esc(true)
     );
 
     let freetype = ft::Library::init().unwrap();
