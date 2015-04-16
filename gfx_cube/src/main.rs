@@ -179,8 +179,6 @@ fn main() {
             );
             canvas.renderer.draw(&(&mesh, slice.clone(), &program, &data, &state),
                 &canvas.output).unwrap();
-            canvas.device.submit(canvas.renderer.as_buffer());
-            canvas.renderer.reset();
         });
     }
 }
