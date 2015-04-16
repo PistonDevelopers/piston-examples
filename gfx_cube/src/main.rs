@@ -96,7 +96,7 @@ fn main() {
         Vertex::new([ 1, -1, -1], [0, 1]),
     ];
 
-    let mesh = events.gfx.borrow_mut().factory.create_mesh(&vertex_data);
+    let mesh = events.canvas.borrow_mut().factory.create_mesh(&vertex_data);
 
     let index_data: &[u8] = &[
          0,  1,  2,  2,  3,  0, // top
@@ -107,7 +107,7 @@ fn main() {
         20, 21, 22, 22, 23, 20, // back
     ];
 
-    let slice = events.gfx.borrow_mut().factory.create_buffer_index(index_data)
+    let slice = events.canvas.borrow_mut().factory.create_buffer_index(index_data)
                        .to_slice(gfx::PrimitiveType::TriangleList);
 
     let tinfo = gfx::tex::TextureInfo {
@@ -116,20 +116,20 @@ fn main() {
         format: gfx::tex::RGBA8,
     };
     let img_info = tinfo.to_image_info();
-    let texture = events.gfx.borrow_mut().factory.create_texture(tinfo).unwrap();
-    events.gfx.borrow_mut().factory.update_texture(
+    let texture = events.canvas.borrow_mut().factory.create_texture(tinfo).unwrap();
+    events.canvas.borrow_mut().factory.update_texture(
         &texture,
         &img_info,
         &[0x20u8, 0xA0, 0xC0, 0x00],
         Some(gfx::tex::TextureKind::Texture2D)
     ).unwrap();
 
-    let sampler = events.gfx.borrow_mut().factory.create_sampler(
+    let sampler = events.canvas.borrow_mut().factory.create_sampler(
         gfx::tex::SamplerInfo::new(gfx::tex::FilterMethod::Bilinear,
             gfx::tex::WrapMode::Clamp));
 
     let program = {
-        let gfx = &mut *events.gfx.borrow_mut();
+        let canvas = &mut *events.canvas.borrow_mut();
         let vertex = gfx::ShaderSource {
             glsl_120: Some(include_bytes!("cube_120.glslv")),
             glsl_150: Some(include_bytes!("cube_150.glslv")),
@@ -140,8 +140,8 @@ fn main() {
             glsl_150: Some(include_bytes!("cube_150.glslf")),
             .. gfx::ShaderSource::empty()
         };
-        gfx.factory.link_program_source(vertex, fragment,
-            &gfx.device.get_capabilities()).unwrap()
+        canvas.factory.link_program_source(vertex, fragment,
+            &canvas.device.get_capabilities()).unwrap()
     };
 
     let mut data = Params {
@@ -161,26 +161,26 @@ fn main() {
     for e in events {
         first_person.event(&e);
 
-        e.draw_3d(|gfx| {
+        e.draw_3d(|canvas| {
             let args = e.render_args().unwrap();
-            gfx.renderer.clear(
+            canvas.renderer.clear(
                 gfx::ClearData {
                     color: [0.3, 0.3, 0.3, 1.0],
                     depth: 1.0,
                     stencil: 0,
                 },
                 gfx::COLOR | gfx::DEPTH,
-                &gfx.output
+                &canvas.output
             );
             data.u_model_view_proj = model_view_projection(
                 model,
                 first_person.camera(args.ext_dt).orthogonal(),
                 projection
             );
-            gfx.renderer.draw(&(&mesh, slice.clone(), &program, &data, &state),
-                &gfx.output).unwrap();
-            gfx.device.submit(gfx.renderer.as_buffer());
-            gfx.renderer.reset();
+            canvas.renderer.draw(&(&mesh, slice.clone(), &program, &data, &state),
+                &canvas.output).unwrap();
+            canvas.device.submit(canvas.renderer.as_buffer());
+            canvas.renderer.reset();
         });
     }
 }
