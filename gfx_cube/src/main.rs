@@ -149,11 +149,18 @@ fn main() {
         t_color: (texture, Some(sampler)),
     };
 
+    let get_projection = |w: &PistonWindow<GlfwWindow>| {
+        use piston::window::Window;
+
+        let draw_size = w.window.borrow().draw_size();
+        CameraPerspective {
+            fov: 90.0, near_clip: 0.1, far_clip: 1000.0,
+            aspect_ratio: (draw_size.width as f32) / (draw_size.height as f32)
+        }.projection()
+    };
+
     let model = vecmath::mat4_id();
-    let projection = CameraPerspective {
-        fov: 90.0, near_clip: 0.1, far_clip: 1000.0,
-        aspect_ratio: (win_width as f32) / (win_height as f32)
-    }.projection();
+    let mut projection = get_projection(&events);
     let mut first_person = FirstPerson::new([0.5, 0.5, 4.0],
         FirstPersonSettings::keyboard_wasd());
     let state = gfx::DrawState::new().depth(gfx::state::Comparison::LessEqual, true);
@@ -180,5 +187,9 @@ fn main() {
             canvas.renderer.draw(&(&mesh, slice.clone(), &program, &data, &state),
                 &canvas.output).unwrap();
         });
+
+        if let Some(_) = e.resize_args() {
+            projection = get_projection(&e);
+        }
     }
 }
