@@ -1,10 +1,8 @@
-#![feature(plugin, custom_attribute)]
-#![plugin(gfx_macros)]
-
 extern crate piston;
 extern crate piston_window;
 extern crate vecmath;
 extern crate camera_controllers;
+#[macro_use]
 extern crate gfx;
 extern crate gfx_device_gl;
 extern crate glfw_window;
@@ -20,35 +18,31 @@ use camera_controllers::{
     CameraPerspective,
     model_view_projection
 };
+use gfx::attrib::Floater;
 use gfx::traits::*;
 use glfw_window::{ GlfwWindow, OpenGL };
 
 //----------------------------------------
 // Cube associated data
 
-#[vertex_format]
-#[derive(Copy, Clone)]
-struct Vertex {
-    #[as_float]
-    a_pos: [i8; 3],
-    #[as_float]
-    a_tex_coord: [u8; 2],
-}
+gfx_vertex!( Vertex {
+    a_pos@ a_pos: [Floater<i8>; 3],
+    a_tex_coord@ a_tex_coord: [Floater<u8>; 2],
+});
 
 impl Vertex {
     fn new(pos: [i8; 3], tc: [u8; 2]) -> Vertex {
         Vertex {
-            a_pos: pos,
-            a_tex_coord: tc,
+            a_pos: Floater::cast3(pos),
+            a_tex_coord: Floater::cast2(tc),
         }
     }
 }
 
-#[shader_param]
-struct Params<R: gfx::Resources> {
-    u_model_view_proj: [[f32; 4]; 4],
-    t_color: gfx::shade::TextureParam<R>,
-}
+gfx_parameters!( Params/ParamsLink {
+    u_model_view_project@ u_model_view_proj: [[f32; 4]; 4],
+    t_color@ t_color: gfx::shade::TextureParam<R>,
+});
 
 //----------------------------------------
 
@@ -147,6 +141,7 @@ fn main() {
     let mut data = Params {
         u_model_view_proj: vecmath::mat4_id(),
         t_color: (texture, Some(sampler)),
+        _r: std::marker::PhantomData,
     };
 
     let get_projection = |w: &PistonWindow<GlfwWindow>| {
