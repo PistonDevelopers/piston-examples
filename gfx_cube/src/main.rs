@@ -40,7 +40,7 @@ impl Vertex {
 }
 
 gfx_parameters!( Params/ParamsLink {
-    u_model_view_project@ u_model_view_proj: [[f32; 4]; 4],
+    u_model_view_proj@ u_model_view_proj: [[f32; 4]; 4],
     t_color@ t_color: gfx::shade::TextureParam<R>,
 });
 
