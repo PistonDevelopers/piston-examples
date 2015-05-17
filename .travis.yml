@@ -5,11 +5,15 @@ before_install:
   - sudo apt-get update -qq
 install:
   - sudo apt-get install libXxf86vm-dev cmake libsdl2-dev
+env:
+  matrix:
+    - EXAMPLE=gfx_cube
+    - EXAMPLE=image
+    - EXAMPLE=paint
+    - EXAMPLE=deform
+    - EXAMPLE=user_input
+    - EXAMPLE=sprite
+    - EXAMPLE=freetype
 script:
-  - (cd gfx_cube && cargo build -v)
-  - (cd image && cargo build -v)
-  - (cd paint && cargo build -v)
-  - (cd deform && cargo build -v)
-  - (cd user_input && cargo build -v)
-  - (cd sprite && cargo build -v)
-  - (cd freetype && cargo build -v)
+  - cd $EXAMPLE
+  - cargo build -v
