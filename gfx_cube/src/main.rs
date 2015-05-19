@@ -39,7 +39,7 @@ impl Vertex {
     }
 }
 
-gfx_parameters!( Params/ParamsLink {
+gfx_parameters!( Params {
     u_model_view_proj@ u_model_view_proj: [[f32; 4]; 4],
     t_color@ t_color: gfx::shade::TextureParam<R>,
 });
@@ -47,15 +47,16 @@ gfx_parameters!( Params/ParamsLink {
 //----------------------------------------
 
 fn main() {
-    let (win_width, win_height) = (640, 480);
     let window = Rc::new(RefCell::new(GlfwWindow::new(
         OpenGL::_3_2,
-        WindowSettings::new("piston-example-gfx_cube", [win_width, win_height])
+        WindowSettings::new("piston-example-gfx_cube", [640, 480])
         .exit_on_esc(true)
         .samples(4)
     ).capture_cursor(true)));
 
     let events = PistonWindow::new(window, empty_app());
+
+    let ref mut factory = events.device.borrow().spawn_factory();
 
     let vertex_data = vec![
         //top (0, 0, 1)
@@ -90,7 +91,7 @@ fn main() {
         Vertex::new([ 1, -1, -1], [0, 1]),
     ];
 
-    let mesh = events.canvas.borrow_mut().factory.create_mesh(&vertex_data);
+    let mesh = factory.create_mesh(&vertex_data);
 
     let index_data: &[u8] = &[
          0,  1,  2,  2,  3,  0, // top
@@ -101,29 +102,16 @@ fn main() {
         20, 21, 22, 22, 23, 20, // back
     ];
 
-    let slice = events.canvas.borrow_mut().factory.create_buffer_index(index_data)
-                       .to_slice(gfx::PrimitiveType::TriangleList);
+    let slice = index_data.to_slice(factory, gfx::PrimitiveType::TriangleList);
 
-    let tinfo = gfx::tex::TextureInfo {
-        width: 1, height: 1, depth: 1, levels: 1,
-        kind: gfx::tex::TextureKind::Texture2D,
-        format: gfx::tex::RGBA8,
-    };
-    let img_info = tinfo.to_image_info();
-    let texture = events.canvas.borrow_mut().factory.create_texture(tinfo).unwrap();
-    events.canvas.borrow_mut().factory.update_texture(
-        &texture,
-        &img_info,
-        &[0x20u8, 0xA0, 0xC0, 0x00],
-        Some(gfx::tex::TextureKind::Texture2D)
-    ).unwrap();
+    let texture = factory.create_texture_rgba8_static(1, 1, &[0x00_C0_A0_20]).unwrap();
 
-    let sampler = events.canvas.borrow_mut().factory.create_sampler(
+    let sampler = factory.create_sampler(
         gfx::tex::SamplerInfo::new(gfx::tex::FilterMethod::Bilinear,
-            gfx::tex::WrapMode::Clamp));
+                                   gfx::tex::WrapMode::Clamp)
+    );
 
     let program = {
-        let canvas = &mut *events.canvas.borrow_mut();
         let vertex = gfx::ShaderSource {
             glsl_120: Some(include_bytes!("cube_120.glslv")),
             glsl_150: Some(include_bytes!("cube_150.glslv")),
@@ -134,8 +122,7 @@ fn main() {
             glsl_150: Some(include_bytes!("cube_150.glslf")),
             .. gfx::ShaderSource::empty()
         };
-        canvas.factory.link_program_source(vertex, fragment,
-            &canvas.device.get_capabilities()).unwrap()
+        factory.link_program_source(vertex, fragment).unwrap()
     };
 
     let mut data = Params {
@@ -156,31 +143,30 @@ fn main() {
 
     let model = vecmath::mat4_id();
     let mut projection = get_projection(&events);
-    let mut first_person = FirstPerson::new([0.5, 0.5, 4.0],
-        FirstPersonSettings::keyboard_wasd());
+    let mut first_person = FirstPerson::new(
+        [0.5, 0.5, 4.0],
+        FirstPersonSettings::keyboard_wasd()
+    );
     let state = gfx::DrawState::new().depth(gfx::state::Comparison::LessEqual, true);
 
     for e in events {
         first_person.event(&e);
 
-        e.draw_3d(|canvas| {
+        e.draw_3d(|stream| {
             let args = e.render_args().unwrap();
-            canvas.renderer.clear(
+            stream.clear(
                 gfx::ClearData {
                     color: [0.3, 0.3, 0.3, 1.0],
                     depth: 1.0,
                     stencil: 0,
-                },
-                gfx::COLOR | gfx::DEPTH,
-                &canvas.output
+                }
             );
             data.u_model_view_proj = model_view_projection(
                 model,
                 first_person.camera(args.ext_dt).orthogonal(),
                 projection
             );
-            canvas.renderer.draw(&(&mesh, slice.clone(), &program, &data, &state),
-                &canvas.output).unwrap();
+            stream.draw(&(&mesh, slice.clone(), &program, &data, &state)).unwrap();
         });
 
         if let Some(_) = e.resize_args() {
