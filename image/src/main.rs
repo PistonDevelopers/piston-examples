@@ -1,6 +1,6 @@
 extern crate piston;
 extern crate graphics;
-extern crate sdl2_window;
+extern crate glutin_window;
 extern crate opengl_graphics;
 
 use std::path::Path;
@@ -9,13 +9,13 @@ use opengl_graphics::{
     OpenGL,
     Texture,
 };
-use sdl2_window::Sdl2Window;
+use glutin_window::GlutinWindow;
 use piston::window::WindowSettings;
 use piston::event::*;
 
 fn main() {
     let opengl = OpenGL::_3_2;
-    let window = Sdl2Window::new(
+    let window = GlutinWindow::new(
         opengl,
         WindowSettings::new("piston-example-image", [300, 300])
         .exit_on_esc(true)
