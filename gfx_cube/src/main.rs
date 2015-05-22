@@ -5,7 +5,7 @@ extern crate camera_controllers;
 #[macro_use]
 extern crate gfx;
 extern crate gfx_device_gl;
-extern crate glfw_window;
+extern crate glutin_window;
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -20,7 +20,7 @@ use camera_controllers::{
 };
 use gfx::attrib::Floater;
 use gfx::traits::*;
-use glfw_window::{ GlfwWindow, OpenGL };
+use glutin_window::{ GlutinWindow, OpenGL };
 
 //----------------------------------------
 // Cube associated data
@@ -47,7 +47,7 @@ gfx_parameters!( Params {
 //----------------------------------------
 
 fn main() {
-    let window = Rc::new(RefCell::new(GlfwWindow::new(
+    let window = Rc::new(RefCell::new(GlutinWindow::new(
         OpenGL::_3_2,
         WindowSettings::new("piston-example-gfx_cube", [640, 480])
         .exit_on_esc(true)
@@ -131,7 +131,7 @@ fn main() {
         _r: std::marker::PhantomData,
     };
 
-    let get_projection = |w: &PistonWindow<GlfwWindow>| {
+    let get_projection = |w: &PistonWindow<GlutinWindow>| {
         use piston::window::Window;
 
         let draw_size = w.window.borrow().draw_size();
