@@ -4,7 +4,11 @@ extern crate camera_controllers;
 #[macro_use]
 extern crate gfx;
 extern crate gfx_device_gl;
+extern crate sdl2_window;
 
+use std::rc::Rc;
+use std::cell::RefCell;
+use sdl2_window::Sdl2Window;
 use piston_window::*;
 use camera_controllers::{
     FirstPersonSettings,
@@ -40,12 +44,12 @@ gfx_parameters!( Params {
 //----------------------------------------
 
 fn main() {
-    let window = window(
+    let window = Rc::new(RefCell::new(Sdl2Window::new(
         OpenGL::_3_2,
         WindowSettings::new("piston-example-gfx_cube", [640, 480])
         .exit_on_esc(true)
         .samples(4)
-    );
+    )));
 
     let events = PistonWindow::new(window, empty_app())
         .capture_cursor(true);
@@ -125,7 +129,7 @@ fn main() {
         _r: std::marker::PhantomData,
     };
 
-    let get_projection = |w: &PistonWindow| {
+    let get_projection = |w: &PistonWindow<Sdl2Window>| {
         let draw_size = w.draw_size();
         CameraPerspective {
             fov: 90.0, near_clip: 0.1, far_clip: 1000.0,
