@@ -126,7 +126,7 @@ fn main() {
     };
 
     let get_projection = |w: &PistonWindow| {
-        let draw_size = w.window.borrow().draw_size();
+        let draw_size = w.draw_size();
         CameraPerspective {
             fov: 90.0, near_clip: 0.1, far_clip: 1000.0,
             aspect_ratio: (draw_size.width as f32) / (draw_size.height as f32)
