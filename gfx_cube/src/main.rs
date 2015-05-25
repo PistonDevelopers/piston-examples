@@ -1,17 +1,11 @@
-extern crate piston;
 extern crate piston_window;
 extern crate vecmath;
 extern crate camera_controllers;
 #[macro_use]
 extern crate gfx;
 extern crate gfx_device_gl;
-extern crate glutin_window;
 
-use std::cell::RefCell;
-use std::rc::Rc;
 use piston_window::*;
-use piston::event::*;
-use piston::window::{ AdvancedWindow, WindowSettings };
 use camera_controllers::{
     FirstPersonSettings,
     FirstPerson,
@@ -20,7 +14,6 @@ use camera_controllers::{
 };
 use gfx::attrib::Floater;
 use gfx::traits::*;
-use glutin_window::{ GlutinWindow, OpenGL };
 
 //----------------------------------------
 // Cube associated data
@@ -47,14 +40,15 @@ gfx_parameters!( Params {
 //----------------------------------------
 
 fn main() {
-    let window = Rc::new(RefCell::new(GlutinWindow::new(
+    let window = window(
         OpenGL::_3_2,
         WindowSettings::new("piston-example-gfx_cube", [640, 480])
         .exit_on_esc(true)
         .samples(4)
-    ).capture_cursor(true)));
+    );
 
-    let events = PistonWindow::new(window, empty_app());
+    let events = PistonWindow::new(window, empty_app())
+        .capture_cursor(true);
 
     let ref mut factory = events.device.borrow().spawn_factory();
 
@@ -131,9 +125,7 @@ fn main() {
         _r: std::marker::PhantomData,
     };
 
-    let get_projection = |w: &PistonWindow<GlutinWindow>| {
-        use piston::window::Window;
-
+    let get_projection = |w: &PistonWindow| {
         let draw_size = w.window.borrow().draw_size();
         CameraPerspective {
             fov: 90.0, near_clip: 0.1, far_clip: 1000.0,
