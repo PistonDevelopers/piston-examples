@@ -5,7 +5,7 @@ extern crate camera_controllers;
 #[macro_use]
 extern crate gfx;
 extern crate gfx_device_gl;
-extern crate glutin_window;
+extern crate sdl2_window;
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -20,7 +20,7 @@ use camera_controllers::{
 };
 use gfx::attrib::Floater;
 use gfx::traits::*;
-use glutin_window::{ GlutinWindow, OpenGL };
+use sdl2_window::{ Sdl2Window, OpenGL };
 
 //----------------------------------------
 // Cube associated data
@@ -47,7 +47,7 @@ gfx_parameters!( Params {
 //----------------------------------------
 
 fn main() {
-    let window = Rc::new(RefCell::new(GlutinWindow::new(
+    let window = Rc::new(RefCell::new(Sdl2Window::new(
         OpenGL::_3_2,
         WindowSettings::new("piston-example-gfx_cube", [640, 480])
         .exit_on_esc(true)
@@ -56,7 +56,7 @@ fn main() {
 
     let events = PistonWindow::new(window, empty_app());
 
-    let ref mut factory = events.device.borrow().spawn_factory();
+    let ref mut factory = events.factory.borrow().clone();
 
     let vertex_data = vec![
         //top (0, 0, 1)
@@ -131,7 +131,7 @@ fn main() {
         _r: std::marker::PhantomData,
     };
 
-    let get_projection = |w: &PistonWindow<GlutinWindow>| {
+    let get_projection = |w: &PistonWindow<Sdl2Window>| {
         use piston::window::Window;
 
         let draw_size = w.window.borrow().draw_size();
