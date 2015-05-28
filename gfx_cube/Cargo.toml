@@ -14,8 +14,8 @@ git = "https://github.com/PistonDevelopers/piston"
 [dependencies.piston_window]
 git = "https://github.com/PistonDevelopers/piston_window"
 
-[dependencies.pistoncore-glutin_window]
-git = "https://github.com/pistondevelopers/glutin_window"
+[dependencies.pistoncore-sdl2_window]
+git = "https://github.com/pistondevelopers/sdl2_window"
 
 [dependencies.camera_controllers]
 git = "https://github.com/PistonDevelopers/camera_controllers"
