@@ -1,6 +1,6 @@
 [package]
 name = "piston-example-sprite"
-version = "0.0.1"
+version = "0.1.0"
 authors = ["Coeuvre Wong <coeuvre@gmail.com>"]
 keywords = []
 
@@ -8,20 +8,10 @@ keywords = []
 name = "piston-example-sprite"
 path = "src/main.rs"
 
-[dependencies.pistoncore-sdl2_window]
-git = "https://github.com/pistondevelopers/sdl2_window"
-
-[dependencies.piston]
-git = "https://github.com/pistondevelopers/piston"
-
-[dependencies.piston2d-sprite]
-git = "https://github.com/pistondevelopers/sprite"
-
-[dependencies.piston2d-graphics]
-git = "https://github.com/pistondevelopers/graphics"
-
-[dependencies.piston2d-opengl_graphics]
-git = "https://github.com/pistondevelopers/opengl_graphics"
-
-[dependencies.piston-ai_behavior]
-git = "https://github.com/pistondevelopers/ai_behavior"
+[dependencies]
+pistoncore-sdl2_window = "0.1.0"
+piston = "0.1.4"
+piston2d-sprite = "0.1.0"
+piston2d-graphics = "0.1.3"
+piston2d-opengl_graphics = "0.1.0"
+piston-ai_behavior = "0.1.0"
