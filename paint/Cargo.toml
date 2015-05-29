@@ -1,6 +1,6 @@
 [package]
 name = "piston-example-paint"
-version = "0.0.1"
+version = "0.1.0"
 authors = ["Sven Nilsen <bvssvni@gmail.com>"]
 keywords = []
 
@@ -8,17 +8,9 @@ keywords = []
 name = "piston-example-paint"
 path = "src/main.rs"
 
-[dependencies.pistoncore-sdl2_window]
-git = "https://github.com/pistondevelopers/sdl2_window"
-
-[dependencies.piston]
-git = "https://github.com/pistondevelopers/piston"
-
-[dependencies.piston2d-opengl_graphics]
-git = "https://github.com/pistondevelopers/opengl_graphics"
-
-[dependencies.piston2d-graphics]
-git = "https://github.com/pistondevelopers/graphics"
-
-[dependencies.image]
-git = "https://github.com/pistondevelopers/image"
+[dependencies]
+pistoncore-sdl2_window = "0.1.0"
+piston = "0.1.4"
+piston2d-opengl_graphics = "0.1.0"
+piston2d-graphics = "0.1.4"
+image = "0.3.10"
