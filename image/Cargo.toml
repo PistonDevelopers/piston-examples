@@ -8,14 +8,8 @@ keywords = []
 name = "piston-example-image"
 path = "src/main.rs"
 
-[dependencies.piston]
-git = "https://github.com/pistondevelopers/piston"
-
-[dependencies.pistoncore-sdl2_window]
-git = "https://github.com/pistondevelopers/sdl2_window"
-
-[dependencies.piston2d-opengl_graphics]
-git = "https://github.com/pistondevelopers/opengl_graphics"
-
-[dependencies.piston2d-graphics]
-git = "https://github.com/pistondevelopers/graphics"
+[dependencies]
+piston = "0.1.4"
+pistoncore-sdl2_window = "0.1.0"
+piston2d-opengl_graphics = "0.1.0"
+piston2d-graphics = "0.1.0"
