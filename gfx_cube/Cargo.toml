@@ -1,6 +1,6 @@
 [package]
 name = "piston-example-gfx_cube"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Your Name <your@email.com>"]
 keywords = []
 
@@ -9,9 +9,8 @@ name = "piston-example-gfx_cube"
 path = "src/main.rs"
 
 [dependencies]
-piston = "0.1.4"
 piston_window = "0.1.0"
-pistoncore-sdl2_window = "0.1.0"
+pistoncore-sdl2_window = "0.2.0"
 camera_controllers = "0.1.0"
 vecmath = "0.1.0"
 gfx = "0.6.1"
