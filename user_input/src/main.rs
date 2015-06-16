@@ -24,11 +24,8 @@ use glutin_window::GlutinWindow as Window;
 
 fn main() {
     let opengl = OpenGL::_3_2;
-    let window = Window::new(
-        opengl,
-        WindowSettings::new("piston-example-user_input", [600, 600])
-        .exit_on_esc(true)
-    );
+    let window: Window = WindowSettings::new("piston-example-user_input", [600, 600])
+        .exit_on_esc(true).opengl(opengl).into();
 
     println!("Press C to turn capture cursor on/off");
 
