@@ -16,6 +16,10 @@ path = "src/draw_state.rs"
 name = "sprite"
 path = "src/sprite.rs"
 
+[[bin]]
+name = "image"
+path = "src/image.rs"
+
 [dependencies]
 piston_window = "0.5.0"
 find_folder = "0.2.0"
