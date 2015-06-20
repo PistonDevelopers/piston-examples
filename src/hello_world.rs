@@ -5,8 +5,8 @@ use piston_window::*;
 
 fn main() {
     let window: PistonWindow = WindowSettings::new(
-            "gfx_graphics: text_test",
-            [300, 300]
+            "piston: hello_world",
+            [200, 200]
         )
         .exit_on_esc(true)
         .into();
@@ -24,7 +24,7 @@ fn main() {
 
             clear([0.0, 0.0, 0.0, 1.0], g);
             text::Text::colored([0.0, 1.0, 0.0, 1.0], 32).draw(
-                "Hello gfx_graphics!",
+                "Hello world!",
                 &mut glyphs,
                 &c.draw_state,
                 transform, g

@@ -9,7 +9,7 @@ fn main() {
     println!("Press S to change clip inside/out");
 
     let window: PistonWindow = WindowSettings::new(
-            "gfx_graphics: draw_state_test",
+            "piston: draw_state",
             [600, 600]
         )
         .exit_on_esc(true)

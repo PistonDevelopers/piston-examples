@@ -1,16 +1,16 @@
 [package]
-name = "piston-example-gfx_graphics_examples"
+name = "piston-examples"
 version = "0.0.0"
 authors = ["bvssvni <bvssvni@gmail.com>"]
 keywords = []
 
 [[bin]]
-name = "draw_state_test"
-path = "src/draw_state_test.rs"
+name = "hello_world"
+path = "src/hello_world.rs"
 
 [[bin]]
-name = "text_test"
-path = "src/text_test.rs"
+name = "draw_state"
+path = "src/draw_state.rs"
 
 [dependencies]
 piston_window = "0.5.0"
