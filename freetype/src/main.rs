@@ -3,8 +3,8 @@ extern crate freetype as ft;
 extern crate sdl2_window;
 extern crate opengl_graphics;
 extern crate piston;
+extern crate find_folder;
 
-use std::path::Path;
 use sdl2_window::Sdl2Window;
 use opengl_graphics::{ GlGraphics, Texture, OpenGL };
 use graphics::math::Matrix2d;
@@ -38,14 +38,16 @@ fn render_text(face: &mut ft::Face, gl: &mut GlGraphics, t: Matrix2d, text: &str
 
 fn main() {
     let opengl = OpenGL::_3_2;
-    let window = Sdl2Window::new(
-        opengl,
+    let window: Sdl2Window = 
         WindowSettings::new("piston-example-freetype", [300, 300])
         .exit_on_esc(true)
-    );
+        .opengl(opengl)
+        .into();
 
+    let assets = find_folder::Search::ParentsThenKids(3, 3)
+        .for_folder("assets").unwrap();
     let freetype = ft::Library::init().unwrap();
-    let font = Path::new("./bin/assets/FiraSans-Regular.ttf");
+    let font = assets.join("FiraSans-Regular.ttf");
     let mut face = freetype.new_face(&font, 0).unwrap();
     face.set_pixel_sizes(0, 48).unwrap();
 
