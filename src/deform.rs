@@ -1,20 +1,9 @@
-extern crate piston;
-extern crate graphics;
-extern crate opengl_graphics;
+extern crate piston_window;
 extern crate drag_controller;
-extern crate sdl2_window;
+extern crate find_folder;
 
-use std::path::Path;
-
-use graphics::ImageSize;
-use drag_controller::{
-    DragController,
-    Drag
-};
-use opengl_graphics::{ GlGraphics, OpenGL, Texture };
-use sdl2_window::Sdl2Window as Window;
-use piston::window::WindowSettings;
-use piston::event::*;
+use piston_window::*;
+use drag_controller::{ DragController, Drag };
 
 fn main() {
     println!("Click in the red square and drag.");
@@ -22,20 +11,26 @@ fn main() {
     println!("Reset grid with R.");
 
     let opengl = OpenGL::_3_2;
-    let window = Window::new(
-        opengl,
+    let window: PistonWindow = 
         WindowSettings::new("piston-example-deform", [300, 300])
         .exit_on_esc(true)
+        .opengl(opengl)
         .samples(4)
-    );
+        .into();
 
-    let image = Path::new("./bin/assets/rust-logo.png");
-    let image = Texture::from_path(&image).unwrap();
+    let assets = find_folder::Search::ParentsThenKids(3, 3)
+        .for_folder("assets").unwrap();
+    let image = assets.join("rust.png");
+    let image = Texture::from_path(
+            &mut *window.factory.borrow_mut(),
+            &image,
+            &TextureSettings::new()
+        ).unwrap();
 
     let (width, height) = image.get_size();
     let width = width as f64;
     let height = height as f64;
-    let mut grid = graphics::deform::DeformGrid::new(
+    let mut grid = deform::DeformGrid::new(
         [0.0, 0.0, width, height],
         20, 20
     );
@@ -43,8 +38,7 @@ fn main() {
     let mut drag = DragController::new();
     let mut draw_grid = true;
 
-    let mut gl = GlGraphics::new(opengl);
-    for e in window.events() {
+    for e in window {
         drag.event(&e, |action| {
             match action {
                 Drag::Start(x, y) => {
@@ -75,8 +69,8 @@ fn main() {
             }
         });
         if let Some(button) = e.press_args() {
-            use piston::input::Button::Keyboard;
-            use piston::input::keyboard::Key;
+            use piston_window::Button::Keyboard;
+            use piston_window::Key;
 
             if button == Keyboard(Key::G) {
                 draw_grid = !draw_grid;
@@ -88,10 +82,8 @@ fn main() {
                 println!("Reset grid");
             }
         }
-        if let Some(args) = e.render_args() {
-            gl.draw(args.viewport(), |c, g| {
-
-            graphics::clear(graphics::color::WHITE, g);
+        e.draw_2d(|c, g| {
+            clear(color::WHITE, g);
 
             // Draw deformed image.
             grid.draw_image(&image, &c.draw_state, c.transform, g);
@@ -99,13 +91,13 @@ fn main() {
             if draw_grid {
                 // Draw grid.
                 grid.draw_vertical_lines(
-                    &graphics::Line::new([0.0, 1.0, 0.0, 1.0], 0.5),
+                    &Line::new([0.0, 1.0, 0.0, 1.0], 0.5),
                     &c.draw_state,
                     c.transform,
                     g
                 );
                 grid.draw_horizontal_lines(
-                    &graphics::Line::new([0.0, 0.0, 1.0, 1.0], 0.5),
+                    &Line::new([0.0, 0.0, 1.0, 1.0], 0.5),
                     &c.draw_state,
                     c.transform,
                     g
@@ -113,14 +105,14 @@ fn main() {
             }
 
             // Draw rect of the original grid.
-            graphics::Rectangle::new_border([1.0, 0.0, 0.0, 1.0], 1.5)
+            Rectangle::new_border([1.0, 0.0, 0.0, 1.0], 1.5)
                 .draw([0.0, 0.0, width, height], &c.draw_state, c.transform, g);
 
             // Draw control points.
-            let original = graphics::Ellipse::new([1.0, 0.0, 0.0, 0.5]);
-            let current = graphics::Ellipse::new([0.0, 0.0, 0.0, 0.5]);
+            let original = Ellipse::new([1.0, 0.0, 0.0, 0.5]);
+            let current = Ellipse::new([0.0, 0.0, 0.0, 0.5]);
             for i in (0..grid.ps.len()) {
-                use graphics::ellipse::circle;
+                use piston_window::ellipse::circle;
 
                 // Original positions.
                 let x = grid.ps[i][0];
@@ -133,8 +125,7 @@ fn main() {
                 current.draw(circle(x, y, 3.0), &c.draw_state, c.transform, g);
             };
 
-            });
-        } // end render
+        }); // end draw_2d
     }
 }
 

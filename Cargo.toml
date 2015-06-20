@@ -24,10 +24,15 @@ path = "src/image.rs"
 name = "paint"
 path = "src/paint.rs"
 
+[[bin]]
+name = "deform"
+path = "src/deform.rs"
+
 [dependencies]
 piston_window = "0.5.0"
 find_folder = "0.2.0"
 piston-ai_behavior = "0.2.0"
 piston2d-sprite = "0.2.0"
 image = "0.3.11"
+piston2d-drag_controller = "0.2.0"
 
