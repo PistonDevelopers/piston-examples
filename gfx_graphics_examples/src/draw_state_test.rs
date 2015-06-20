@@ -1,9 +1,8 @@
 extern crate piston_window;
+extern crate find_folder;
 
-use std::path::Path;
 use piston_window::draw_state::BlendPreset;
 use piston_window::*;
-use std::ops::DerefMut;
 
 fn main() {
     println!("Press A to change blending");
@@ -17,10 +16,12 @@ fn main() {
         .samples(4)
         .into();
 
+    let assets = find_folder::Search::ParentsThenKids(3, 3)
+        .for_folder("assets").unwrap();
     let mut blend = BlendPreset::Alpha;
     let mut clip_inside = true;
-    let rust_logo = Texture::from_path(window.factory.borrow_mut().deref_mut(),
-                                       &Path::new("./assets/rust.png"),
+    let rust_logo = Texture::from_path(&mut *window.factory.borrow_mut(),
+                                       assets.join("rust.png"),
                                        &TextureSettings::new()).unwrap();
     for e in window {
         e.draw_2d(|c, g| {
