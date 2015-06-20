@@ -1,18 +1,7 @@
-extern crate piston;
-extern crate graphics;
 extern crate piston_window;
-extern crate glutin_window;
-extern crate gfx_device_gl;
-extern crate gfx_graphics;
 
-use std::cell::RefCell;
-use std::rc::Rc;
 use std::path::Path;
-use piston::window::WindowSettings;
-use piston::event::*;
-use gfx_graphics::{ Texture, TextureSettings };
-use glutin_window::{ GlutinWindow, OpenGL };
-use graphics::draw_state::BlendPreset;
+use piston_window::draw_state::BlendPreset;
 use piston_window::*;
 use std::ops::DerefMut;
 
@@ -20,28 +9,20 @@ fn main() {
     println!("Press A to change blending");
     println!("Press S to change clip inside/out");
 
-    let window = Rc::new(RefCell::new(
-        GlutinWindow::new(
-            OpenGL::_3_2,
-            WindowSettings::new(
-                "gfx_graphics: draw_state_test",
-                [600, 600]
-            )
-            .exit_on_esc(true)
-            .samples(4)
+    let window: PistonWindow = WindowSettings::new(
+            "gfx_graphics: draw_state_test",
+            [600, 600]
         )
-    ));
+        .exit_on_esc(true)
+        .samples(4)
+        .into();
 
-    let events = PistonWindow::new(window, empty_app());
     let mut blend = BlendPreset::Alpha;
     let mut clip_inside = true;
-    let rust_logo = Texture::from_path(events.factory.borrow_mut().deref_mut(),
+    let rust_logo = Texture::from_path(window.factory.borrow_mut().deref_mut(),
                                        &Path::new("./assets/rust.png"),
                                        &TextureSettings::new()).unwrap();
-    for e in events {
-        use piston::input::*;
-        use graphics::*;
-
+    for e in window {
         e.draw_2d(|c, g| {
             clear([0.8, 0.8, 0.8, 1.0], g);
             g.clear_stencil(0);
