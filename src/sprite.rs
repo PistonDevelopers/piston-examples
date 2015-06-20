@@ -1,13 +1,11 @@
-extern crate piston;
+extern crate piston_window;
 extern crate ai_behavior;
 extern crate sprite;
-extern crate graphics;
-extern crate sdl2_window;
-extern crate opengl_graphics;
 extern crate find_folder;
 
 use std::rc::Rc;
 
+use piston_window::*;
 use sprite::*;
 use ai_behavior::{
     Action,
@@ -17,19 +15,10 @@ use ai_behavior::{
     While,
 };
 
-use sdl2_window::Sdl2Window;
-use opengl_graphics::{
-    GlGraphics,
-    OpenGL,
-    Texture,
-};
-use piston::window::WindowSettings;
-use piston::event::*;
-
 fn main() {
     let (width, height) = (300, 300);
     let opengl = OpenGL::_3_2;
-    let window: Sdl2Window =
+    let window: PistonWindow =
         WindowSettings::new("piston-example-sprite", (width, height))
         .exit_on_esc(true)
         .opengl(opengl)
@@ -39,8 +28,11 @@ fn main() {
         .for_folder("assets").unwrap();
     let id;
     let mut scene = Scene::new();
-    let tex = assets.join("rust.png");
-    let tex = Rc::new(Texture::from_path(&tex).unwrap());
+    let tex = Rc::new(Texture::from_path(
+            &mut *window.factory.borrow_mut(),
+            assets.join("rust.png"),
+            &TextureSettings::new()
+        ).unwrap());
     let mut sprite = Sprite::from_texture(tex.clone());
     sprite.set_position(width as f64 / 2.0, height as f64 / 2.0);
 
@@ -69,17 +61,13 @@ fn main() {
 
     println!("Press any key to pause/resume the animation!");
 
-    let ref mut gl = GlGraphics::new(opengl);
-    for e in window.events() {
+    for e in window {
         scene.event(&e);
 
-        if let Some(args) = e.render_args() {
-            use graphics::*;
-            gl.draw(args.viewport(), |c, gl| {
-                graphics::clear([1.0, 1.0, 1.0, 1.0], gl);
-                scene.draw(c.transform, gl);
-            });
-        }
+        e.draw_2d(|c, g| {
+            clear([1.0, 1.0, 1.0, 1.0], g);
+            scene.draw(c.transform, g);
+        });
         if let Some(_) = e.press_args() {
             scene.toggle(id, &seq);
             scene.toggle(id, &rotate);

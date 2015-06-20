@@ -12,6 +12,13 @@ path = "src/hello_world.rs"
 name = "draw_state"
 path = "src/draw_state.rs"
 
+[[bin]]
+name = "sprite"
+path = "src/sprite.rs"
+
 [dependencies]
 piston_window = "0.5.0"
 find_folder = "0.2.0"
+piston-ai_behavior = "0.2.0"
+piston2d-sprite = "0.2.0"
+
