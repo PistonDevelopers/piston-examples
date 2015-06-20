@@ -20,9 +20,14 @@ path = "src/sprite.rs"
 name = "image"
 path = "src/image.rs"
 
+[[bin]]
+name = "paint"
+path = "src/paint.rs"
+
 [dependencies]
 piston_window = "0.5.0"
 find_folder = "0.2.0"
 piston-ai_behavior = "0.2.0"
 piston2d-sprite = "0.2.0"
+image = "0.3.11"
 
