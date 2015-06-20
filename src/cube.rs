@@ -6,6 +6,7 @@ extern crate gfx;
 extern crate gfx_device_gl;
 extern crate sdl2_window;
 
+use sdl2_window::Sdl2Window;
 use piston_window::*;
 use camera_controllers::{
     FirstPersonSettings,
@@ -15,7 +16,6 @@ use camera_controllers::{
 };
 use gfx::attrib::Floater;
 use gfx::traits::*;
-use sdl2_window::Sdl2Window;
 
 //----------------------------------------
 // Cube associated data
@@ -43,7 +43,7 @@ gfx_parameters!( Params {
 
 fn main() {
     let mut events: PistonWindow<Sdl2Window> =
-        WindowSettings::new("piston-example-gfx_cube", [640, 480])
+        WindowSettings::new("piston: cube", [640, 480])
         .exit_on_esc(true)
         .samples(4)
         .into();
@@ -106,13 +106,13 @@ fn main() {
 
     let program = {
         let vertex = gfx::ShaderSource {
-            glsl_120: Some(include_bytes!("cube_120.glslv")),
-            glsl_150: Some(include_bytes!("cube_150.glslv")),
+            glsl_120: Some(include_bytes!("../assets/cube_120.glslv")),
+            glsl_150: Some(include_bytes!("../assets/cube_150.glslv")),
             .. gfx::ShaderSource::empty()
         };
         let fragment = gfx::ShaderSource {
-            glsl_120: Some(include_bytes!("cube_120.glslf")),
-            glsl_150: Some(include_bytes!("cube_150.glslf")),
+            glsl_120: Some(include_bytes!("../assets/cube_120.glslf")),
+            glsl_150: Some(include_bytes!("../assets/cube_150.glslf")),
             .. gfx::ShaderSource::empty()
         };
         factory.link_program_source(vertex, fragment).unwrap()
