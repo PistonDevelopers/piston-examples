@@ -19,7 +19,7 @@ fn main() {
     let (width, height) = (300, 300);
     let opengl = OpenGL::_3_2;
     let window: PistonWindow =
-        WindowSettings::new("piston-example-sprite", (width, height))
+        WindowSettings::new("piston: sprite", (width, height))
         .exit_on_esc(true)
         .opengl(opengl)
         .into();
