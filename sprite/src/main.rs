@@ -4,9 +4,8 @@ extern crate sprite;
 extern crate graphics;
 extern crate sdl2_window;
 extern crate opengl_graphics;
+extern crate find_folder;
 
-use std::path::Path;
-use std::cell::RefCell;
 use std::rc::Rc;
 
 use sprite::*;
@@ -30,15 +29,17 @@ use piston::event::*;
 fn main() {
     let (width, height) = (300, 300);
     let opengl = OpenGL::_3_2;
-    let window = Sdl2Window::new(
-        opengl,
+    let window: Sdl2Window =
         WindowSettings::new("piston-example-sprite", (width, height))
         .exit_on_esc(true)
-    );
+        .opengl(opengl)
+        .into();
 
+    let assets = find_folder::Search::ParentsThenKids(3, 3)
+        .for_folder("assets").unwrap();
     let id;
     let mut scene = Scene::new();
-    let tex = Path::new("./bin/assets/rust-logo.png");
+    let tex = assets.join("rust.png");
     let tex = Rc::new(Texture::from_path(&tex).unwrap());
     let mut sprite = Sprite::from_texture(tex.clone());
     sprite.set_position(width as f64 / 2.0, height as f64 / 2.0);
@@ -69,7 +70,6 @@ fn main() {
     println!("Press any key to pause/resume the animation!");
 
     let ref mut gl = GlGraphics::new(opengl);
-    let window = Rc::new(RefCell::new(window));
     for e in window.events() {
         scene.event(&e);
 
