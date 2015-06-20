@@ -1,6 +1,6 @@
 extern crate piston_window;
+extern crate find_folder;
 
-use std::path::Path;
 use piston_window::*;
 
 fn main() {
@@ -11,7 +11,10 @@ fn main() {
         .exit_on_esc(true)
         .into();
 
-    let ref font = Path::new("assets/FiraSans-Regular.ttf");
+    let assets = find_folder::Search::ParentsThenKids(3, 3)
+        .for_folder("assets").unwrap();
+    println!("{:?}", assets);
+    let ref font = assets.join("FiraSans-Regular.ttf");
     let factory = window.factory.borrow().clone();
     let mut glyphs = Glyphs::new(font, factory).unwrap();
 
