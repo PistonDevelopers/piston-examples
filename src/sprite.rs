@@ -31,6 +31,7 @@ fn main() {
     let tex = Rc::new(Texture::from_path(
             &mut *window.factory.borrow_mut(),
             assets.join("rust.png"),
+            Flip::None,
             &TextureSettings::new()
         ).unwrap());
     let mut sprite = Sprite::from_texture(tex.clone());

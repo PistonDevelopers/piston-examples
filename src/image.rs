@@ -17,6 +17,7 @@ fn main() {
     let rust_logo = Texture::from_path(
             &mut *window.factory.borrow_mut(),
             &rust_logo,
+            Flip::None,
             &TextureSettings::new()
         ).unwrap();
     for e in window {

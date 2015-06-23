@@ -18,10 +18,8 @@ fn main() {
     let mut texture = Texture::from_image(
             &mut *window.factory.borrow_mut(),
             &canvas,
-            false, // convert gamma
-            false, // compress
-            false, // generate mipmap
-        );
+            &TextureSettings::new()
+        ).unwrap();
     for e in window {
         e.draw_2d(|c, g| {
             clear([1.0; 4], g);
@@ -42,7 +40,7 @@ fn main() {
                 let (x, y) = (pos[0] as u32, pos[1] as u32);
                 if x < width && y < height {
                     canvas.put_pixel(x, y, im::Rgba([0, 0, 0, 255]));
-                    texture.update(&mut*e.factory.borrow_mut(), &canvas);
+                    texture.update(&mut*e.factory.borrow_mut(), &canvas).unwrap();
                 }
             };
         }
