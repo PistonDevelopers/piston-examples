@@ -22,6 +22,7 @@ fn main() {
     let mut clip_inside = true;
     let rust_logo = Texture::from_path(&mut *window.factory.borrow_mut(),
                                        assets.join("rust.png"),
+                                       Flip::None,
                                        &TextureSettings::new()).unwrap();
     for e in window {
         e.draw_2d(|c, g| {

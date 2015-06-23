@@ -24,6 +24,7 @@ fn main() {
     let image = Texture::from_path(
             &mut *window.factory.borrow_mut(),
             &image,
+            Flip::None,
             &TextureSettings::new()
         ).unwrap();
 
