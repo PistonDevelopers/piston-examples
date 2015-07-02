@@ -10,7 +10,7 @@ install:
   - sudo apt-get install libXxf86vm-dev cmake libsdl2-dev
 env:
   matrix:
-    - EXAMPLE=src
+    - EXAMPLE=
     - EXAMPLE=user_input
     - EXAMPLE=freetype
 script:
