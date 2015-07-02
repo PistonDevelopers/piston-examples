@@ -18,5 +18,5 @@ env:
     - EXAMPLE=sprite
     - EXAMPLE=freetype
 script:
-  - cd $EXAMPLE
+  - cd src/$EXAMPLE
   - cargo build -v
