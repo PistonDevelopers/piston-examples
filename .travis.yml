@@ -8,11 +8,10 @@ before_install:
   - sudo apt-get update -qq
 install:
   - sudo apt-get install libXxf86vm-dev cmake libsdl2-dev
-env:
-  matrix:
-    - EXAMPLE=
-    - EXAMPLE=user_input
-    - EXAMPLE=freetype
 script:
-  - cd $EXAMPLE
+  - cd user_input
+  - cargo build -v
+  - cd ../freetype
+  - cargo build -v
+  - cd ..
   - cargo build -v
