@@ -9,9 +9,8 @@ before_install:
 install:
   - sudo apt-get install libXxf86vm-dev cmake libsdl2-dev
 script:
+  - cargo build -v
   - cd user_input
   - cargo build -v
   - cd ../freetype
-  - cargo build -v
-  - cd ..
   - cargo build -v
