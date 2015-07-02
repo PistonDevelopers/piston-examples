@@ -14,5 +14,5 @@ env:
     - EXAMPLE=user_input
     - EXAMPLE=freetype
 script:
-  - cd $EXAMPLE
+  - cd src/$EXAMPLE
   - cargo build -v
