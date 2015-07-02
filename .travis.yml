@@ -10,12 +10,8 @@ install:
   - sudo apt-get install libXxf86vm-dev cmake libsdl2-dev
 env:
   matrix:
-    - EXAMPLE=src/gfx_cube
-    - EXAMPLE=src/image
-    - EXAMPLE=src/paint
-    - EXAMPLE=src/deform
+    - EXAMPLE=src
     - EXAMPLE=user_input
-    - EXAMPLE=src/sprite
     - EXAMPLE=freetype
 script:
   - cd $EXAMPLE
