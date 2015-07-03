@@ -10,9 +10,9 @@ install:
   - sudo apt-get install libXxf86vm-dev cmake libsdl2-dev
 env:
   matrix:
-    - EXAMPLE=
+    - EXAMPLE=src
     - EXAMPLE=user_input
     - EXAMPLE=freetype
 script:
-  - cd src/$EXAMPLE
+  - cd $EXAMPLE
   - cargo build -v
