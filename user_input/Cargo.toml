@@ -10,6 +10,8 @@ path = "src/main.rs"
 
 [dependencies]
 piston = "0.2.0"
+piston2d-opengl_graphics = "0.1.0"
+piston2d-graphics = "0.1.4"
 
 [dependencies.pistoncore-sdl2_window]
 version = "0.1.0"
@@ -22,10 +24,6 @@ optional = true
 [dependencies.pistoncore-glutin_window]
 version = "0.2.1"
 optional = true
-
-[dependencies]
-piston2d-opengl_graphics = "0.1.0"
-piston2d-graphics = "0.1.4"
 
 [features]
 default = ["include_glutin"]
