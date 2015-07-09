@@ -10,13 +10,9 @@ install:
   - sudo apt-get install libXxf86vm-dev cmake libsdl2-dev
 env:
   matrix:
-    - EXAMPLE=gfx_cube
-    - EXAMPLE=image
-    - EXAMPLE=paint
-    - EXAMPLE=deform
     - EXAMPLE=user_input
-    - EXAMPLE=sprite
     - EXAMPLE=freetype
 script:
+  - cargo build -v
   - cd $EXAMPLE
   - cargo build -v
