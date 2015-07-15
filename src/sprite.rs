@@ -17,7 +17,7 @@ use ai_behavior::{
 
 fn main() {
     let (width, height) = (300, 300);
-    let opengl = OpenGL::_3_2;
+    let opengl = OpenGL::V3_2;
     let window: PistonWindow =
         WindowSettings::new("piston: sprite", (width, height))
         .exit_on_esc(true)

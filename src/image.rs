@@ -4,7 +4,7 @@ extern crate find_folder;
 use piston_window::*;
 
 fn main() {
-    let opengl = OpenGL::_3_2;
+    let opengl = OpenGL::V3_2;
     let window: PistonWindow =
         WindowSettings::new("piston: image", [300, 300])
         .exit_on_esc(true)

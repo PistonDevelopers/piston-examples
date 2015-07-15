@@ -10,7 +10,7 @@ fn main() {
     println!("Toggle grid with G.");
     println!("Reset grid with R.");
 
-    let opengl = OpenGL::_3_2;
+    let opengl = OpenGL::V3_2;
     let window: PistonWindow = 
         WindowSettings::new("piston-example-deform", [300, 300])
         .exit_on_esc(true)
