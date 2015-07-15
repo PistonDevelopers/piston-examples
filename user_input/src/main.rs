@@ -23,7 +23,7 @@ use glfw_window::GlfwWindow as Window;
 use glutin_window::GlutinWindow as Window;
 
 fn main() {
-    let opengl = OpenGL::_3_2;
+    let opengl = OpenGL::V3_2;
     let window: Window = WindowSettings::new("piston-example-user_input", [600, 600])
         .exit_on_esc(true).opengl(opengl).into();
 
