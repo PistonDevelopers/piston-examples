@@ -37,7 +37,7 @@ fn render_text(face: &mut ft::Face, gl: &mut GlGraphics, t: Matrix2d, text: &str
 }
 
 fn main() {
-    let opengl = OpenGL::_3_2;
+    let opengl = OpenGL::V3_2;
     let window: Sdl2Window = 
         WindowSettings::new("piston-example-freetype", [300, 300])
         .exit_on_esc(true)
