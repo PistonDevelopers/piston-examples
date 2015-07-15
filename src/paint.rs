@@ -5,7 +5,7 @@ use im::GenericImage;
 use piston_window::*;
 
 fn main() {
-    let opengl = OpenGL::_3_2;
+    let opengl = OpenGL::V3_2;
     let (width, height) = (300, 300);
     let window: PistonWindow =
         WindowSettings::new("piston: paint", (width, height))
