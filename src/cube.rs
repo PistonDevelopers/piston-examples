@@ -42,7 +42,7 @@ gfx_parameters!( Params {
 //----------------------------------------
 
 fn main() {
-    let mut events: PistonWindow<Sdl2Window> =
+    let mut events: PistonWindow<(), Sdl2Window> =
         WindowSettings::new("piston: cube", [640, 480])
         .exit_on_esc(true)
         .samples(4)
@@ -124,7 +124,7 @@ fn main() {
         _r: std::marker::PhantomData,
     };
 
-    let get_projection = |w: &PistonWindow<Sdl2Window>| {
+    let get_projection = |w: &PistonWindow<(), Sdl2Window>| {
         let draw_size = w.window.borrow().draw_size();
         CameraPerspective {
             fov: 90.0, near_clip: 0.1, far_clip: 1000.0,
