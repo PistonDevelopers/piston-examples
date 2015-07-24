@@ -13,8 +13,8 @@ use graphics::{ Context, Graphics };
 use std::rc::Rc;
 use std::cell::RefCell;
 use piston::window::{ AdvancedWindow, WindowSettings };
-use piston::input::{ Button, Key };
-use piston::event::*;
+use piston::input::*;
+use piston::event_loop::*;
 #[cfg(feature = "include_sdl2")]
 use sdl2_window::Sdl2Window as Window;
 #[cfg(feature = "include_glfw")]
