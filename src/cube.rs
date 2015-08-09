@@ -46,7 +46,8 @@ fn main() {
         WindowSettings::new("piston: cube", [640, 480])
         .exit_on_esc(true)
         .samples(4)
-        .into();
+        .build()
+        .unwrap();
     events.set_capture_cursor(true);
 
     let ref mut factory = events.factory.borrow().clone();

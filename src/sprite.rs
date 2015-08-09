@@ -22,7 +22,8 @@ fn main() {
         WindowSettings::new("piston: sprite", (width, height))
         .exit_on_esc(true)
         .opengl(opengl)
-        .into();
+        .build()
+        .unwrap();
 
     let assets = find_folder::Search::ParentsThenKids(3, 3)
         .for_folder("assets").unwrap();

@@ -9,7 +9,8 @@ fn main() {
             [200, 200]
         )
         .exit_on_esc(true)
-        .into();
+        .build()
+        .unwrap();
 
     let assets = find_folder::Search::ParentsThenKids(3, 3)
         .for_folder("assets").unwrap();

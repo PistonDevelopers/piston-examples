@@ -16,7 +16,8 @@ fn main() {
         .exit_on_esc(true)
         .opengl(opengl)
         .samples(4)
-        .into();
+        .build()
+        .unwrap();
 
     let assets = find_folder::Search::ParentsThenKids(3, 3)
         .for_folder("assets").unwrap();
