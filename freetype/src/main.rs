@@ -9,7 +9,8 @@ use sdl2_window::Sdl2Window;
 use opengl_graphics::{ GlGraphics, Texture, OpenGL };
 use graphics::math::Matrix2d;
 use piston::window::WindowSettings;
-use piston::event::*;
+use piston::input::*;
+use piston::event_loop::Events;
 
 fn render_text(face: &mut ft::Face, gl: &mut GlGraphics, t: Matrix2d, text: &str) {
     use graphics::*;
@@ -42,7 +43,8 @@ fn main() {
         WindowSettings::new("piston-example-freetype", [300, 300])
         .exit_on_esc(true)
         .opengl(opengl)
-        .into();
+        .build()
+        .unwrap();
 
     let assets = find_folder::Search::ParentsThenKids(3, 3)
         .for_folder("assets").unwrap();
