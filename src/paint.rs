@@ -11,7 +11,8 @@ fn main() {
         WindowSettings::new("piston: paint", (width, height))
         .exit_on_esc(true)
         .opengl(opengl)
-        .into();
+        .build()
+        .unwrap();
 
     let mut canvas = im::ImageBuffer::new(width, height);
     let mut draw = false;

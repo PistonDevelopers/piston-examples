@@ -10,7 +10,7 @@ fn main() {
     let frames = 200;
     let size = 32.0;
 
-    let window: PistonWindow = WindowSettings::new("piston", [1024; 2]).into();
+    let window: PistonWindow = WindowSettings::new("piston", [1024; 2]).build().unwrap();
 
     let textures = {
         let mut factory = window.factory.borrow_mut();
