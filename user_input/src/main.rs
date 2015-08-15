@@ -64,6 +64,10 @@ fn main() {
             if focused { println!("Gained focus"); }
             else { println!("Lost focus"); }
         };
+        if let Some(cursor) = e.cursor_args() {
+            if cursor { println!("Mouse entered"); }
+            else { println!("Mouse leaved"); }
+        };
         if let Some(args) = e.render_args() {
             gl.draw(args.viewport(), |c, g| {
                     graphics::clear([1.0; 4], g);
