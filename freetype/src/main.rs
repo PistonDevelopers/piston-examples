@@ -25,7 +25,7 @@ fn render_text(face: &mut ft::Face, gl: &mut GlGraphics, t: Matrix2d, text: &str
         let texture = Texture::from_memory_alpha(bitmap.buffer(),
                                                  bitmap.width() as u32,
                                                  bitmap.rows() as u32).unwrap();
-        Image::new_colored(color::BLACK).draw(
+        Image::new_color(color::BLACK).draw(
             &texture,
             default_draw_state(),
             t.trans((x + g.bitmap_left()) as f64, (y - g.bitmap_top()) as f64),
