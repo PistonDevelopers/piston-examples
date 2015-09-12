@@ -47,24 +47,21 @@ fn main() {
             if let Some(pos) = e.mouse_cursor_args() {
                 let (x, y) = (pos[0] as f32, pos[1] as f32);
 
-                match last_pos {
-                    Some(p) => {
-                        let (last_x, last_y) = (p[0] as f32, p[1] as f32);
-                        let distance = vec2_len(vec2_sub(p, pos)) as u32;
+                if let Some(p) = last_pos {
+                    let (last_x, last_y) = (p[0] as f32, p[1] as f32);
+                    let distance = vec2_len(vec2_sub(p, pos)) as u32;
 
-                        for i in 0..distance {
-                            let diff_x = x - last_x;
-                            let diff_y = y - last_y;
-                            let delta = i as f32 / distance as f32;
-                            let new_x = (last_x + (diff_x * delta)) as u32;
-                            let new_y = (last_y + (diff_y * delta)) as u32;
-                            if new_x < width && new_y < height {
-                                canvas.put_pixel(new_x, new_y, im::Rgba([0, 0, 0, 255]));
-                                texture.update(&mut*e.factory.borrow_mut(), &canvas).unwrap();
-                            };
+                    for i in 0..distance {
+                        let diff_x = x - last_x;
+                        let diff_y = y - last_y;
+                        let delta = i as f32 / distance as f32;
+                        let new_x = (last_x + (diff_x * delta)) as u32;
+                        let new_y = (last_y + (diff_y * delta)) as u32;
+                        if new_x < width && new_y < height {
+                            canvas.put_pixel(new_x, new_y, im::Rgba([0, 0, 0, 255]));
+                            texture.update(&mut*e.factory.borrow_mut(), &canvas).unwrap();
                         };
-                    },
-                    None => {}
+                    };
                 };
 
                 last_pos = Some(pos)
