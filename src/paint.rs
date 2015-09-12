@@ -53,8 +53,8 @@ fn main() {
                         let distance = vec2_len(vec2_sub(p, pos)) as u32;
 
                         for i in 0..distance {
-                            let diff_x = (x - last_x) as f32;
-                            let diff_y = (y - last_y) as f32;
+                            let diff_x = x - last_x;
+                            let diff_y = y - last_y;
                             let delta = i as f32 / distance as f32;
                             let new_x = (last_x + (diff_x * delta)) as u32;
                             let new_y = (last_y + (diff_y * delta)) as u32;
