@@ -50,6 +50,7 @@ fn main() {
             match button {
                 Button::Keyboard(key) => println!("Released keyboard key '{:?}'", key),
                 Button::Mouse(button) => println!("Released mouse button '{:?}'", button),
+                Button::Joystick(button) => println!("Released joystick button '{:?}'", button),
             }
         };
         e.mouse_cursor(|x, y| {
