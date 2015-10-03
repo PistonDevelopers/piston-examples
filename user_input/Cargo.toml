@@ -14,7 +14,7 @@ piston2d-opengl_graphics = "0.14.0"
 piston2d-graphics = "0.10.0"
 
 [dependencies.pistoncore-sdl2_window]
-version = "0.15.0"
+version = "0.15.1"
 optional = true
 
 [dependencies.pistoncore-glfw_window]
@@ -26,7 +26,7 @@ version = "0.14.0"
 optional = true
 
 [features]
-default = ["include_glutin"]
+default = ["include_sdl2"]
 include_sdl2 = ["pistoncore-sdl2_window"]
 include_glfw = ["pistoncore-glfw_window"]
 include_glutin = ["pistoncore-glutin_window"]
