@@ -11,6 +11,7 @@ extern crate glutin_window;
 use opengl_graphics::{ GlGraphics, OpenGL };
 use graphics::{ Context, Graphics };
 use std::rc::Rc;
+use std::collections::HashMap;
 use std::cell::RefCell;
 use piston::window::{ AdvancedWindow, WindowSettings };
 use piston::input::*;
@@ -21,6 +22,8 @@ use sdl2_window::Sdl2Window as Window;
 use glfw_window::GlfwWindow as Window;
 #[cfg(feature = "include_glutin")]
 use glutin_window::GlutinWindow as Window;
+
+type AxisValues = HashMap<(i32, u8), f64>;
 
 fn main() {
     let opengl = OpenGL::V3_2;
@@ -33,6 +36,9 @@ fn main() {
     let window = Rc::new(RefCell::new(window));
     let ref mut gl = GlGraphics::new(opengl);
     let mut cursor = [0.0, 0.0];
+
+    let mut axis_values: AxisValues = HashMap::new();
+
     for e in window.clone().events() {
         if let Some(Button::Mouse(button)) = e.press_args() {
             println!("Pressed mouse button '{:?}'", button);
@@ -53,6 +59,9 @@ fn main() {
                 Button::Joystick(button) => println!("Released joystick button '{:?}'", button),
             }
         };
+        if let Some(args) = e.joystick_axis_args() {
+            axis_values.insert((args.id, args.axis), args.position);
+        }
         e.mouse_cursor(|x, y| {
             cursor = [x, y];
             println!("Mouse moved '{} {}'", x, y);
@@ -73,6 +82,7 @@ fn main() {
             gl.draw(args.viewport(), |c, g| {
                     graphics::clear([1.0; 4], g);
                     draw_rectangles(cursor, &window.borrow(), &c, g);
+                    draw_axis_values(&mut axis_values, &window.borrow(), &c, g);
                 }
             );
         }
@@ -122,4 +132,30 @@ fn draw_rectangles<G: Graphics>(
             draw_size.height as f64 * zoom
         ],
         &c.draw_state, c.transform, g);
+}
+
+fn draw_axis_values<G: Graphics>(
+    axis_values: &mut AxisValues,
+    window: &Window,
+    c: &Context,
+    g: &mut G
+) {
+    use piston::window::Window;
+
+    let window_height = window.size().height as f64;
+    let max_axis_height = 200.0;
+    let offset = 10.0;
+    let top = window_height - (max_axis_height + offset);
+    let color = [1.0, 0.0, 0.0, 1.0];
+    let width = 10.0;
+    let mut draw = |i, v: f64| {
+        let i = i as f64;
+        let height = (v + 1.0) / 2.0 * max_axis_height;
+        let rect = [offset + i * (width + offset),
+            top + max_axis_height - height, width, height];
+        graphics::rectangle(color, rect, c.transform, g);
+    };
+    for (i, &v) in axis_values.values().enumerate() {
+        draw(i, v);
+    }
 }
