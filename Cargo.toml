@@ -37,7 +37,7 @@ name = "texture_swap"
 path = "src/texture_swap.rs"
 
 [dependencies]
-piston_window = "0.23.0"
+piston_window = "0.24.0"
 find_folder = "0.2.0"
 piston-ai_behavior = "0.11.0"
 piston2d-sprite = "0.17.0"

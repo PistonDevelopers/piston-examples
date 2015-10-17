@@ -48,7 +48,7 @@ fn main() {
                 *p = (x + (rand::random::<f64>() - 0.5) * 0.01,
                       y + (rand::random::<f64>() - 0.5) * 0.01);
             }
-            for i in (0..texture_count) {
+            for i in 0..texture_count {
                 let p = positions[i];
                 image(&textures[i], c.transform
                     .trans(p.0 * 1024.0, p.1 * 1024.0).zoom(size), g);
