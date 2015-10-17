@@ -113,7 +113,7 @@ fn main() {
             // Draw control points.
             let original = Ellipse::new([1.0, 0.0, 0.0, 0.5]);
             let current = Ellipse::new([0.0, 0.0, 0.0, 0.5]);
-            for i in (0..grid.ps.len()) {
+            for i in 0..grid.ps.len() {
                 use piston_window::ellipse::circle;
 
                 // Original positions.
