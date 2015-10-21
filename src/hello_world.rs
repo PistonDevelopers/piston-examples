@@ -9,6 +9,7 @@ fn main() {
             [200, 200]
         )
         .exit_on_esc(true)
+        //.opengl(OpenGL::V2_1) // Set a different OpenGl version
         .build()
         .unwrap();
 

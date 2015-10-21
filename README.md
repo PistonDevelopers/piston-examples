@@ -16,3 +16,8 @@ To build the examples, you need the latest Rust nightly and Cargo installed.
 ## Troubleshooting
 
 * [I get `ld: library not found for -lSDL2` error on OSX](https://github.com/PistonDevelopers/rust-empty/issues/175)
+
+* I get "GL context creation failed" when running an example.
+
+  It's likely your hardware or driver doesn't support PistonWindow's default OpenGl spec. Just change it to something
+  you can support at the beginning of the example. See hello_world.rs for an example.
