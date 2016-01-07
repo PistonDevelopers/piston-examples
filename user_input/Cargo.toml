@@ -14,7 +14,7 @@ piston2d-opengl_graphics = "0.22.0"
 piston2d-graphics = "0.13.0"
 
 [dependencies.pistoncore-sdl2_window]
-version = "0.22.0"
+version = "0.23.0"
 optional = true
 
 [dependencies.pistoncore-glfw_window]
