@@ -10,9 +10,7 @@ extern crate glutin_window;
 
 use opengl_graphics::{ GlGraphics, OpenGL };
 use graphics::{ Context, Graphics };
-use std::rc::Rc;
 use std::collections::HashMap;
-use std::cell::RefCell;
 use piston::window::{ AdvancedWindow, WindowSettings };
 use piston::input::*;
 use piston::event_loop::*;
@@ -27,19 +25,19 @@ type AxisValues = HashMap<(i32, u8), f64>;
 
 fn main() {
     let opengl = OpenGL::V3_2;
-    let window: Window = WindowSettings::new("piston-example-user_input", [600, 600])
+    let mut window: Window = WindowSettings::new("piston-example-user_input", [600, 600])
         .exit_on_esc(true).opengl(opengl).build().unwrap();
 
     println!("Press C to turn capture cursor on/off");
 
     let mut capture_cursor = false;
-    let window = Rc::new(RefCell::new(window));
     let ref mut gl = GlGraphics::new(opengl);
     let mut cursor = [0.0, 0.0];
 
     let mut axis_values: AxisValues = HashMap::new();
 
-    for e in window.clone().events() {
+    let mut events = window.events();
+    while let Some(e) = events.next(&mut window) {
         if let Some(Button::Mouse(button)) = e.press_args() {
             println!("Pressed mouse button '{:?}'", button);
         }
@@ -47,7 +45,7 @@ fn main() {
             if key == Key::C {
                 println!("Turned capture cursor on");
                 capture_cursor = !capture_cursor;
-                window.borrow_mut().set_capture_cursor(capture_cursor);
+                window.set_capture_cursor(capture_cursor);
             }
 
             println!("Pressed keyboard key '{:?}'", key);
@@ -81,8 +79,8 @@ fn main() {
         if let Some(args) = e.render_args() {
             gl.draw(args.viewport(), |c, g| {
                     graphics::clear([1.0; 4], g);
-                    draw_rectangles(cursor, &window.borrow(), &c, g);
-                    draw_axis_values(&mut axis_values, &window.borrow(), &c, g);
+                    draw_rectangles(cursor, &window, &c, g);
+                    draw_axis_values(&mut axis_values, &window, &c, g);
                 }
             );
         }
