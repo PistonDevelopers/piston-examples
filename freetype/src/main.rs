@@ -39,7 +39,7 @@ fn render_text(face: &mut ft::Face, gl: &mut GlGraphics, t: Matrix2d, text: &str
 
 fn main() {
     let opengl = OpenGL::V3_2;
-    let window: Sdl2Window = 
+    let mut window: Sdl2Window = 
         WindowSettings::new("piston-example-freetype", [300, 300])
         .exit_on_esc(true)
         .opengl(opengl)
@@ -55,7 +55,8 @@ fn main() {
 
     let ref mut gl = GlGraphics::new(opengl);
 
-    for e in window.events() {
+    let mut events = window.events();
+    while let Some(e) = events.next(&mut window) {
         if let Some(args) = e.render_args() {
             use graphics::*;
 
