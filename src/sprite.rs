@@ -40,7 +40,7 @@ fn main() {
 
     id = scene.add_child(sprite);
 
-    // Run a sequence or animations.
+    // Run a sequence of animations.
     let seq = Sequence(vec![
         Action(Ease(EaseFunction::CubicOut, Box::new(ScaleTo(2.0, 0.5, 0.5)))),
         Action(Ease(EaseFunction::BounceOut, Box::new(MoveBy(1.0, 0.0, 100.0)))),
