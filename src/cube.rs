@@ -5,7 +5,10 @@ extern crate camera_controllers;
 extern crate gfx;
 extern crate gfx_device_gl;
 extern crate sdl2_window;
+extern crate shader_version;
 
+use shader_version::Shaders;
+use shader_version::glsl::GLSL;
 use sdl2_window::Sdl2Window;
 use piston_window::*;
 use camera_controllers::{
@@ -14,38 +17,45 @@ use camera_controllers::{
     CameraPerspective,
     model_view_projection
 };
-use gfx::attrib::Floater;
+use gfx::format::I8Scaled;
 use gfx::traits::*;
 
 //----------------------------------------
 // Cube associated data
 
-gfx_vertex!( Vertex {
-    a_pos@ a_pos: [Floater<i8>; 3],
-    a_tex_coord@ a_tex_coord: [Floater<u8>; 2],
+gfx_vertex_struct!( Vertex {
+    a_pos: [I8Scaled; 3] = "a_pos",
+    a_tex_coord: [I8Scaled; 2] = "a_tex_coord",
 });
 
 impl Vertex {
-    fn new(pos: [i8; 3], tc: [u8; 2]) -> Vertex {
+    fn new(pos: [i8; 3], tc: [i8; 2]) -> Vertex {
         Vertex {
-            a_pos: Floater::cast3(pos),
-            a_tex_coord: Floater::cast2(tc),
+            a_pos: I8Scaled::cast3(pos),
+            a_tex_coord: I8Scaled::cast2(tc),
         }
     }
 }
 
-gfx_parameters!( Params {
-    u_model_view_proj@ u_model_view_proj: [[f32; 4]; 4],
-    t_color@ t_color: gfx::shade::TextureParam<R>,
+gfx_pipeline!( pipe {
+    vbuf: gfx::VertexBuffer<Vertex> = (),
+    u_model_view_proj: gfx::Global<[[f32; 4]; 4]> = "u_model_view_proj",
+    t_color: gfx::TextureSampler<[f32; 4]> = "t_color",
+    out_color: gfx::RenderTarget<gfx::format::Rgba8> = "o_Color",
+    out_depth: gfx::DepthTarget<gfx::format::DepthStencil> =
+        gfx::preset::depth::LESS_EQUAL_WRITE,
 });
 
 //----------------------------------------
 
 fn main() {
+    let opengl = OpenGL::V3_2;
+
     let mut events: PistonWindow<(), Sdl2Window> =
         WindowSettings::new("piston: cube", [640, 480])
         .exit_on_esc(true)
         .samples(4)
+        .opengl(opengl)
         .build()
         .unwrap();
     events.set_capture_cursor(true);
@@ -85,8 +95,6 @@ fn main() {
         Vertex::new([ 1, -1, -1], [0, 1]),
     ];
 
-    let mesh = factory.create_mesh(&vertex_data);
-
     let index_data: &[u8] = &[
          0,  1,  2,  2,  3,  0, // top
          4,  6,  5,  6,  4,  7, // bottom
@@ -96,34 +104,32 @@ fn main() {
         20, 21, 22, 22, 23, 20, // back
     ];
 
-    let slice = index_data.to_slice(factory, gfx::PrimitiveType::TriangleList);
+    let (vbuf, slice) = factory.create_vertex_buffer_indexed(&vertex_data,
+        index_data);
 
-    let texture = factory.create_texture_rgba8_static(1, 1, &[0x00_C0_A0_20]).unwrap();
+    let (_, texture_view) = factory.create_texture_const::<gfx::format::Rgba8>(
+        gfx::tex::Kind::D2(1, 1, gfx::tex::AaMode::Single),
+        &[[0x20, 0xA0, 0xC0, 0x00]],
+        false
+        ).unwrap();
 
-    let sampler = factory.create_sampler(
-        gfx::tex::SamplerInfo::new(gfx::tex::FilterMethod::Bilinear,
-                                   gfx::tex::WrapMode::Clamp)
-    );
+    let sinfo = gfx::tex::SamplerInfo::new(
+        gfx::tex::FilterMethod::Bilinear,
+        gfx::tex::WrapMode::Clamp);
 
-    let program = {
-        let vertex = gfx::ShaderSource {
-            glsl_120: Some(include_bytes!("../assets/cube_120.glslv")),
-            glsl_150: Some(include_bytes!("../assets/cube_150.glslv")),
-            .. gfx::ShaderSource::empty()
-        };
-        let fragment = gfx::ShaderSource {
-            glsl_120: Some(include_bytes!("../assets/cube_120.glslf")),
-            glsl_150: Some(include_bytes!("../assets/cube_150.glslf")),
-            .. gfx::ShaderSource::empty()
-        };
-        factory.link_program_source(vertex, fragment).unwrap()
-    };
-
-    let mut data = Params {
-        u_model_view_proj: vecmath::mat4_id(),
-        t_color: (texture, Some(sampler)),
-        _r: std::marker::PhantomData,
-    };
+    let glsl = opengl.to_glsl();
+    let pso = factory.create_pipeline_simple(
+            Shaders::new()
+                .set(GLSL::V1_20, include_str!("../assets/cube_120.glslv"))
+                .set(GLSL::V1_50, include_str!("../assets/cube_150.glslv"))
+                .get(glsl).unwrap().as_bytes(),
+            Shaders::new()
+                .set(GLSL::V1_20, include_str!("../assets/cube_120.glslf"))
+                .set(GLSL::V1_50, include_str!("../assets/cube_150.glslf"))
+                .get(glsl).unwrap().as_bytes(),
+            gfx::state::CullFace::Nothing,
+            pipe::new()
+        ).unwrap();
 
     let get_projection = |w: &PistonWindow<(), Sdl2Window>| {
         let draw_size = w.window.borrow().draw_size();
@@ -139,26 +145,30 @@ fn main() {
         [0.5, 0.5, 4.0],
         FirstPersonSettings::keyboard_wasd()
     );
-    let state = gfx::DrawState::new().depth(gfx::state::Comparison::LessEqual, true);
+
+    let mut data = pipe::Data {
+            vbuf: vbuf.clone(),
+            u_model_view_proj: [[0.0; 4]; 4],
+            t_color: (texture_view, factory.create_sampler(sinfo)),
+            out_color: (*events.output_color).clone(),
+            out_depth: (*events.output_stencil).clone(),
+        };
 
     for e in events {
         first_person.event(&e);
 
-        e.draw_3d(|stream| {
+        e.draw_3d(|encoder| {
             let args = e.render_args().unwrap();
-            stream.clear(
-                gfx::ClearData {
-                    color: [0.3, 0.3, 0.3, 1.0],
-                    depth: 1.0,
-                    stencil: 0,
-                }
-            );
+
+            encoder.clear(&e.output_color, [0.3, 0.3, 0.3, 1.0]);
+            encoder.clear_depth(&e.output_stencil, 1.0);
+
             data.u_model_view_proj = model_view_projection(
                 model,
                 first_person.camera(args.ext_dt).orthogonal(),
                 projection
             );
-            stream.draw(&(&mesh, slice.clone(), &program, &data, &state)).unwrap();
+            encoder.draw(&slice, &pso, &data);
         });
 
         if let Some(_) = e.resize_args() {
