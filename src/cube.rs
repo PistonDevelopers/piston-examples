@@ -7,29 +7,18 @@ extern crate gfx_device_gl;
 extern crate sdl2_window;
 extern crate shader_version;
 
-use shader_version::Shaders;
-use shader_version::glsl::GLSL;
-use sdl2_window::Sdl2Window;
-use piston_window::*;
-use camera_controllers::{
-    FirstPersonSettings,
-    FirstPerson,
-    CameraPerspective,
-    model_view_projection
-};
-use gfx::format::I8Scaled;
-use gfx::traits::*;
-
 //----------------------------------------
 // Cube associated data
 
 gfx_vertex_struct!( Vertex {
-    a_pos: [I8Scaled; 3] = "a_pos",
-    a_tex_coord: [I8Scaled; 2] = "a_tex_coord",
+    a_pos: [gfx::format::I8Scaled; 3] = "a_pos",
+    a_tex_coord: [gfx::format::I8Scaled; 2] = "a_tex_coord",
 });
 
 impl Vertex {
     fn new(pos: [i8; 3], tc: [i8; 2]) -> Vertex {
+        use gfx::format::I8Scaled;
+
         Vertex {
             a_pos: I8Scaled::cast3(pos),
             a_tex_coord: I8Scaled::cast2(tc),
@@ -41,7 +30,7 @@ gfx_pipeline!( pipe {
     vbuf: gfx::VertexBuffer<Vertex> = (),
     u_model_view_proj: gfx::Global<[[f32; 4]; 4]> = "u_model_view_proj",
     t_color: gfx::TextureSampler<[f32; 4]> = "t_color",
-    out_color: gfx::RenderTarget<gfx::format::Rgba8> = "o_Color",
+    out_color: gfx::RenderTarget<gfx::format::Srgb8> = "o_Color",
     out_depth: gfx::DepthTarget<gfx::format::DepthStencil> =
         gfx::preset::depth::LESS_EQUAL_WRITE,
 });
@@ -49,6 +38,18 @@ gfx_pipeline!( pipe {
 //----------------------------------------
 
 fn main() {
+    use piston_window::*;
+    use gfx::traits::*;
+    use shader_version::Shaders;
+    use shader_version::glsl::GLSL;
+    use sdl2_window::Sdl2Window;
+    use camera_controllers::{
+        FirstPersonSettings,
+        FirstPerson,
+        CameraPerspective,
+        model_view_projection
+    };
+
     let opengl = OpenGL::V3_2;
 
     let mut events: PistonWindow<(), Sdl2Window> =
@@ -160,7 +161,7 @@ fn main() {
         e.draw_3d(|encoder| {
             let args = e.render_args().unwrap();
 
-            encoder.clear(&e.output_color, [0.3, 0.3, 0.3, 1.0]);
+            encoder.clear(&e.output_color, [0.3, 0.3, 0.3]);
             encoder.clear_depth(&e.output_stencil, 1.0);
 
             data.u_model_view_proj = model_view_projection(
