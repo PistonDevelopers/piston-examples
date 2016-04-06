@@ -54,10 +54,10 @@ fn main() {
             match button {
                 Button::Keyboard(key) => println!("Released keyboard key '{:?}'", key),
                 Button::Mouse(button) => println!("Released mouse button '{:?}'", button),
-                Button::Joystick(button) => println!("Released joystick button '{:?}'", button),
+                Button::Controller(button) => println!("Released controller button '{:?}'", button),
             }
         };
-        if let Some(args) = e.joystick_axis_args() {
+        if let Some(args) = e.controller_axis_args() {
             axis_values.insert((args.id, args.axis), args.position);
         }
         e.mouse_cursor(|x, y| {
