@@ -6,28 +6,31 @@ extern crate piston;
 extern crate find_folder;
 
 use sdl2_window::Sdl2Window;
-use opengl_graphics::{ GlGraphics, Texture, OpenGL };
+use opengl_graphics::{ GlGraphics, Texture, TextureSettings, OpenGL };
 use graphics::math::Matrix2d;
 use piston::window::WindowSettings;
 use piston::input::*;
 use piston::event_loop::Events;
 
 fn render_text(face: &mut ft::Face, gl: &mut GlGraphics, t: Matrix2d, text: &str) {
-    use graphics::*;
-
     let mut x = 10;
     let mut y = 0;
     for ch in text.chars() {
+        use graphics::*;
+        
         face.load_char(ch as usize, ft::face::RENDER).unwrap();
         let g = face.glyph();
 
         let bitmap = g.bitmap();
-        let texture = Texture::from_memory_alpha(bitmap.buffer(),
-                                                 bitmap.width() as u32,
-                                                 bitmap.rows() as u32).unwrap();
+        let texture = Texture::from_memory_alpha(
+            bitmap.buffer(),
+            bitmap.width() as u32,
+            bitmap.rows() as u32,
+            &TextureSettings::new()
+        ).unwrap();
         Image::new_color(color::BLACK).draw(
             &texture,
-            default_draw_state(),
+            &Default::default(),
             t.trans((x + g.bitmap_left()) as f64, (y - g.bitmap_top()) as f64),
             gl
         );
