@@ -59,7 +59,7 @@ fn main() {
                         let new_y = (last_y + (diff_y * delta)) as u32;
                         if new_x < width && new_y < height {
                             canvas.put_pixel(new_x, new_y, im::Rgba([0, 0, 0, 255]));
-                            texture.update(&mut*e.factory.borrow_mut(), &canvas).unwrap();
+                            texture.update(&mut*e.encoder.borrow_mut(), &canvas).unwrap();
                         };
                     };
                 };

@@ -11,17 +11,15 @@ extern crate shader_version;
 // Cube associated data
 
 gfx_vertex_struct!( Vertex {
-    a_pos: [gfx::format::I8Scaled; 3] = "a_pos",
-    a_tex_coord: [gfx::format::I8Scaled; 2] = "a_tex_coord",
+    a_pos: [i8; 4] = "a_pos",
+    a_tex_coord: [i8; 2] = "a_tex_coord",
 });
 
 impl Vertex {
     fn new(pos: [i8; 3], tc: [i8; 2]) -> Vertex {
-        use gfx::format::I8Scaled;
-
         Vertex {
-            a_pos: I8Scaled::cast3(pos),
-            a_tex_coord: I8Scaled::cast2(tc),
+            a_pos: [pos[0], pos[1], pos[2], 1],
+            a_tex_coord: tc,
         }
     }
 }
@@ -30,7 +28,7 @@ gfx_pipeline!( pipe {
     vbuf: gfx::VertexBuffer<Vertex> = (),
     u_model_view_proj: gfx::Global<[[f32; 4]; 4]> = "u_model_view_proj",
     t_color: gfx::TextureSampler<[f32; 4]> = "t_color",
-    out_color: gfx::RenderTarget<gfx::format::Srgb8> = "o_Color",
+    out_color: gfx::RenderTarget<gfx::format::Srgba8> = "o_Color",
     out_depth: gfx::DepthTarget<gfx::format::DepthStencil> =
         gfx::preset::depth::LESS_EQUAL_WRITE,
 });
@@ -108,11 +106,10 @@ fn main() {
     let (vbuf, slice) = factory.create_vertex_buffer_indexed(&vertex_data,
         index_data);
 
+    let texels = [[0x20, 0xA0, 0xC0, 0x00]];
     let (_, texture_view) = factory.create_texture_const::<gfx::format::Rgba8>(
         gfx::tex::Kind::D2(1, 1, gfx::tex::AaMode::Single),
-        &[[0x20, 0xA0, 0xC0, 0x00]],
-        false
-        ).unwrap();
+        &[&texels]).unwrap();
 
     let sinfo = gfx::tex::SamplerInfo::new(
         gfx::tex::FilterMethod::Bilinear,
@@ -161,7 +158,7 @@ fn main() {
         e.draw_3d(|encoder| {
             let args = e.render_args().unwrap();
 
-            encoder.clear(&e.output_color, [0.3, 0.3, 0.3]);
+            encoder.clear(&e.output_color, [0.3, 0.3, 0.3, 1.0]);
             encoder.clear_depth(&e.output_stencil, 1.0);
 
             data.u_model_view_proj = model_view_projection(
