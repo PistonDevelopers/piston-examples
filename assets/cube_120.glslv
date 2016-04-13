@@ -1,6 +1,6 @@
 #version 120
-attribute vec3 a_pos;
-attribute vec2 a_tex_coord;
+attribute ivec3 a_pos;
+attribute ivec2 a_tex_coord;
 varying vec2 v_TexCoord;
 uniform mat4 u_model_view_proj;
 void main() {
