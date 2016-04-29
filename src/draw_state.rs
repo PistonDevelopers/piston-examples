@@ -8,7 +8,7 @@ fn main() {
     println!("Press A to change blending");
     println!("Press S to change clip inside/out");
 
-    let window: PistonWindow = WindowSettings::new(
+    let mut window: PistonWindow = WindowSettings::new(
             "piston: draw_state",
             [600, 600]
         )
@@ -22,12 +22,12 @@ fn main() {
     let blends = [Blend::Alpha, Blend::Add, Blend::Invert, Blend::Multiply];
     let mut blend = 0;
     let mut clip_inside = true;
-    let rust_logo = Texture::from_path(&mut *window.factory.borrow_mut(),
+    let rust_logo = Texture::from_path(&mut window.factory,
                                        assets.join("rust.png"),
                                        Flip::None,
                                        &TextureSettings::new()).unwrap();
-    for e in window {
-        e.draw_2d(|c, g| {
+    while let Some(e) = window.next() {
+        window.draw_2d(&e, |c, g| {
             clear([0.8, 0.8, 0.8, 1.0], g);
             g.clear_stencil(0);
             Rectangle::new([1.0, 0.0, 0.0, 1.0])

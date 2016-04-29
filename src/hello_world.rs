@@ -4,7 +4,7 @@ extern crate find_folder;
 use piston_window::*;
 
 fn main() {
-    let window: PistonWindow = WindowSettings::new(
+    let mut window: PistonWindow = WindowSettings::new(
             "piston: hello_world",
             [200, 200]
         )
@@ -17,11 +17,11 @@ fn main() {
         .for_folder("assets").unwrap();
     println!("{:?}", assets);
     let ref font = assets.join("FiraSans-Regular.ttf");
-    let factory = window.factory.borrow().clone();
+    let factory = window.factory.clone();
     let mut glyphs = Glyphs::new(font, factory).unwrap();
 
-    for e in window {
-        e.draw_2d(|c, g| {
+    while let Some(e) = window.next() {
+        window.draw_2d(&e, |c, g| {
             let transform = c.transform.trans(10.0, 100.0);
 
             clear([0.0, 0.0, 0.0, 1.0], g);

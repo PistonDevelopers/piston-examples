@@ -5,7 +5,7 @@ use piston_window::*;
 
 fn main() {
     let opengl = OpenGL::V3_2;
-    let window: PistonWindow =
+    let mut window: PistonWindow =
         WindowSettings::new("piston: image", [300, 300])
         .exit_on_esc(true)
         .opengl(opengl)
@@ -16,13 +16,13 @@ fn main() {
         .for_folder("assets").unwrap();
     let rust_logo = assets.join("rust.png");
     let rust_logo = Texture::from_path(
-            &mut *window.factory.borrow_mut(),
+            &mut window.factory,
             &rust_logo,
             Flip::None,
             &TextureSettings::new()
         ).unwrap();
-    for e in window {
-        e.draw_2d(|c, g| {
+    while let Some(e) = window.next() {
+        window.draw_2d(&e, |c, g| {
             clear([1.0; 4], g);
             image(&rust_logo, c.transform, g);
         });
