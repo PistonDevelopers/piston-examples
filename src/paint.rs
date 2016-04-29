@@ -9,7 +9,7 @@ use vecmath::*;
 fn main() {
     let opengl = OpenGL::V3_2;
     let (width, height) = (300, 300);
-    let window: PistonWindow =
+    let mut window: PistonWindow =
         WindowSettings::new("piston: paint", (width, height))
         .exit_on_esc(true)
         .opengl(opengl)
@@ -19,15 +19,15 @@ fn main() {
     let mut canvas = im::ImageBuffer::new(width, height);
     let mut draw = false;
     let mut texture = Texture::from_image(
-            &mut *window.factory.borrow_mut(),
+            &mut window.factory,
             &canvas,
             &TextureSettings::new()
         ).unwrap();
 
     let mut last_pos = None;
 
-    for e in window {
-        e.draw_2d(|c, g| {
+    while let Some(e) = window.next() {
+        window.draw_2d(&e, |c, g| {
             clear([1.0; 4], g);
             image(&texture, c.transform, g);
         });
@@ -59,7 +59,7 @@ fn main() {
                         let new_y = (last_y + (diff_y * delta)) as u32;
                         if new_x < width && new_y < height {
                             canvas.put_pixel(new_x, new_y, im::Rgba([0, 0, 0, 255]));
-                            texture.update(&mut*e.encoder.borrow_mut(), &canvas).unwrap();
+                            texture.update(&mut window.encoder, &canvas).unwrap();
                         };
                     };
                 };
