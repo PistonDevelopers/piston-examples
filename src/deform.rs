@@ -11,7 +11,7 @@ fn main() {
     println!("Reset grid with R.");
 
     let opengl = OpenGL::V3_2;
-    let window: PistonWindow = 
+    let mut window: PistonWindow =
         WindowSettings::new("piston-example-deform", [300, 300])
         .exit_on_esc(true)
         .opengl(opengl)
@@ -23,7 +23,7 @@ fn main() {
         .for_folder("assets").unwrap();
     let image = assets.join("rust.png");
     let image = Texture::from_path(
-            &mut *window.factory.borrow_mut(),
+            &mut window.factory,
             &image,
             Flip::None,
             &TextureSettings::new()
@@ -40,7 +40,7 @@ fn main() {
     let mut drag = DragController::new();
     let mut draw_grid = true;
 
-    for e in window {
+    while let Some(e) = window.next() {
         drag.event(&e, |action| {
             match action {
                 Drag::Start(x, y) => {
@@ -84,7 +84,7 @@ fn main() {
                 println!("Reset grid");
             }
         }
-        e.draw_2d(|c, g| {
+        window.draw_2d(&e, |c, g| {
             clear(color::WHITE, g);
 
             // Draw deformed image.
