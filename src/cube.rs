@@ -50,16 +50,16 @@ fn main() {
 
     let opengl = OpenGL::V3_2;
 
-    let mut events: PistonWindow<(), Sdl2Window> =
+    let mut window: PistonWindow<Sdl2Window> =
         WindowSettings::new("piston: cube", [640, 480])
         .exit_on_esc(true)
         .samples(4)
         .opengl(opengl)
         .build()
         .unwrap();
-    events.set_capture_cursor(true);
+    window.set_capture_cursor(true);
 
-    let ref mut factory = events.factory.borrow().clone();
+    let ref mut factory = window.factory.clone();
 
     let vertex_data = vec![
         //top (0, 0, 1)
@@ -129,8 +129,8 @@ fn main() {
             pipe::new()
         ).unwrap();
 
-    let get_projection = |w: &PistonWindow<(), Sdl2Window>| {
-        let draw_size = w.window.borrow().draw_size();
+    let get_projection = |w: &PistonWindow<Sdl2Window>| {
+        let draw_size = w.window.draw_size();
         CameraPerspective {
             fov: 90.0, near_clip: 0.1, far_clip: 1000.0,
             aspect_ratio: (draw_size.width as f32) / (draw_size.height as f32)
@@ -138,7 +138,7 @@ fn main() {
     };
 
     let model = vecmath::mat4_id();
-    let mut projection = get_projection(&events);
+    let mut projection = get_projection(&window);
     let mut first_person = FirstPerson::new(
         [0.5, 0.5, 4.0],
         FirstPersonSettings::keyboard_wasd()
@@ -148,29 +148,29 @@ fn main() {
             vbuf: vbuf.clone(),
             u_model_view_proj: [[0.0; 4]; 4],
             t_color: (texture_view, factory.create_sampler(sinfo)),
-            out_color: (*events.output_color).clone(),
-            out_depth: (*events.output_stencil).clone(),
+            out_color: window.output_color.clone(),
+            out_depth: window.output_stencil.clone(),
         };
 
-    for e in events {
+    while let Some(e) = window.next() {
         first_person.event(&e);
 
-        e.draw_3d(|encoder| {
+        window.draw_3d(&e, |window| {
             let args = e.render_args().unwrap();
 
-            encoder.clear(&e.output_color, [0.3, 0.3, 0.3, 1.0]);
-            encoder.clear_depth(&e.output_stencil, 1.0);
+            window.encoder.clear(&window.output_color, [0.3, 0.3, 0.3, 1.0]);
+            window.encoder.clear_depth(&window.output_stencil, 1.0);
 
             data.u_model_view_proj = model_view_projection(
                 model,
                 first_person.camera(args.ext_dt).orthogonal(),
                 projection
             );
-            encoder.draw(&slice, &pso, &data);
+            window.encoder.draw(&slice, &pso, &data);
         });
 
         if let Some(_) = e.resize_args() {
-            projection = get_projection(&e);
+            projection = get_projection(&window);
         }
     }
 }
