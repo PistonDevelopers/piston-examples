@@ -18,7 +18,7 @@ use ai_behavior::{
 fn main() {
     let (width, height) = (300, 300);
     let opengl = OpenGL::V3_2;
-    let window: PistonWindow =
+    let mut window: PistonWindow =
         WindowSettings::new("piston: sprite", (width, height))
         .exit_on_esc(true)
         .opengl(opengl)
@@ -30,7 +30,7 @@ fn main() {
     let id;
     let mut scene = Scene::new();
     let tex = Rc::new(Texture::from_path(
-            &mut *window.factory.borrow_mut(),
+            &mut window.factory,
             assets.join("rust.png"),
             Flip::None,
             &TextureSettings::new()
@@ -63,10 +63,10 @@ fn main() {
 
     println!("Press any key to pause/resume the animation!");
 
-    for e in window {
+    while let Some(e) = window.next() {
         scene.event(&e);
 
-        e.draw_2d(|c, g| {
+        window.draw_2d(&e, |c, g| {
             clear([1.0, 1.0, 1.0, 1.0], g);
             scene.draw(c.transform, g);
         });
