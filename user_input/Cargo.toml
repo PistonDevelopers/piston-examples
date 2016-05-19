@@ -10,7 +10,7 @@ path = "src/main.rs"
 
 [dependencies]
 piston = "0.22.0"
-piston2d-opengl_graphics = "0.28.0"
+piston2d-opengl_graphics = "0.29.0"
 piston2d-graphics = "0.16.0"
 
 [dependencies.pistoncore-sdl2_window]
