@@ -94,7 +94,7 @@ fn main() {
         Vertex::new([ 1, -1, -1], [0, 1]),
     ];
 
-    let index_data: &[u8] = &[
+    let index_data: &[u16] = &[
          0,  1,  2,  2,  3,  0, // top
          4,  6,  5,  6,  4,  7, // bottom
          8,  9, 10, 10, 11,  8, // right
@@ -103,8 +103,8 @@ fn main() {
         20, 21, 22, 22, 23, 20, // back
     ];
 
-    let (vbuf, slice) = factory.create_vertex_buffer_indexed(&vertex_data,
-        index_data);
+    let (vbuf, slice) = factory.create_vertex_buffer_with_slice
+        (&vertex_data, index_data);
 
     let texels = [[0x20, 0xA0, 0xC0, 0x00]];
     let (_, texture_view) = factory.create_texture_const::<gfx::format::Rgba8>(
@@ -125,7 +125,6 @@ fn main() {
                 .set(GLSL::V1_20, include_str!("../assets/cube_120.glslf"))
                 .set(GLSL::V1_50, include_str!("../assets/cube_150.glslf"))
                 .get(glsl).unwrap().as_bytes(),
-            gfx::state::CullFace::Nothing,
             pipe::new()
         ).unwrap();
 
