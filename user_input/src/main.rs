@@ -90,7 +90,7 @@ fn main() {
         };
         if let Some(cursor) = e.cursor_args() {
             if cursor { println!("Mouse entered"); }
-            else { println!("Mouse leaved"); }
+            else { println!("Mouse left"); }
         };
         if let Some(args) = e.render_args() {
             gl.draw(args.viewport(), |c, g| {
