@@ -2,7 +2,6 @@ extern crate rand;
 extern crate piston_window;
 extern crate image as im;
 
-use im::GenericImage;
 use piston_window::*;
 
 fn main() {

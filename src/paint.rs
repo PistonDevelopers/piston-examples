@@ -2,7 +2,6 @@ extern crate piston_window;
 extern crate image as im;
 extern crate vecmath;
 
-use im::GenericImage;
 use piston_window::*;
 use vecmath::*;
 

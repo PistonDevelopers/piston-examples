@@ -36,8 +36,12 @@ path = "src/cube.rs"
 name = "texture_swap"
 path = "src/texture_swap.rs"
 
+[[bin]]
+name = "multi_window"
+path = "src/multi_window.rs"
+
 [dependencies]
-piston_window = "0.47.0"
+piston_window = "0.47.2"
 find_folder = "0.3.0"
 piston-ai_behavior = "0.14.0"
 piston2d-sprite = "0.26.0"
