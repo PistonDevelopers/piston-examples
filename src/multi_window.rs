@@ -8,9 +8,8 @@ fn create_window(number: usize) -> PistonWindow {
 }
 
 fn main() {
-    println!("Move windows apart because they overlap");
-
-    let mut windows: Vec<_> = (0..3 as usize).into_iter().map(|n| create_window(n)).collect();
+    let mut windows: Vec<_> = (0..3 as usize).into_iter().map(|n|
+        create_window(n).position([100 + n as i32 * 300, 100])).collect();
     let colors = vec![[1.0, 0.0, 0.0, 1.0], [0.0, 1.0, 0.0, 1.0], [0.0, 0.0, 1.0, 1.0]];
 
     loop {
@@ -23,7 +22,7 @@ fn main() {
                     clear(colors[i], g);
                 });
             }
-            if window.should_close() { window.window.window.hide() }
+            if window.should_close() { window.hide() }
         }
         
         if !any_window_open { break }
