@@ -26,10 +26,13 @@ fn main() {
     let mut last_pos = None;
 
     while let Some(e) = window.next() {
-        window.draw_2d(&e, |c, g| {
-            clear([1.0; 4], g);
-            image(&texture, c.transform, g);
-        });
+        if let Event::Render(_) = e {
+            texture.update(&mut window.encoder, &canvas).unwrap();
+            window.draw_2d(&e, |c, g| {
+                clear([1.0; 4], g);
+                image(&texture, c.transform, g);
+            });
+        }
         if let Some(button) = e.press_args() {
             if button == Button::Mouse(MouseButton::Left) {
                 draw = true;
@@ -58,7 +61,6 @@ fn main() {
                         let new_y = (last_y + (diff_y * delta)) as u32;
                         if new_x < width && new_y < height {
                             canvas.put_pixel(new_x, new_y, im::Rgba([0, 0, 0, 255]));
-                            texture.update(&mut window.encoder, &canvas).unwrap();
                         };
                     };
                 };
@@ -69,4 +71,3 @@ fn main() {
         }
     }
 }
-
