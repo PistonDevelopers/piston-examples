@@ -98,7 +98,7 @@ fn main() {
          0,  1,  2,  2,  3,  0, // top
          4,  6,  5,  6,  4,  7, // bottom
          8,  9, 10, 10, 11,  8, // right
-        12, 14, 13, 14, 12, 16, // left
+        12, 14, 13, 14, 12, 15, // left
         16, 18, 17, 18, 16, 19, // front
         20, 21, 22, 22, 23, 20, // back
     ];
@@ -106,9 +106,14 @@ fn main() {
     let (vbuf, slice) = factory.create_vertex_buffer_with_slice
         (&vertex_data, index_data);
 
-    let texels = [[0x20, 0xA0, 0xC0, 0x00]];
+    let texels = [
+        [0xff, 0xff, 0xff, 0x00],
+        [0xff, 0x00, 0x00, 0x00],
+        [0x00, 0xff, 0x00, 0x00],
+        [0x00, 0x00, 0xff, 0x00]
+    ];
     let (_, texture_view) = factory.create_texture_const::<gfx::format::Rgba8>(
-        gfx::tex::Kind::D2(1, 1, gfx::tex::AaMode::Single),
+        gfx::tex::Kind::D2(2, 2, gfx::tex::AaMode::Single),
         &[&texels]).unwrap();
 
     let sinfo = gfx::tex::SamplerInfo::new(
