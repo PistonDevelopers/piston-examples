@@ -25,12 +25,12 @@ impl Vertex {
 }
 
 gfx_pipeline!( pipe {
-    vbuf: gfx::VertexBuffer<Vertex> = (),
-    u_model_view_proj: gfx::Global<[[f32; 4]; 4]> = "u_model_view_proj",
-    t_color: gfx::TextureSampler<[f32; 4]> = "t_color",
-    out_color: gfx::RenderTarget<gfx::format::Srgba8> = "o_Color",
-    out_depth: gfx::DepthTarget<gfx::format::DepthStencil> =
-        gfx::preset::depth::LESS_EQUAL_WRITE,
+    vbuf: ::gfx::VertexBuffer<Vertex> = (),
+    u_model_view_proj: ::gfx::Global<[[f32; 4]; 4]> = "u_model_view_proj",
+    t_color: ::gfx::TextureSampler<[f32; 4]> = "t_color",
+    out_color: ::gfx::RenderTarget<::gfx::format::Srgba8> = "o_Color",
+    out_depth: ::gfx::DepthTarget<::gfx::format::DepthStencil> =
+        ::gfx::preset::depth::LESS_EQUAL_WRITE,
 });
 
 //----------------------------------------
