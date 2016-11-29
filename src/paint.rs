@@ -23,7 +23,7 @@ fn main() {
             &TextureSettings::new()
         ).unwrap();
 
-    let mut last_pos = None;
+    let mut last_pos: Option<[f64; 2]> = None;
 
     while let Some(e) = window.next() {
         if let Event::Render(_) = e {
@@ -36,7 +36,6 @@ fn main() {
         if let Some(button) = e.press_args() {
             if button == Button::Mouse(MouseButton::Left) {
                 draw = true;
-                last_pos = e.mouse_cursor_args()
             }
         };
         if let Some(button) = e.release_args() {
