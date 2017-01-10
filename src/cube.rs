@@ -25,12 +25,12 @@ impl Vertex {
 }
 
 gfx_pipeline!( pipe {
-    vbuf: ::gfx::VertexBuffer<Vertex> = (),
-    u_model_view_proj: ::gfx::Global<[[f32; 4]; 4]> = "u_model_view_proj",
-    t_color: ::gfx::TextureSampler<[f32; 4]> = "t_color",
-    out_color: ::gfx::RenderTarget<::gfx::format::Srgba8> = "o_Color",
-    out_depth: ::gfx::DepthTarget<::gfx::format::DepthStencil> =
-        ::gfx::preset::depth::LESS_EQUAL_WRITE,
+    vbuf: gfx::VertexBuffer<Vertex> = (),
+    u_model_view_proj: gfx::Global<[[f32; 4]; 4]> = "u_model_view_proj",
+    t_color: gfx::TextureSampler<[f32; 4]> = "t_color",
+    out_color: gfx::RenderTarget<::gfx::format::Srgba8> = "o_Color",
+    out_depth: gfx::DepthTarget<::gfx::format::DepthStencil> =
+        gfx::preset::depth::LESS_EQUAL_WRITE,
 });
 
 //----------------------------------------
@@ -112,13 +112,13 @@ fn main() {
         [0x00, 0xff, 0x00, 0x00],
         [0x00, 0x00, 0xff, 0x00]
     ];
-    let (_, texture_view) = factory.create_texture_const::<gfx::format::Rgba8>(
-        gfx::tex::Kind::D2(2, 2, gfx::tex::AaMode::Single),
+    let (_, texture_view) = factory.create_texture_immutable::<gfx::format::Rgba8>(
+        gfx::texture::Kind::D2(2, 2, gfx::texture::AaMode::Single),
         &[&texels]).unwrap();
 
-    let sinfo = gfx::tex::SamplerInfo::new(
-        gfx::tex::FilterMethod::Bilinear,
-        gfx::tex::WrapMode::Clamp);
+    let sinfo = gfx::texture::SamplerInfo::new(
+        gfx::texture::FilterMethod::Bilinear,
+        gfx::texture::WrapMode::Clamp);
 
     let glsl = opengl.to_glsl();
     let pso = factory.create_pipeline_simple(
