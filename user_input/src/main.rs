@@ -38,7 +38,7 @@ fn main() {
     let mut axis_values: AxisValues = HashMap::new();
     let mut touch_values: TouchValues = HashMap::new();
 
-    let mut events = window.events();
+    let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut window) {
         if let Some(Button::Mouse(button)) = e.press_args() {
             println!("Pressed mouse button '{:?}'", button);
