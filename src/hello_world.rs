@@ -20,6 +20,7 @@ fn main() {
     let factory = window.factory.clone();
     let mut glyphs = Glyphs::new(font, factory).unwrap();
 
+    window.set_lazy(true);
     while let Some(e) = window.next() {
         window.draw_2d(&e, |c, g| {
             let transform = c.transform.trans(10.0, 100.0);

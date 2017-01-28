@@ -26,6 +26,7 @@ fn main() {
                                        assets.join("rust.png"),
                                        Flip::None,
                                        &TextureSettings::new()).unwrap();
+    window.set_lazy(true);
     while let Some(e) = window.next() {
         window.draw_2d(&e, |c, g| {
             clear([0.8, 0.8, 0.8, 1.0], g);
