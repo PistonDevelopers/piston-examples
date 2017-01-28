@@ -38,7 +38,7 @@ fn main() {
     let mut axis_values: AxisValues = HashMap::new();
     let mut touch_values: TouchValues = HashMap::new();
 
-    let mut events = Events::new(EventSettings::new());
+    let mut events = Events::new(EventSettings::new().lazy(true));
     while let Some(e) = events.next(&mut window) {
         if let Some(Button::Mouse(button)) = e.press_args() {
             println!("Pressed mouse button '{:?}'", button);
@@ -93,6 +93,7 @@ fn main() {
             else { println!("Mouse left"); }
         };
         if let Some(args) = e.render_args() {
+            // println!("Render {}", args.ext_dt);
             gl.draw(args.viewport(), |c, g| {
                     graphics::clear([1.0; 4], g);
                     draw_rectangles(cursor, &window, &c, g);
@@ -101,7 +102,20 @@ fn main() {
                 }
             );
         }
-        e.update(|_| {});
+        if let Some(_args) = e.idle_args() {
+            // println!("Idle {}", _args.dt);
+        }
+        if let Some(_args) = e.update_args() {
+            /*
+            // Used to test CPU overload.
+            println!("Update {}", _args.dt);
+            let mut x: f64 = 0.0;
+            for _ in 0..500_000 {
+                x += (1.0 + x).sqrt();
+            }
+            println!("{}", x);
+            */
+        }
     }
 }
 

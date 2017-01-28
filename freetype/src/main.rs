@@ -10,14 +10,14 @@ use opengl_graphics::{ GlGraphics, Texture, TextureSettings, OpenGL };
 use graphics::math::Matrix2d;
 use piston::window::WindowSettings;
 use piston::input::*;
-use piston::event_loop::Events;
+use piston::event_loop::{Events, EventSettings, EventLoop};
 
 fn render_text(face: &mut ft::Face, gl: &mut GlGraphics, t: Matrix2d, text: &str) {
     let mut x = 10;
     let mut y = 0;
     for ch in text.chars() {
         use graphics::*;
-        
+
         face.load_char(ch as usize, ft::face::RENDER).unwrap();
         let g = face.glyph();
 
@@ -42,7 +42,7 @@ fn render_text(face: &mut ft::Face, gl: &mut GlGraphics, t: Matrix2d, text: &str
 
 fn main() {
     let opengl = OpenGL::V3_2;
-    let mut window: Sdl2Window = 
+    let mut window: Sdl2Window =
         WindowSettings::new("piston-example-freetype", [300, 300])
         .exit_on_esc(true)
         .opengl(opengl)
@@ -58,7 +58,7 @@ fn main() {
 
     let ref mut gl = GlGraphics::new(opengl);
 
-    let mut events = window.events();
+    let mut events = Events::new(EventSettings::new().lazy(true));
     while let Some(e) = events.next(&mut window) {
         if let Some(args) = e.render_args() {
             use graphics::*;
@@ -72,4 +72,3 @@ fn main() {
         }
     }
 }
-

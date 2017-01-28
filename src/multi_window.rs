@@ -24,7 +24,7 @@ fn main() {
             }
             if window.should_close() { window.hide() }
         }
-        
+
         if !any_window_open { break }
     }
 }

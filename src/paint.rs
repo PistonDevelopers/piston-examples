@@ -26,7 +26,7 @@ fn main() {
     let mut last_pos: Option<[f64; 2]> = None;
 
     while let Some(e) = window.next() {
-        if let Event::Render(_) = e {
+        if let Some(_) = e.render_args() {
             texture.update(&mut window.encoder, &canvas).unwrap();
             window.draw_2d(&e, |c, g| {
                 clear([1.0; 4], g);
