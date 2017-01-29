@@ -1,6 +1,8 @@
 extern crate piston;
 extern crate opengl_graphics;
 extern crate graphics;
+extern crate touch_visualizer;
+
 #[cfg(feature = "include_sdl2")]
 extern crate sdl2_window;
 #[cfg(feature = "include_glfw")]
@@ -8,25 +10,25 @@ extern crate glfw_window;
 #[cfg(feature = "include_glutin")]
 extern crate glutin_window;
 
+use touch_visualizer::TouchVisualizer;
 use opengl_graphics::{ GlGraphics, OpenGL };
 use graphics::{ Context, Graphics };
 use std::collections::HashMap;
-use piston::window::{ AdvancedWindow, WindowSettings };
+use piston::window::{ AdvancedWindow, Window, WindowSettings };
 use piston::input::*;
 use piston::event_loop::*;
 #[cfg(feature = "include_sdl2")]
-use sdl2_window::Sdl2Window as Window;
+use sdl2_window::Sdl2Window as AppWindow;
 #[cfg(feature = "include_glfw")]
-use glfw_window::GlfwWindow as Window;
+use glfw_window::GlfwWindow as AppWindow;
 #[cfg(feature = "include_glutin")]
-use glutin_window::GlutinWindow as Window;
+use glutin_window::GlutinWindow as AppWindow;
 
 type AxisValues = HashMap<(i32, u8), f64>;
-type TouchValues = HashMap<(i64, i64), ([f64; 2], f64)>;
 
 fn main() {
     let opengl = OpenGL::V3_2;
-    let mut window: Window = WindowSettings::new("piston-example-user_input", [600, 600])
+    let mut window: AppWindow = WindowSettings::new("piston-example-user_input", [600, 600])
         .exit_on_esc(true).opengl(opengl).build().unwrap();
 
     println!("Press C to turn capture cursor on/off");
@@ -35,11 +37,12 @@ fn main() {
     let ref mut gl = GlGraphics::new(opengl);
     let mut cursor = [0.0, 0.0];
 
+    let mut touch_visualizer = TouchVisualizer::new();
     let mut axis_values: AxisValues = HashMap::new();
-    let mut touch_values: TouchValues = HashMap::new();
 
     let mut events = Events::new(EventSettings::new().lazy(true));
     while let Some(e) = events.next(&mut window) {
+        touch_visualizer.event(window.size(), &e);
         if let Some(Button::Mouse(button)) = e.press_args() {
             println!("Pressed mouse button '{:?}'", button);
         }
@@ -59,17 +62,6 @@ fn main() {
                 Button::Controller(button) => println!("Released controller button '{:?}'", button),
             }
         };
-        if let Some(args) = e.touch_args() {
-            match args.touch {
-                Touch::Start | Touch::Move => {
-                    touch_values.insert((args.device, args.id), (args.position(), args.pressure()));
-                }
-                Touch::End | Touch::Cancel => {
-                    touch_values.remove(&(args.device, args.id));
-                }
-            }
-            println!("Touch '{} {:?} {} {}'", args.id, args.touch, args.x, args.y);
-        }
         if let Some(args) = e.controller_axis_args() {
             axis_values.insert((args.id, args.axis), args.position);
         }
@@ -81,13 +73,6 @@ fn main() {
         e.mouse_relative(|dx, dy| println!("Relative mouse moved '{} {}'", dx, dy));
         e.text(|text| println!("Typed '{}'", text));
         e.resize(|w, h| println!("Resized '{}, {}'", w, h));
-        if let Some(focused) = e.focus_args() {
-            if focused { println!("Gained focus"); }
-            else {
-                touch_values.clear();
-                println!("Lost focus");
-            }
-        };
         if let Some(cursor) = e.cursor_args() {
             if cursor { println!("Mouse entered"); }
             else { println!("Mouse left"); }
@@ -98,7 +83,7 @@ fn main() {
                     graphics::clear([1.0; 4], g);
                     draw_rectangles(cursor, &window, &c, g);
                     draw_axis_values(&mut axis_values, &window, &c, g);
-                    draw_touch_values(&mut touch_values, &window, &c, g);
+                    touch_visualizer.draw(&c, g);
                 }
             );
         }
@@ -186,29 +171,5 @@ fn draw_axis_values<G: Graphics>(
     };
     for (i, &v) in axis_values.values().enumerate() {
         draw(i, v);
-    }
-}
-
-fn draw_touch_values<G: Graphics>(
-    touch_values: &mut TouchValues,
-    window: &Window,
-    c: &Context,
-    g: &mut G
-) {
-    use piston::window::Window;
-
-    let window_size = window.size();
-    let window_size = [window_size.width as f64, window_size.height as f64];
-    let color = [1.0, 0.0, 0.0, 0.4];
-    let radius = 20.0;
-    let mut draw = |pos: [f64; 2], pressure: f64| {
-        let r = radius * pressure;
-        let x = pos[0] * window_size[0] - r;
-        let y = pos[1] * window_size[1] - r;
-        let w = 2.0 * r;
-        graphics::ellipse(color, [x, y, w, w], c.transform, g);
-    };
-    for &(pos, pressure) in touch_values.values() {
-        draw(pos, pressure);
     }
 }
