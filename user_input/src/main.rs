@@ -110,8 +110,6 @@ fn draw_rectangles<G: Graphics>(
     c: &Context,
     g: &mut G,
 ) {
-    use piston::window::Window;
-
     let size = window.size();
     let draw_size = window.draw_size();
     let zoom = 0.2;
@@ -148,14 +146,12 @@ fn draw_rectangles<G: Graphics>(
         &c.draw_state, c.transform, g);
 }
 
-fn draw_axis_values<G: Graphics>(
+fn draw_axis_values<W: Window, G: Graphics>(
     axis_values: &mut AxisValues,
-    window: &Window,
+    window: &W,
     c: &Context,
     g: &mut G
 ) {
-    use piston::window::Window;
-
     let window_height = window.size().height as f64;
     let max_axis_height = 200.0;
     let offset = 10.0;
