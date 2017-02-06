@@ -175,6 +175,8 @@ fn main() {
 
         if let Some(_) = e.resize_args() {
             projection = get_projection(&window);
+            data.out_color = window.output_color.clone();
+            data.out_depth = window.output_stencil.clone();
         }
     }
 }
