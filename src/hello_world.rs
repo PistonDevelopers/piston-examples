@@ -18,7 +18,7 @@ fn main() {
     println!("{:?}", assets);
     let ref font = assets.join("FiraSans-Regular.ttf");
     let factory = window.factory.clone();
-    let mut glyphs = Glyphs::new(font, factory).unwrap();
+    let mut glyphs = Glyphs::new(font, factory, TextureSettings::new()).unwrap();
 
     window.set_lazy(true);
     while let Some(e) = window.next() {
