@@ -55,6 +55,9 @@ fn main() {
 
             println!("Pressed keyboard key '{:?}'", key);
         };
+        if let Some(args) = e.button_args() {
+            println!("Scancode {:?}", args.scancode);
+        }
         if let Some(button) = e.release_args() {
             match button {
                 Button::Keyboard(key) => println!("Released keyboard key '{:?}'", key),
