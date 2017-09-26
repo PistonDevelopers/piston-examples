@@ -9,21 +9,21 @@ name = "piston-example-user_input"
 path = "src/main.rs"
 
 [dependencies]
-piston = "0.33.0"
-piston2d-opengl_graphics = "0.46.0"
-piston2d-graphics = "0.21.1"
-piston2d-touch_visualizer = "0.4.0"
+piston = "0.34.0"
+piston2d-opengl_graphics = "0.47.0"
+piston2d-graphics = "0.22.0"
+piston2d-touch_visualizer = "0.5.0"
 
 [dependencies.pistoncore-sdl2_window]
-version = "0.44.0"
+version = "0.45.0"
 optional = true
 
 [dependencies.pistoncore-glfw_window]
-version = "0.36.0"
+version = "0.37.0"
 optional = true
 
 [dependencies.pistoncore-glutin_window]
-version = "0.39.0"
+version = "0.40.0"
 optional = true
 
 [features]

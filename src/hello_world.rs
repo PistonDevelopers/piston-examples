@@ -31,7 +31,7 @@ fn main() {
                 &mut glyphs,
                 &c.draw_state,
                 transform, g
-            );
+            ).unwrap();
         });
     }
 }
