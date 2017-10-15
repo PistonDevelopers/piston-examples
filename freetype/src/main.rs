@@ -18,7 +18,7 @@ fn render_text(face: &mut ft::Face, gl: &mut GlGraphics, t: Matrix2d, text: &str
     for ch in text.chars() {
         use graphics::*;
 
-        face.load_char(ch as usize, ft::face::RENDER).unwrap();
+        face.load_char(ch as usize, ft::face::LoadFlag::RENDER).unwrap();
         let g = face.glyph();
 
         let bitmap = g.bitmap();
