@@ -17,7 +17,7 @@ fn main() {
 
     let mut canvas = im::ImageBuffer::new(width, height);
     let mut draw = false;
-    let mut texture = Texture::from_image(
+    let mut texture: G2dTexture = Texture::from_image(
             &mut window.factory,
             &canvas,
             &TextureSettings::new()

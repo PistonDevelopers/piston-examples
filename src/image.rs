@@ -15,7 +15,7 @@ fn main() {
     let assets = find_folder::Search::ParentsThenKids(3, 3)
         .for_folder("assets").unwrap();
     let rust_logo = assets.join("rust.png");
-    let rust_logo = Texture::from_path(
+    let rust_logo: G2dTexture = Texture::from_path(
             &mut window.factory,
             &rust_logo,
             Flip::None,
