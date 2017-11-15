@@ -3,7 +3,6 @@ extern crate vecmath;
 extern crate camera_controllers;
 #[macro_use]
 extern crate gfx;
-extern crate sdl2_window;
 extern crate shader_version;
 
 //----------------------------------------
@@ -39,7 +38,6 @@ fn main() {
     use gfx::traits::*;
     use shader_version::Shaders;
     use shader_version::glsl::GLSL;
-    use sdl2_window::Sdl2Window;
     use camera_controllers::{
         FirstPersonSettings,
         FirstPerson,
@@ -49,7 +47,7 @@ fn main() {
 
     let opengl = OpenGL::V3_2;
 
-    let mut window: PistonWindow<Sdl2Window> =
+    let mut window: PistonWindow =
         WindowSettings::new("piston: cube", [640, 480])
         .exit_on_esc(true)
         .samples(4)
@@ -132,7 +130,7 @@ fn main() {
             pipe::new()
         ).unwrap();
 
-    let get_projection = |w: &PistonWindow<Sdl2Window>| {
+    let get_projection = |w: &PistonWindow| {
         let draw_size = w.window.draw_size();
         CameraPerspective {
             fov: 90.0, near_clip: 0.1, far_clip: 1000.0,
