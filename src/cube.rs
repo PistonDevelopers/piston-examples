@@ -111,6 +111,7 @@ fn main() {
     ];
     let (_, texture_view) = factory.create_texture_immutable::<gfx::format::Rgba8>(
         gfx::texture::Kind::D2(2, 2, gfx::texture::AaMode::Single),
+        gfx::texture::Mipmap::Provided,
         &[&texels]).unwrap();
 
     let sinfo = gfx::texture::SamplerInfo::new(
