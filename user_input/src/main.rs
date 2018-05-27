@@ -63,6 +63,7 @@ fn main() {
                 Button::Keyboard(key) => println!("Released keyboard key '{:?}'", key),
                 Button::Mouse(button) => println!("Released mouse button '{:?}'", button),
                 Button::Controller(button) => println!("Released controller button '{:?}'", button),
+                Button::Hat(hat) => println!("Released controller hat `{:?}`", hat),
             }
         };
         if let Some(args) = e.controller_axis_args() {
