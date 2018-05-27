@@ -7,17 +7,16 @@ extern crate find_folder;
 
 use sdl2_window::Sdl2Window;
 use opengl_graphics::{ GlGraphics, Texture, TextureSettings, OpenGL };
-use graphics::math::Matrix2d;
 use piston::window::WindowSettings;
 use piston::input::*;
 use piston::event_loop::{Events, EventSettings, EventLoop};
+use graphics::{Context, Graphics, ImageSize};
 
-fn render_text(face: &mut ft::Face, gl: &mut GlGraphics, t: Matrix2d, text: &str) {
+fn glyphs(face: &mut ft::Face, text: &str) -> Vec<(Texture, [f64; 2])> {
     let mut x = 10;
     let mut y = 0;
+    let mut res = vec![];
     for ch in text.chars() {
-        use graphics::*;
-
         face.load_char(ch as usize, ft::face::LoadFlag::RENDER).unwrap();
         let g = face.glyph();
 
@@ -28,15 +27,26 @@ fn render_text(face: &mut ft::Face, gl: &mut GlGraphics, t: Matrix2d, text: &str
             bitmap.rows() as u32,
             &TextureSettings::new()
         ).unwrap();
-        Image::new_color(color::BLACK).draw(
-            &texture,
-            &Default::default(),
-            t.trans((x + g.bitmap_left()) as f64, (y - g.bitmap_top()) as f64),
-            gl
-        );
+        res.push((texture, [(x + g.bitmap_left()) as f64, (y - g.bitmap_top()) as f64]));
 
         x += (g.advance().x >> 6) as i32;
         y += (g.advance().y >> 6) as i32;
+    }
+    res
+}
+
+fn render_text<G, T>(glyphs: &[(T, [f64; 2])], c: &Context, gl: &mut G)
+    where G: Graphics<Texture = T>, T: ImageSize
+{
+    for &(ref texture, [x, y]) in glyphs {
+        use graphics::*;
+
+        Image::new_color(color::BLACK).draw(
+            texture,
+            &c.draw_state,
+            c.transform.trans(x, y),
+            gl
+        );
     }
 }
 
@@ -57,6 +67,7 @@ fn main() {
     face.set_pixel_sizes(0, 48).unwrap();
 
     let ref mut gl = GlGraphics::new(opengl);
+    let glyphs = glyphs(&mut face, "Hello Piston!");
 
     let mut events = Events::new(EventSettings::new().lazy(true));
     while let Some(e) = events.next(&mut window) {
@@ -64,10 +75,8 @@ fn main() {
             use graphics::*;
 
             gl.draw(args.viewport(), |c, gl| {
-                let transform = c.transform.trans(0.0, 100.0);
-
                 clear(color::WHITE, gl);
-                render_text(&mut face, gl, transform, "Hello Piston!");
+                render_text(&glyphs, &c.trans(0.0, 100.0), gl);
             });
         }
     }
