@@ -39,11 +39,8 @@ fn main() {
                 .draw([50.0, 50.0, 100.0, 100.0], &draw_state, c.transform, g);
 
             let transform = c.transform.trans(100.0, 100.0);
-            // Compute clip rectangle from upper left corner.
-            let (clip_x, clip_y, clip_w, clip_h) = (100, 100, 100, 100);
-            let (clip_x, clip_y, clip_w, clip_h) =
-                (clip_x, c.viewport.unwrap().draw_size[1] - clip_y - clip_h, clip_w, clip_h);
-            let clipped = c.draw_state.scissor([clip_x, clip_y, clip_w, clip_h]);
+            // Clip rectangle from upper left corner.
+            let clipped = c.draw_state.scissor([100, 100, 100, 100]);
             Image::new().draw(&rust_logo, &clipped, transform, g);
 
             let transform = c.transform.trans(200.0, 200.0);
