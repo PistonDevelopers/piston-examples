@@ -29,8 +29,12 @@ fn main() {
         .for_folder("assets").unwrap();
     let id;
     let mut scene = Scene::new();
+    let mut texture_context = TextureContext {
+        factory: window.factory.clone(),
+        encoder: window.factory.create_command_buffer().into()
+    };
     let tex = Rc::new(Texture::from_path(
-            &mut window.factory,
+            &mut texture_context,
             assets.join("rust.png"),
             Flip::None,
             &TextureSettings::new()
@@ -66,7 +70,7 @@ fn main() {
     while let Some(e) = window.next() {
         scene.event(&e);
 
-        window.draw_2d(&e, |c, g| {
+        window.draw_2d(&e, |c, g, _| {
             clear([1.0, 1.0, 1.0, 1.0], g);
             scene.draw(c.transform, g);
         });

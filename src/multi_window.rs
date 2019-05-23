@@ -18,7 +18,7 @@ fn main() {
         for (i, window) in windows.iter_mut().enumerate() {
             if let Some(e) = window.next() {
                 any_window_open = true;
-                window.draw_2d(&e, |_c, g| {
+                window.draw_2d(&e, |_c, g, _device| {
                     clear(colors[i], g);
                 });
             }

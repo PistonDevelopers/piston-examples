@@ -23,7 +23,7 @@ fn main() {
         .for_folder("assets").unwrap();
     let image = assets.join("rust.png");
     let image = Texture::from_path(
-            &mut window.factory,
+            &mut window.create_texture_context(),
             &image,
             Flip::None,
             &TextureSettings::new()
@@ -72,7 +72,6 @@ fn main() {
         });
         if let Some(button) = e.press_args() {
             use piston_window::Button::Keyboard;
-            use piston_window::Key;
 
             if button == Keyboard(Key::G) {
                 draw_grid = !draw_grid;
@@ -84,7 +83,7 @@ fn main() {
                 println!("Reset grid");
             }
         }
-        window.draw_2d(&e, |c, g| {
+        window.draw_2d(&e, |c, g, _| {
             clear(color::WHITE, g);
 
             // Draw deformed image.

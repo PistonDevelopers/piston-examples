@@ -41,10 +41,10 @@ name = "multi_window"
 path = "src/multi_window.rs"
 
 [dependencies]
-piston_window = "0.89.0"
+piston_window = "0.92.0"
 find_folder = "0.3.0"
 piston-ai_behavior = "0.27.0"
-piston2d-sprite = "0.50.0"
+piston2d-sprite = "0.51.0"
 image = "0.21.0"
 piston2d-drag_controller = "0.25.0"
 gfx = "0.17.1"
