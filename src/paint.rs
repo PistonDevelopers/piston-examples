@@ -17,8 +17,12 @@ fn main() {
 
     let mut canvas = im::ImageBuffer::new(width, height);
     let mut draw = false;
+    let mut texture_context = TextureContext {
+        factory: window.factory.clone(),
+        encoder: window.factory.create_command_buffer().into()
+    };
     let mut texture: G2dTexture = Texture::from_image(
-            &mut window.factory,
+            &mut texture_context,
             &canvas,
             &TextureSettings::new()
         ).unwrap();
@@ -27,8 +31,11 @@ fn main() {
 
     while let Some(e) = window.next() {
         if let Some(_) = e.render_args() {
-            texture.update(&mut window.encoder, &canvas).unwrap();
-            window.draw_2d(&e, |c, g| {
+            texture.update(&mut texture_context, &canvas).unwrap();
+            window.draw_2d(&e, |c, g, device| {
+                // Update texture before rendering.
+                texture_context.encoder.flush(device);
+
                 clear([1.0; 4], g);
                 image(&texture, c.transform, g);
             });

@@ -22,13 +22,13 @@ fn main() {
     let blends = [Blend::Alpha, Blend::Add, Blend::Invert, Blend::Multiply];
     let mut blend = 0;
     let mut clip_inside = true;
-    let rust_logo = Texture::from_path(&mut window.factory,
+    let rust_logo = Texture::from_path(&mut window.create_texture_context(),
                                        assets.join("rust.png"),
                                        Flip::None,
                                        &TextureSettings::new()).unwrap();
     window.set_lazy(true);
     while let Some(e) = window.next() {
-        window.draw_2d(&e, |c, g| {
+        window.draw_2d(&e, |c, g, _| {
             clear([0.8, 0.8, 0.8, 1.0], g);
             g.clear_stencil(0);
             Rectangle::new([1.0, 0.0, 0.0, 1.0])

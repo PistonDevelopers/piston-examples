@@ -11,6 +11,10 @@ fn main() {
 
     let mut window: PistonWindow = WindowSettings::new("piston", [1024; 2]).build().unwrap();
 
+    let mut texture_context = TextureContext {
+        factory: window.factory.clone(),
+        encoder: window.factory.create_command_buffer().into()
+    };
     let textures = {
         (0..texture_count).map(|_| {
             let mut img = im::ImageBuffer::new(2, 2);
@@ -21,7 +25,7 @@ fn main() {
                 }
             }
             Texture::from_image(
-                &mut window.factory,
+                &mut texture_context,
                 &img,
                 &TextureSettings::new()
             ).unwrap()
@@ -39,7 +43,7 @@ fn main() {
             counter += 1;
             if counter > frames { break; }
         }
-        window.draw_2d(&e, |c, g| {
+        window.draw_2d(&e, |c, g, _| {
             clear([0.0, 0.0, 0.0, 1.0], g);
             for p in &mut positions {
                 let (x, y) = *p;
