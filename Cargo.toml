@@ -40,6 +40,10 @@ path = "src/texture_swap.rs"
 name = "multi_window"
 path = "src/multi_window.rs"
 
+[[bin]]
+name = "shapes"
+path = "src/shapes.rs"
+
 [dependencies]
 piston_window = "0.92.0"
 find_folder = "0.3.0"
