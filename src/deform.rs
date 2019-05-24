@@ -1,7 +1,9 @@
 extern crate piston_window;
 extern crate drag_controller;
 extern crate find_folder;
+extern crate deform_grid;
 
+use deform_grid::DeformGrid;
 use piston_window::*;
 use drag_controller::{ DragController, Drag };
 
@@ -32,7 +34,7 @@ fn main() {
     let (width, height) = image.get_size();
     let width = width as f64;
     let height = height as f64;
-    let mut grid = deform::DeformGrid::new(
+    let mut grid = DeformGrid::new(
         [0.0, 0.0, width, height],
         20, 20
     );
