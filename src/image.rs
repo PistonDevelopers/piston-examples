@@ -8,7 +8,7 @@ fn main() {
     let mut window: PistonWindow =
         WindowSettings::new("piston: image", [300, 300])
         .exit_on_esc(true)
-        .opengl(opengl)
+        .graphics_api(opengl)
         .build()
         .unwrap();
 

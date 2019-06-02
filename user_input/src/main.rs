@@ -29,7 +29,7 @@ type AxisValues = HashMap<(i32, u8), f64>;
 fn main() {
     let opengl = OpenGL::V3_2;
     let mut window: AppWindow = WindowSettings::new("piston-example-user_input", [600, 600])
-        .exit_on_esc(true).opengl(opengl).build().unwrap();
+        .exit_on_esc(true).graphics_api(opengl).build().unwrap();
 
     println!("Press C to turn capture cursor on/off");
 
