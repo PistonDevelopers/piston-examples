@@ -55,7 +55,7 @@ fn main() {
     let mut window: Sdl2Window =
         WindowSettings::new("piston-example-freetype", [300, 300])
         .exit_on_esc(true)
-        .opengl(opengl)
+        .graphics_api(opengl)
         .build()
         .unwrap();
 

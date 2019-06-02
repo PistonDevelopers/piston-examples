@@ -51,7 +51,7 @@ fn main() {
         WindowSettings::new("piston: cube", [640, 480])
         .exit_on_esc(true)
         .samples(4)
-        .opengl(opengl)
+        .graphics_api(opengl)
         .build()
         .unwrap();
     window.set_capture_cursor(true);

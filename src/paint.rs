@@ -11,7 +11,7 @@ fn main() {
     let mut window: PistonWindow =
         WindowSettings::new("piston: paint", (width, height))
         .exit_on_esc(true)
-        .opengl(opengl)
+        .graphics_api(opengl)
         .build()
         .unwrap();
 
