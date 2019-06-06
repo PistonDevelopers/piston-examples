@@ -9,9 +9,9 @@ name = "piston-example-freetype"
 path = "src/main.rs"
 
 [dependencies]
-piston = "0.45.0"
+piston = "0.46.0"
 piston2d-opengl_graphics = "0.65.0"
 piston2d-graphics = "0.32.0"
-pistoncore-sdl2_window = "0.59.0"
+pistoncore-sdl2_window = "0.60.0"
 freetype-rs = "0.20.0"
 find_folder = "0.3.0"
