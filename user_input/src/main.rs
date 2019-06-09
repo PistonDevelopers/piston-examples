@@ -69,14 +69,14 @@ fn main() {
         if let Some(args) = e.controller_axis_args() {
             axis_values.insert((args.id, args.axis), args.position);
         }
-        e.mouse_cursor(|x, y| {
-            cursor = [x, y];
-            println!("Mouse moved '{} {}'", x, y);
+        e.mouse_cursor(|pos| {
+            cursor = pos;
+            println!("Mouse moved '{} {}'", pos[0], pos[1]);
         });
-        e.mouse_scroll(|dx, dy| println!("Scrolled mouse '{}, {}'", dx, dy));
-        e.mouse_relative(|dx, dy| println!("Relative mouse moved '{} {}'", dx, dy));
+        e.mouse_scroll(|d| println!("Scrolled mouse '{}, {}'", d[0], d[1]));
+        e.mouse_relative(|d| println!("Relative mouse moved '{} {}'", d[0], d[1]));
         e.text(|text| println!("Typed '{}'", text));
-        e.resize(|w, h| println!("Resized '{}, {}'", w, h));
+        e.resize(|args| println!("Resized '{}, {}'", args.width, args.height));
         if let Some(cursor) = e.cursor_args() {
             if cursor { println!("Mouse entered"); }
             else { println!("Mouse left"); }
