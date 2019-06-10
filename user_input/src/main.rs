@@ -76,7 +76,7 @@ fn main() {
         e.mouse_scroll(|d| println!("Scrolled mouse '{}, {}'", d[0], d[1]));
         e.mouse_relative(|d| println!("Relative mouse moved '{} {}'", d[0], d[1]));
         e.text(|text| println!("Typed '{}'", text));
-        e.resize(|args| println!("Resized '{}, {}'", args.width, args.height));
+        e.resize(|args| println!("Resized '{}, {}'", args.window_size[0], args.window_size[1]));
         if let Some(cursor) = e.cursor_args() {
             if cursor { println!("Mouse entered"); }
             else { println!("Mouse left"); }
