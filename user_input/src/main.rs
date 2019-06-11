@@ -28,7 +28,7 @@ type AxisValues = HashMap<(i32, u8), f64>;
 
 fn main() {
     let opengl = OpenGL::V3_2;
-    let mut window: AppWindow = WindowSettings::new("piston-example-user_input", [600, 600])
+    let mut window: AppWindow = WindowSettings::new("piston-example-user_input", [400, 400])
         .exit_on_esc(true).graphics_api(opengl).build().unwrap();
 
     println!("Press C to turn capture cursor on/off");
@@ -88,6 +88,10 @@ fn main() {
                     draw_rectangles(cursor, &window, &c, g);
                     draw_axis_values(&mut axis_values, &window, &c, g);
                     touch_visualizer.draw(&c, g);
+                    graphics::ellipse(
+                        [0.0, 1.0, 0.0, 1.0],
+                        graphics::ellipse::circle(cursor[0], cursor[1], 5.0),
+                        c.transform, g);
                 }
             );
         }
