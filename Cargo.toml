@@ -45,11 +45,11 @@ name = "shapes"
 path = "src/shapes.rs"
 
 [dependencies]
-piston_window = "0.101.0"
+piston_window = "0.102.0"
 find_folder = "0.3.0"
 piston-ai_behavior = "0.31.0"
 piston2d-sprite = "0.56.0"
-image = "0.21.0"
+image = "0.22.1"
 piston2d-drag_controller = "0.29.0"
 piston2d-deform_grid = "0.3.0"
 gfx = "0.17.1"
