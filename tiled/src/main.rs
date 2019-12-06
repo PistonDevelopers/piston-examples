@@ -17,7 +17,7 @@ fn main() {
     let opengl = OpenGL::V3_2;
     let mut window: PistonWindow = WindowSettings::new("piston: tiled", [600, 600])
         .exit_on_esc(true)
-        .opengl(opengl)
+        .graphics_api(opengl)
         .build()
         .unwrap();
 
@@ -25,9 +25,10 @@ fn main() {
     let tile_width = tileset.tile_width;
     let tile_height = tileset.tile_height;
 
+    let ref mut texture_context = window.create_texture_context();
     let tilesheet = assets.join(&tileset.images[0].source);
     let tilesheet = Texture::from_path(
-        &mut window.factory,
+        texture_context,
         &tilesheet,
         Flip::None,
         &TextureSettings::new(),
@@ -38,7 +39,7 @@ fn main() {
     let image = Image::new();
 
     while let Some(e) = window.next() {
-        window.draw_2d(&e, |c, g| {
+        window.draw_2d(&e, |c, g, _| {
             clear([0.5; 4], g);
 
             for (y, row) in layer.tiles.iter().enumerate().clone() {
