@@ -114,7 +114,7 @@ fn main() {
 
 fn draw_rectangles<G: Graphics>(
     cursor: [f64; 2],
-    window: &Window,
+    window: &dyn Window,
     c: &Context,
     g: &mut G,
 ) {
