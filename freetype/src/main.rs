@@ -1,11 +1,23 @@
 extern crate graphics;
 extern crate freetype as ft;
-extern crate sdl2_window;
 extern crate opengl_graphics;
 extern crate piston;
 extern crate find_folder;
 
-use sdl2_window::Sdl2Window;
+#[cfg(feature = "include_sdl2")]
+extern crate sdl2_window;
+#[cfg(feature = "include_glfw")]
+extern crate glfw_window;
+#[cfg(feature = "include_glutin")]
+extern crate glutin_window;
+
+#[cfg(feature = "include_sdl2")]
+use sdl2_window::Sdl2Window as AppWindow;
+#[cfg(feature = "include_glfw")]
+use glfw_window::GlfwWindow as AppWindow;
+#[cfg(feature = "include_glutin")]
+use glutin_window::GlutinWindow as AppWindow;
+
 use opengl_graphics::{ GlGraphics, Texture, TextureSettings, OpenGL };
 use piston::window::WindowSettings;
 use piston::input::*;
@@ -52,7 +64,7 @@ fn render_text<G, T>(glyphs: &[(T, [f64; 2])], c: &Context, gl: &mut G)
 
 fn main() {
     let opengl = OpenGL::V3_2;
-    let mut window: Sdl2Window =
+    let mut window: AppWindow =
         WindowSettings::new("piston-example-freetype", [300, 300])
         .exit_on_esc(true)
         .graphics_api(opengl)
