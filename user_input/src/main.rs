@@ -24,7 +24,7 @@ use glfw_window::GlfwWindow as AppWindow;
 #[cfg(feature = "include_glutin")]
 use glutin_window::GlutinWindow as AppWindow;
 
-type AxisValues = HashMap<(i32, u8), f64>;
+type AxisValues = HashMap<(u32, u8), f64>;
 
 fn main() {
     let opengl = OpenGL::V3_2;
