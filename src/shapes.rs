@@ -27,7 +27,7 @@ fn main() {
                 ellipse(green, rect, c.transform, g);
                 Ellipse::new_border(black, 2.0).draw(rect, &c.draw_state, c.transform, g);
                 let blue = [0.0, 0.0, 1.0, 1.0];
-                circle_arc(blue, 10.0, 0.0, 6.28 - i as f64 * 1.2, [230.0, 30.0, 40.0, 40.0],
+                circle_arc(blue, 10.0, 0.0, f64::_360() - i as f64 * 1.2, [230.0, 30.0, 40.0, 40.0],
                            c.transform, g);
                 let orange = [1.0, 0.5, 0.0, 1.0];
                 line(orange, 5.0, [320.0 + i as f64 * 15.0, 20.0, 380.0 - i as f64 * 15.0, 80.0],
