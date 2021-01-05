@@ -1,0 +1,47 @@
+name: examples/deform - CI
+# Relevant to events - https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows
+on: 
+  pull_request:
+    types: [synchronize, opened, reopened, ready_for_review]
+    paths:
+    - 'examples/deform.rs'
+env:
+  CLICOLOR_FORCE: 1
+  exampleName: deform
+jobs:
+  ci:
+    name: CI
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        rust: [stable, beta, nightly, 1.44.0]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Install rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: ${{ matrix.rust }}
+        profile: minimal
+        override: true
+    - name: Run CI
+      if: matrix.rust == 'stable' || matrix.rust == 'beta'
+      uses: actions-rs/cargo@v1
+      with:
+        command: build
+        args: --example "$exampleName"
+    - name: Run CI (Allow Failures)
+      if: matrix.rust == 'nightly'
+      continue-on-error: true
+      uses: actions-rs/cargo@v1
+      with:
+        command: build
+        args: --example "$exampleName"
+    - name: Run CI (Minimal Supported Rust Version)
+      if: matrix.rust != 'stable' && matrix.rust != 'beta' && matrix.rust != 'nightly' && matrix.os == 'ubuntu-latest'
+      uses: actions-rs/cargo@v1
+      with:
+        command: build
+        args: --example "$exampleName"
