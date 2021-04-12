@@ -4,54 +4,14 @@ version = "0.0.0"
 authors = ["bvssvni <bvssvni@gmail.com>"]
 keywords = []
 
-[[bin]]
-name = "hello_world"
-path = "src/hello_world.rs"
-
-[[bin]]
-name = "draw_state"
-path = "src/draw_state.rs"
-
-[[bin]]
-name = "sprite"
-path = "src/sprite.rs"
-
-[[bin]]
-name = "image"
-path = "src/image.rs"
-
-[[bin]]
-name = "paint"
-path = "src/paint.rs"
-
-[[bin]]
-name = "deform"
-path = "src/deform.rs"
-
-[[bin]]
-name = "cube"
-path = "src/cube.rs"
-
-[[bin]]
-name = "texture_swap"
-path = "src/texture_swap.rs"
-
-[[bin]]
-name = "multi_window"
-path = "src/multi_window.rs"
-
-[[bin]]
-name = "shapes"
-path = "src/shapes.rs"
-
 [dependencies]
-piston_window = "0.118.0"
+piston_window = "0.119.0"
 find_folder = "0.3.0"
 piston-ai_behavior = "0.32.0"
-piston2d-sprite = "0.63.0"
+piston2d-sprite = "0.64.0"
 image = "0.23.0"
 piston2d-drag_controller = "0.30.0"
-piston2d-deform_grid = "0.9.0"
+piston2d-deform_grid = "0.10.0"
 gfx = "0.18.1"
 gfx_device_gl = "0.16.2"
 vecmath = "1.0.0"
