@@ -5,7 +5,7 @@ authors = ["bvssvni <bvssvni@gmail.com>"]
 keywords = []
 
 [dependencies]
-piston_window = "0.119.0"
+piston_window = "0.120.0"
 find_folder = "0.3.0"
 piston-ai_behavior = "0.32.0"
 piston2d-sprite = "0.64.0"
