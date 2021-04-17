@@ -24,7 +24,7 @@ version = "0.71.0"
 optional = true
 
 [dependencies.pistoncore-glutin_window]
-version = "0.68.0"
+version = "0.69.0"
 optional = true
 
 [features]
