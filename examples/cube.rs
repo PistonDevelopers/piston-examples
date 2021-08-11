@@ -56,7 +56,7 @@ fn main() {
         .unwrap();
     window.set_capture_cursor(true);
 
-    let ref mut factory = window.factory.clone();
+    let mut factory = window.factory.clone();
 
     let vertex_data = vec![
         //top (0, 0, 1)
@@ -147,7 +147,7 @@ fn main() {
     );
 
     let mut data = pipe::Data {
-            vbuf: vbuf.clone(),
+            vbuf,
             u_model_view_proj: [[0.0; 4]; 4],
             t_color: (texture_view, factory.create_sampler(sinfo)),
             out_color: window.output_color.clone(),
@@ -171,7 +171,7 @@ fn main() {
             window.encoder.draw(&slice, &pso, &data);
         });
 
-        if let Some(_) = e.resize_args() {
+        if e.resize_args().is_some() {
             projection = get_projection(&window);
             data.out_color = window.output_color.clone();
             data.out_depth = window.output_stencil.clone();

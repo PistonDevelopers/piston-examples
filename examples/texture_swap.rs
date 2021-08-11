@@ -39,7 +39,7 @@ fn main() {
     let mut counter = 0;
     window.set_bench_mode(true);
     while let Some(e) = window.next() {
-        if let Some(_) = e.render_args() {
+        if e.render_args().is_some() {
             counter += 1;
             if counter > frames { break; }
         }
