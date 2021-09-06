@@ -39,7 +39,7 @@ fn main() {
             Flip::None,
             &TextureSettings::new()
         ).unwrap());
-    let mut sprite = Sprite::from_texture(tex.clone());
+    let mut sprite = Sprite::from_texture(tex);
     sprite.set_position(width as f64 / 2.0, height as f64 / 2.0);
 
     id = scene.add_child(sprite);
@@ -74,7 +74,7 @@ fn main() {
             clear([1.0, 1.0, 1.0, 1.0], g);
             scene.draw(c.transform, g);
         });
-        if let Some(_) = e.press_args() {
+        if e.press_args().is_some() {
             scene.toggle(id, &seq);
             scene.toggle(id, &rotate);
         }

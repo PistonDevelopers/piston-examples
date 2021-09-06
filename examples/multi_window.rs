@@ -8,7 +8,7 @@ fn create_window(number: usize) -> PistonWindow {
 }
 
 fn main() {
-    let mut windows: Vec<_> = (0..3 as usize).into_iter().map(|n|
+    let mut windows: Vec<_> = (0..3_usize).into_iter().map(|n|
         create_window(n).position([100 + n as i32 * 300, 100])).collect();
     let colors = vec![[1.0, 0.0, 0.0, 1.0], [0.0, 1.0, 0.0, 1.0], [0.0, 0.0, 1.0, 1.0]];
 

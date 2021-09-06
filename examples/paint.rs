@@ -30,7 +30,7 @@ fn main() {
     let mut last_pos: Option<[f64; 2]> = None;
 
     while let Some(e) = window.next() {
-        if let Some(_) = e.render_args() {
+        if e.render_args().is_some() {
             texture.update(&mut texture_context, &canvas).unwrap();
             window.draw_2d(&e, |c, g, device| {
                 // Update texture before rendering.
