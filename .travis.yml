@@ -3,6 +3,8 @@ rust:
   - stable
   - nightly
 before_install:
+    - sudo apt update
+    - sudo apt install -y libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
     - wget https://www.libsdl.org/release/SDL2-2.0.5.tar.gz -O SDL2-2.0.5.tar.gz
     - tar -xzvf SDL2-2.0.5.tar.gz
 install:
@@ -13,5 +15,5 @@ env:
     - EXAMPLE=freetype
 script:
   - cargo build -v
-  - cd $EXAMPLE
+  - cd examples/$EXAMPLE
   - cargo build -v
