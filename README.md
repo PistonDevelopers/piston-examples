@@ -1,4 +1,4 @@
-# piston-examples [![Build Status](https://travis-ci.org/PistonDevelopers/piston-examples.svg?branch=master)](https://travis-ci.org/PistonDevelopers/piston-examples)
+# Piston Examples
 
 A collection of examples using the Piston game engine
 
