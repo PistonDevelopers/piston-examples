@@ -10,8 +10,8 @@ path = "src/main.rs"
 
 [dependencies]
 piston = "0.53.0"
-piston2d-opengl_graphics = "0.81.0"
-piston2d-graphics = "0.42.0"
+piston2d-opengl_graphics = "0.82.0"
+piston2d-graphics = "0.43.0"
 freetype-rs = "0.32.0"
 find_folder = "0.3.0"
 
