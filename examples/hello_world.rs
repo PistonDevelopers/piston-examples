@@ -23,8 +23,8 @@ fn main() {
         window.draw_2d(&e, |c, g, device| {
             let transform = c.transform.trans(10.0, 100.0);
 
-            clear([0.0, 0.0, 0.0, 1.0], g);
-            text::Text::new_color([0.0, 1.0, 0.0, 1.0], 32).draw(
+            clear([1.0, 1.0, 1.0, 1.0], g);
+            text::Text::new_color([0.0, 0.0, 0.0, 1.0], 32).draw(
                 "Hello world!",
                 &mut glyphs,
                 &c.draw_state,
