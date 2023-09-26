@@ -6,16 +6,16 @@ authors = ["bvssvni <bvssvni@gmail.com>"]
 keywords = []
 
 [dependencies]
-piston_window = "0.128.0"
+piston_window = "0.130.0"
 find_folder = "0.3.0"
 piston-ai_behavior = "0.33.0"
-piston2d-sprite = "0.67.0"
+piston2d-sprite = "0.68.0"
 image = "0.24.1"
 piston2d-drag_controller = "0.30.0"
-piston2d-deform_grid = "0.13.0"
+piston2d-deform_grid = "0.14.0"
 gfx = "0.18.1"
 gfx_device_gl = "0.16.2"
 vecmath = "1.0.0"
-camera_controllers = "0.33.0"
+camera_controllers = "0.34.0"
 rand = "0.6.0"
 shader_version = "0.7.0"
