@@ -6,6 +6,10 @@ authors = ["bvssvni <bvssvni@gmail.com>"]
 keywords = []
 
 [dependencies]
+piston = "0.53.0"
+piston2d-graphics = "0.43.0"
+pistoncore-glutin_window = "0.71.0"
+piston2d-opengl_graphics = "0.82.0"
 piston_window = "0.131.0"
 find_folder = "0.3.0"
 piston-ai_behavior = "0.33.0"
@@ -17,5 +21,5 @@ gfx = "0.18.1"
 gfx_device_gl = "0.16.2"
 vecmath = "1.0.0"
 camera_controllers = "0.34.0"
-rand = "0.6.0"
+rand = "0.8.5"
 shader_version = "0.7.0"
