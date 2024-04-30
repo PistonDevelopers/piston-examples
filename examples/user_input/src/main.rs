@@ -109,6 +109,9 @@ fn main() {
             println!("{}", x);
             */
         }
+        if let Some(_) = e.close_args() {
+            println!("Closed");
+        }
     }
 }
 
