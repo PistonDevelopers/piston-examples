@@ -9,6 +9,8 @@ extern crate sdl2_window;
 extern crate glfw_window;
 #[cfg(feature = "include_glutin")]
 extern crate glutin_window;
+#[cfg(feature = "include_winit")]
+extern crate winit_window;
 
 use touch_visualizer::TouchVisualizer;
 use opengl_graphics::{ GlGraphics, OpenGL };
@@ -23,6 +25,8 @@ use sdl2_window::Sdl2Window as AppWindow;
 use glfw_window::GlfwWindow as AppWindow;
 #[cfg(feature = "include_glutin")]
 use glutin_window::GlutinWindow as AppWindow;
+#[cfg(feature = "include_winit")]
+use winit_window::WinitWindow as AppWindow;
 
 type AxisValues = HashMap<(u32, u8), f64>;
 
@@ -34,6 +38,7 @@ fn main() {
     println!("Press C to turn capture cursor on/off");
 
     let mut capture_cursor = false;
+    #[cfg(not(feature = "include_winit"))]
     let ref mut gl = GlGraphics::new(opengl);
     let mut cursor = [0.0, 0.0];
 
@@ -81,6 +86,7 @@ fn main() {
             if cursor { println!("Mouse entered"); }
             else { println!("Mouse left"); }
         };
+        #[cfg(not(feature = "include_winit"))]
         if let Some(args) = e.render_args() {
             // println!("Render {}", args.ext_dt);
             gl.draw(args.viewport(), |c, g| {
