@@ -1,8 +1,7 @@
-extern crate rand;
-extern crate piston_window;
-extern crate image as im;
 
 use piston_window::*;
+use image as im;
+use wgpu_graphics::{Texture, TextureSettings};
 
 fn main() {
     let texture_count = 1024;
@@ -11,10 +10,7 @@ fn main() {
 
     let mut window: PistonWindow = WindowSettings::new("piston", [1024; 2]).build().unwrap();
 
-    let mut texture_context = TextureContext {
-        factory: window.factory.clone(),
-        encoder: window.factory.create_command_buffer().into()
-    };
+    let mut texture_context = window.create_texture_context();
     let textures = {
         (0..texture_count).map(|_| {
             let mut img = im::ImageBuffer::new(2, 2);
@@ -29,7 +25,7 @@ fn main() {
                 &img,
                 &TextureSettings::new()
             ).unwrap()
-        }).collect::<Vec<Texture<_>>>()
+        }).collect::<Vec<Texture>>()
     };
 
     let mut positions = (0..texture_count)
@@ -44,6 +40,8 @@ fn main() {
             if counter > frames { break; }
         }
         window.draw_2d(&e, |c, g, _| {
+            use graphics::*;
+
             clear([0.0, 0.0, 0.0, 1.0], g);
             for p in &mut positions {
                 let (x, y) = *p;

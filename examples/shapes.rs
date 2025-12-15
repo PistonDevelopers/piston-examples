@@ -3,16 +3,16 @@ extern crate piston_window;
 use piston_window::*;
 
 fn main() {
-    let opengl = OpenGL::V3_2;
     let mut window: PistonWindow = WindowSettings::new("shapes", [512; 2])
         .exit_on_esc(true)
-        .graphics_api(opengl)
         .build()
         .unwrap();
     window.set_lazy(true);
 
     while let Some(e) = window.next() {
         window.draw_2d(&e, |c, g, _| {
+            use graphics::*;
+
             clear([1.0; 4], g);
             for i in 0..5 {
                 let c = c.trans(0.0, i as f64 * 100.0);

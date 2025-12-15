@@ -1,7 +1,3 @@
-extern crate piston_window;
-extern crate ai_behavior;
-extern crate sprite;
-extern crate find_folder;
 
 use std::rc::Rc;
 
@@ -14,14 +10,13 @@ use ai_behavior::{
     WaitForever,
     While,
 };
+use wgpu_graphics::{Texture, TextureSettings};
 
 fn main() {
     let (width, height) = (300, 300);
-    let opengl = OpenGL::V3_2;
     let mut window: PistonWindow =
         WindowSettings::new("piston: sprite", (width, height))
         .exit_on_esc(true)
-        .graphics_api(opengl)
         .build()
         .unwrap();
 
@@ -29,14 +24,10 @@ fn main() {
         .for_folder("assets").unwrap();
     let id;
     let mut scene = Scene::new();
-    let mut texture_context = TextureContext {
-        factory: window.factory.clone(),
-        encoder: window.factory.create_command_buffer().into()
-    };
+    let mut texture_context = window.create_texture_context();
     let tex = Rc::new(Texture::from_path(
             &mut texture_context,
             assets.join("rust.png"),
-            Flip::None,
             &TextureSettings::new()
         ).unwrap());
     let mut sprite = Sprite::from_texture(tex);
@@ -71,6 +62,8 @@ fn main() {
         scene.event(&e);
 
         window.draw_2d(&e, |c, g, _| {
+            use graphics::*;
+
             clear([1.0, 1.0, 1.0, 1.0], g);
             scene.draw(c.transform, g);
         });

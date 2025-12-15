@@ -1,8 +1,6 @@
-extern crate piston_window;
-extern crate find_folder;
-
-use piston_window::draw_state::Blend;
 use piston_window::*;
+use graphics::draw_state::Blend;
+use wgpu_graphics::{Texture, TextureSettings};
 
 fn main() {
     println!("Press A to change blending");
@@ -24,11 +22,12 @@ fn main() {
     let mut clip_inside = true;
     let rust_logo = Texture::from_path(&mut window.create_texture_context(),
                                        assets.join("rust.png"),
-                                       Flip::None,
                                        &TextureSettings::new()).unwrap();
     window.set_lazy(true);
     while let Some(e) = window.next() {
         window.draw_2d(&e, |c, g, _| {
+            use graphics::*;
+
             clear([0.8, 0.8, 0.8, 1.0], g);
             g.clear_stencil(0);
             Rectangle::new([1.0, 0.0, 0.0, 1.0])

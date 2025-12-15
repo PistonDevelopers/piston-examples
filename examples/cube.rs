@@ -1,180 +1,203 @@
-extern crate piston_window;
-extern crate vecmath;
-extern crate camera_controllers;
-#[macro_use]
-extern crate gfx;
-extern crate shader_version;
-
-//----------------------------------------
-// Cube associated data
-
-gfx_vertex_struct!( Vertex {
-    a_pos: [i8; 4] = "a_pos",
-    a_tex_coord: [i8; 2] = "a_tex_coord",
-});
-
-impl Vertex {
-    fn new(pos: [i8; 3], tc: [i8; 2]) -> Vertex {
-        Vertex {
-            a_pos: [pos[0], pos[1], pos[2], 1],
-            a_tex_coord: tc,
-        }
-    }
-}
-
-gfx_pipeline!( pipe {
-    vbuf: gfx::VertexBuffer<Vertex> = (),
-    u_model_view_proj: gfx::Global<[[f32; 4]; 4]> = "u_model_view_proj",
-    t_color: gfx::TextureSampler<[f32; 4]> = "t_color",
-    out_color: gfx::RenderTarget<::gfx::format::Srgba8> = "o_Color",
-    out_depth: gfx::DepthTarget<::gfx::format::DepthStencil> =
-        gfx::preset::depth::LESS_EQUAL_WRITE,
-});
-
-//----------------------------------------
+use piston_window::*;
+use turbine::scene3d::*;
+use turbine_scene3d_wgpu::{utils, State};
+use turbine::scene3d::Command::*;
+use vecmath::*;
+use camera_controllers::*;
 
 fn main() {
-    use piston_window::*;
-    use gfx::traits::*;
-    use shader_version::Shaders;
-    use shader_version::glsl::GLSL;
-    use camera_controllers::{
-        FirstPersonSettings,
-        FirstPerson,
-        CameraPerspective,
-        model_view_projection
+    println!("Toggle camera control by pressing C");
+    
+    let mut capture_cursor = false;
+    let (mut window, mut scene, vs, fs) = {
+        let settings = WindowSettings::new("colored cube", [512; 2])
+            .samples(4)
+            .exit_on_esc(true);
+        let mut window: PistonWindow = settings.build().unwrap();
+        window.set_capture_cursor(capture_cursor);
+
+        let depth_texture_view = utils::create_depth_texture_view(
+            &window.device,
+            &window.surface_config,
+            1,
+            "depth_texture",
+        );
+
+        let mut scene: Scene<State> =
+            Scene::new(SceneSettings::new(), State::new(
+                window.device.clone(),
+                window.queue.clone(),
+                window.surface_config.clone(),
+                depth_texture_view,
+            ));
+        let vs = scene.vertex_shader(include_str!("../assets/colored_cube.wgsl")).unwrap();
+        let fs = scene.fragment_shader(include_str!("../assets/colored_cube.wgsl")).unwrap();
+        (window, scene, vs, fs)
     };
 
-    let opengl = OpenGL::V3_2;
+    let mut events = Events::new(EventSettings::new());
+    let mut frame_graph = FrameGraph::new();
 
-    let mut window: PistonWindow =
-        WindowSettings::new("piston: cube", [640, 480])
-        .exit_on_esc(true)
-        .samples(4)
-        .graphics_api(opengl)
-        .build()
-        .unwrap();
-    window.set_capture_cursor(true);
+    let cube = {
+        let program = scene.program_from_vertex_fragment(vs, fs);
+        let mvp = scene.matrix4_uniform(program, "mvp").unwrap();
 
-    let mut factory = window.factory.clone();
+        let va = scene.vertex_array();
+        let pos = scene.vertex_buffer3(va, 0, &vertex_buffer_data());
+        let _col = scene.color_buffer(va, 1, &color_buffer_data());
 
-    let vertex_data = vec![
-        //top (0, 0, 1)
-        Vertex::new([-1, -1,  1], [0, 0]),
-        Vertex::new([ 1, -1,  1], [1, 0]),
-        Vertex::new([ 1,  1,  1], [1, 1]),
-        Vertex::new([-1,  1,  1], [0, 1]),
-        //bottom (0, 0, -1)
-        Vertex::new([ 1,  1, -1], [0, 0]),
-        Vertex::new([-1,  1, -1], [1, 0]),
-        Vertex::new([-1, -1, -1], [1, 1]),
-        Vertex::new([ 1, -1, -1], [0, 1]),
-        //right (1, 0, 0)
-        Vertex::new([ 1, -1, -1], [0, 0]),
-        Vertex::new([ 1,  1, -1], [1, 0]),
-        Vertex::new([ 1,  1,  1], [1, 1]),
-        Vertex::new([ 1, -1,  1], [0, 1]),
-        //left (-1, 0, 0)
-        Vertex::new([-1,  1,  1], [0, 0]),
-        Vertex::new([-1, -1,  1], [1, 0]),
-        Vertex::new([-1, -1, -1], [1, 1]),
-        Vertex::new([-1,  1, -1], [0, 1]),
-        //front (0, 1, 0)
-        Vertex::new([-1,  1, -1], [0, 0]),
-        Vertex::new([ 1,  1, -1], [1, 0]),
-        Vertex::new([ 1,  1,  1], [1, 1]),
-        Vertex::new([-1,  1,  1], [0, 1]),
-        //back (0, -1, 0)
-        Vertex::new([ 1, -1,  1], [0, 0]),
-        Vertex::new([-1, -1,  1], [1, 0]),
-        Vertex::new([-1, -1, -1], [1, 1]),
-        Vertex::new([ 1, -1, -1], [0, 1]),
-    ];
-
-    let index_data: &[u16] = &[
-         0,  1,  2,  2,  3,  0, // top
-         4,  6,  5,  6,  4,  7, // bottom
-         8,  9, 10, 10, 11,  8, // right
-        12, 14, 13, 14, 12, 15, // left
-        16, 18, 17, 18, 16, 19, // front
-        20, 21, 22, 22, 23, 20, // back
-    ];
-
-    let (vbuf, slice) = factory.create_vertex_buffer_with_slice
-        (&vertex_data, index_data);
-
-    let texels = [
-        [0xff, 0xff, 0xff, 0x00],
-        [0xff, 0x00, 0x00, 0x00],
-        [0x00, 0xff, 0x00, 0x00],
-        [0x00, 0x00, 0xff, 0x00]
-    ];
-    let (_, texture_view) = factory.create_texture_immutable::<gfx::format::Rgba8>(
-        gfx::texture::Kind::D2(2, 2, gfx::texture::AaMode::Single),
-        gfx::texture::Mipmap::Provided,
-        &[&texels]).unwrap();
-
-    let sinfo = gfx::texture::SamplerInfo::new(
-        gfx::texture::FilterMethod::Bilinear,
-        gfx::texture::WrapMode::Clamp);
-
-    let glsl = opengl.to_glsl();
-    let pso = factory.create_pipeline_simple(
-            Shaders::new()
-                .set(GLSL::V1_20, include_str!("../assets/cube_120.glslv"))
-                .set(GLSL::V1_50, include_str!("../assets/cube_150.glslv"))
-                .get(glsl).unwrap().as_bytes(),
-            Shaders::new()
-                .set(GLSL::V1_20, include_str!("../assets/cube_120.glslf"))
-                .set(GLSL::V1_50, include_str!("../assets/cube_150.glslf"))
-                .get(glsl).unwrap().as_bytes(),
-            pipe::new()
-        ).unwrap();
-
-    let get_projection = |w: &PistonWindow| {
-        let draw_size = w.window.draw_size();
-        CameraPerspective {
-            fov: 90.0, near_clip: 0.1, far_clip: 1000.0,
-            aspect_ratio: (draw_size.width as f32) / (draw_size.height as f32)
-        }.projection()
+        frame_graph.command_list(vec![
+            EnableCullFace,
+            CullFaceBack,
+            UseProgram(program),
+            SetModelViewProjection(mvp),
+            DrawTriangles(va, pos.len()),
+        ])
     };
 
-    let model = vecmath::mat4_id();
-    let mut projection = get_projection(&window);
+    let cubes = frame_graph.command_list(vec![
+            Draw(cube),
+            Translate([2.5, 0.0, 0.0]),
+            RotateAxisDeg(vec3_normalized([1.0, 0.0, 1.0]), 45.0),
+            Draw(cube)
+        ]);
+
     let mut first_person = FirstPerson::new(
         [0.5, 0.5, 4.0],
         FirstPersonSettings::keyboard_wasd()
     );
 
-    let mut data = pipe::Data {
-            vbuf,
-            u_model_view_proj: [[0.0; 4]; 4],
-            t_color: (texture_view, factory.create_sampler(sinfo)),
-            out_color: window.output_color.clone(),
-            out_depth: window.output_stencil.clone(),
-        };
+    while let Some(e) = events.next(&mut window) {
+        if capture_cursor {first_person.event(&e)};
 
-    while let Some(e) = window.next() {
-        first_person.event(&e);
+        if let Some(args) = e.render_args() {
+            let surface_texture = window.surface.get_current_texture().unwrap();
+            scene.state.surface_texture = Some(surface_texture);
 
-        window.draw_3d(&e, |window| {
-            let args = e.render_args().unwrap();
+            scene.clear([0.0, 0.0, 0.0, 1.0]);
 
-            window.encoder.clear(&window.output_color, [0.3, 0.3, 0.3, 1.0]);
-            window.encoder.clear_depth(&window.output_stencil, 1.0);
+            let proj = get_projection(&window);
+            scene.projection(proj);
+            scene.camera(first_person.camera(args.ext_dt).orthogonal());
+            scene.model(mat4_id());
 
-            data.u_model_view_proj = model_view_projection(
-                model,
-                first_person.camera(args.ext_dt).orthogonal(),
-                projection
-            );
-            window.encoder.draw(&slice, &pso, &data);
-        });
+            scene.draw(cubes, &frame_graph);
 
-        if e.resize_args().is_some() {
-            projection = get_projection(&window);
-            data.out_color = window.output_color.clone();
-            data.out_depth = window.output_stencil.clone();
+            scene.state.end_render_pass();
+            if let Some(surface_texture) = std::mem::replace(
+                &mut scene.state.surface_texture, None
+            ) {
+                surface_texture.present();
+            }
+        }
+
+        if let Some(button) = e.press_args() {
+            if let Button::Keyboard(Key::C) = button {
+                capture_cursor = !capture_cursor;
+                window.set_capture_cursor(capture_cursor);
+            }
         }
     }
+}
+
+#[allow(unused)]
+fn get_projection<W: Window>(w: &W) -> Matrix4<f32> {
+    let draw_size = w.draw_size();
+    CameraPerspective {
+        fov: 90.0, near_clip: 0.1, far_clip: 1000.0,
+        aspect_ratio: (draw_size.width as f32) / (draw_size.height as f32)
+    }.projection()
+}
+
+fn vertex_buffer_data() -> Vec<f32> {
+    vec![
+        -1.0,   -1.0,   -1.0, // triangle 1 : begin
+        -1.0,   -1.0,   1.0,
+        -1.0,   1.0,    1.0, // triangle 1 : end
+
+        1.0,    1.0,    -1.0, // triangle 2 : begin
+        -1.0,   -1.0,   -1.0,
+        -1.0,   1.0,    -1.0, // triangle 2 : end
+
+        1.0,    -1.0,   1.0,
+        -1.0,   -1.0,   -1.0,
+        1.0,    -1.0,   -1.0,
+
+        1.0,    1.0,    -1.0,
+        1.0,    -1.0,   -1.0,
+        -1.0,   -1.0,   -1.0,
+
+        -1.0,   -1.0,   -1.0,
+        -1.0,   1.0,    1.0,
+        -1.0,   1.0,    -1.0,
+
+        1.0,    -1.0,   1.0,
+        -1.0,   -1.0,   1.0,
+        -1.0,   -1.0,   -1.0,
+
+        -1.0,   1.0,    1.0,
+        -1.0,   -1.0,   1.0,
+        1.0,    -1.0,   1.0,
+
+        1.0,    1.0,    1.0,
+        1.0,    -1.0,   -1.0,
+        1.0,    1.0,    -1.0,
+
+        1.0,    -1.0,   -1.0,
+        1.0,    1.0,    1.0,
+        1.0,    -1.0,   1.0,
+
+        1.0,    1.0,    1.0,
+        1.0,    1.0,    -1.0,
+        -1.0,   1.0,    -1.0,
+
+        1.0,    1.0,    1.0,
+        -1.0,   1.0,    -1.0,
+        -1.0,   1.0,    1.0,
+
+        1.0,    1.0,    1.0,
+        -1.0,   1.0,    1.0,
+        1.0,    -1.0,   1.0
+    ]
+}
+
+fn color_buffer_data() -> Vec<f32> {
+    vec![
+        0.583,  0.771,  0.014,  1.0,
+        0.609,  0.115,  0.436,  1.0,
+        0.327,  0.483,  0.844,  1.0,
+        0.822,  0.569,  0.201,  1.0,
+        0.435,  0.602,  0.223,  1.0,
+        0.310,  0.747,  0.185,  1.0,
+        0.597,  0.770,  0.761,  1.0,
+        0.559,  0.436,  0.730,  1.0,
+        0.359,  0.583,  0.152,  1.0,
+        0.483,  0.596,  0.789,  1.0,
+        0.559,  0.861,  0.639,  1.0,
+        0.195,  0.548,  0.859,  1.0,
+        0.014,  0.184,  0.576,  1.0,
+        0.771,  0.328,  0.970,  1.0,
+        0.406,  0.615,  0.116,  1.0,
+        0.676,  0.977,  0.133,  1.0,
+        0.971,  0.572,  0.833,  1.0,
+        0.140,  0.616,  0.489,  1.0,
+        0.997,  0.513,  0.064,  1.0,
+        0.945,  0.719,  0.592,  1.0,
+        0.543,  0.021,  0.978,  1.0,
+        0.279,  0.317,  0.505,  1.0,
+        0.167,  0.620,  0.077,  1.0,
+        0.347,  0.857,  0.137,  1.0,
+        0.055,  0.953,  0.042,  1.0,
+        0.714,  0.505,  0.345,  1.0,
+        0.783,  0.290,  0.734,  1.0,
+        0.722,  0.645,  0.174,  1.0,
+        0.302,  0.455,  0.848,  1.0,
+        0.225,  0.587,  0.040,  1.0,
+        0.517,  0.713,  0.338,  1.0,
+        0.053,  0.959,  0.120,  1.0,
+        0.393,  0.621,  0.362,  1.0,
+        0.673,  0.211,  0.457,  1.0,
+        0.820,  0.883,  0.371,  1.0,
+        0.982,  0.099,  0.879,  1.0,
+    ]
 }

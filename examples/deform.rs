@@ -1,22 +1,17 @@
-extern crate piston_window;
-extern crate drag_controller;
-extern crate find_folder;
-extern crate deform_grid;
-
-use deform_grid::DeformGrid;
 use piston_window::*;
+use deform_grid::DeformGrid;
 use drag_controller::{ DragController, Drag };
+use wgpu_graphics::{Texture, TextureSettings};
+use graphics::ImageSize;
 
 fn main() {
     println!("Click in the red square and drag.");
     println!("Toggle grid with G.");
     println!("Reset grid with R.");
 
-    let opengl = OpenGL::V3_2;
     let mut window: PistonWindow =
         WindowSettings::new("piston-example-deform", [300, 300])
         .exit_on_esc(true)
-        .graphics_api(opengl)
         .samples(4)
         .build()
         .unwrap();
@@ -24,14 +19,13 @@ fn main() {
     let assets = find_folder::Search::ParentsThenKids(3, 3)
         .for_folder("assets").unwrap();
     let image = assets.join("rust.png");
-    let image = Texture::from_path(
+    let image_tex = Texture::from_path(
             &mut window.create_texture_context(),
             &image,
-            Flip::None,
             &TextureSettings::new()
         ).unwrap();
 
-    let (width, height) = image.get_size();
+    let (width, height) = image_tex.get_size();
     let width = width as f64;
     let height = height as f64;
     let mut grid = DeformGrid::new(
@@ -86,10 +80,12 @@ fn main() {
             }
         }
         window.draw_2d(&e, |c, g, _| {
+            use graphics::*;
+
             clear(color::WHITE, g);
 
             // Draw deformed image.
-            grid.draw_image(&image, &c.draw_state, c.transform, g);
+            grid.draw_image(&image_tex, &c.draw_state, c.transform, g);
 
             if draw_grid {
                 // Draw grid.
@@ -115,7 +111,7 @@ fn main() {
             let original = Ellipse::new([1.0, 0.0, 0.0, 0.5]);
             let current = Ellipse::new([0.0, 0.0, 0.0, 0.5]);
             for i in 0..grid.ps.len() {
-                use piston_window::ellipse::circle;
+                use ellipse::circle;
 
                 // Original positions.
                 let x = grid.ps[i][0];
