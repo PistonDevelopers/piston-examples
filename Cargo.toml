@@ -6,11 +6,6 @@ authors = ["bvssvni <bvssvni@gmail.com>"]
 keywords = []
 
 [dependencies.piston_window]
-version = "0.138.2"
+version = "0.139.0"
 features = ["batteries"]
 
-[dependencies]
-find_folder = "0.3.0"
-piston2d-drag_controller = "0.30.0"
-piston2d-deform_grid = "0.15.0"
-rand = "0.8.5"
