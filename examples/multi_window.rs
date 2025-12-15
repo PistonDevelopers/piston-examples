@@ -1,4 +1,8 @@
-extern crate piston_window;
+
+/*
+
+// Multi-window is not supported for PistonWindow at the moment.
+// To use multi-window, use another window backend or write a custom one.
 
 use piston_window::*;
 
@@ -19,6 +23,7 @@ fn main() {
             if let Some(e) = window.next() {
                 any_window_open = true;
                 window.draw_2d(&e, |_c, g, _device| {
+                    use graphics::*;
                     clear(colors[i], g);
                 });
             }
@@ -28,3 +33,6 @@ fn main() {
         if !any_window_open { break }
     }
 }
+*/
+
+fn main() {}
