@@ -115,8 +115,9 @@ impl App{
     fn gen_apple_coords(&mut self, size: [i32; 2]){
         let w: i32 = size[0] / 10;
         let h: i32 = size[1] / 10;
-        let mut rng = rand::thread_rng();
-        self.apple = [10_i32 * rng.gen_range(0..w), 10_i32 * rng.gen_range(0..h)];
+        let mut rng = rand::rng();
+        self.apple = [10_i32 * rng.random_range(0..w),
+                      10_i32 * rng.random_range(0..h)];
         for pos in &self.segments{
             if *pos == self.apple {
                 self.gen_apple_coords(size);
