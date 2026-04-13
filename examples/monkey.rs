@@ -7,6 +7,8 @@ use camera_controllers::*;
 use texture::TextureSettings;
 
 fn main() {
+    println!("Press C to turn camera movement on/off.");
+
     let mut capture_cursor = false;
     let (mut window, mut scene, vertex_shader, fragment_shader) = {
         let settings = WindowSettings::new("monkey", [512; 2])

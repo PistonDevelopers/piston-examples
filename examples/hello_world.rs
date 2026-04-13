@@ -14,7 +14,8 @@ fn main() {
     let assets = find_folder::Search::ParentsThenKids(3, 3)
         .for_folder("assets").unwrap();
     println!("{:?}", assets);
-    let ref mut glyphs = window.load_font(assets.join("FiraSans-Regular.ttf")).unwrap();
+    let ref mut glyphs = window.load_font(assets.join("FiraSans-Regular.ttf"),
+        texture::TextureSettings::new()).unwrap();
 
     window.set_lazy(true);
     while let Some(e) = window.next() {

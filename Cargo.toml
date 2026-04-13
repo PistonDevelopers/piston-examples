@@ -6,6 +6,6 @@ authors = ["bvssvni <bvssvni@gmail.com>"]
 keywords = []
 
 [dependencies.piston_window]
-version = "0.139.0"
+version = "0.147.0"
 features = ["batteries"]
 
