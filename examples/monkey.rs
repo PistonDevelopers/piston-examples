@@ -46,7 +46,7 @@ fn main() {
     );
 
     let (monkey, program, light_position_id, ambient_light_id) = {
-        let obj_mesh = ObjMesh::load("assets/monkey.obj").unwrap();
+        let obj_mesh = &ObjMesh::load("assets/monkey.obj").unwrap()[0];
         let vertex_array = scene.vertex_array();
         let vertex_buffer = scene.vertex_buffer3(vertex_array, 0, &obj_mesh.vertices);
         let _ = scene.uv_buffer(vertex_array, 1, &obj_mesh.uvs);
